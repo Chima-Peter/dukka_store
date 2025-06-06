@@ -3,8 +3,12 @@ import DesktopProfilePage from "@/components/profile/desktop/desktop_profile_pag
 import OrderDetails from "@/components/profile/mobile/orders/order_details";
 import type { Metadata } from "next";
 
-export async function generateMetadata({ params }: { params: { orderID: string } }): Promise<Metadata> {
-    const { orderID } = await params;
+type Props = {
+    params: Promise<{ orderID: string }>
+}
+
+export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
+    const orderID = (await params).orderID;
 
     return {
         title: `Order #${orderID} - Melch`,

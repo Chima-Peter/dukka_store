@@ -162,7 +162,7 @@ const MessagesSmall = () => {
             setRecentMessages(displayList.filter(message => isToday(message.time)))
             setOlderMessages(displayList.filter(message => !isToday(message.time)))
         }
-    }, [])
+    }, [displayList])
 
 
 

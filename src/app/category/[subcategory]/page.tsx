@@ -1,7 +1,15 @@
 import CategoryUI from "@/components/category/category_ui";
+import { Metadata } from "next";
 
-export async function generateMetadata({ params }: { params: { subcategory: string } }) {
-  const { subcategory } = await params
+type Props = {
+  params: Promise<{ subcategory: string }>
+}
+
+
+export const generateMetadata = async (
+  { params }: Props,
+): Promise<Metadata> => {
+  const subcategory = (await (params)).subcategory;
   const category = decodeURIComponent(subcategory);
   // Ensure the category is sanitized and formatted correctly
 
@@ -32,8 +40,11 @@ export async function generateMetadata({ params }: { params: { subcategory: stri
   };
 }
 
-const SubCategoryPage = ({ params }: { params: { subcategory: string } }) => {
-  const { subcategory } = params;
+
+const SubCategoryPage = async (
+  { params }: Props
+) => {
+  const subcategory = (await params).subcategory;
   const decodedSubCategory = decodeURIComponent(subcategory);
   
   return (
