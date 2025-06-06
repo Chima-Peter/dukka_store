@@ -3,15 +3,16 @@ import { redirect } from "next/navigation";
 import ResponsiveDisplay from "@/utils/responsive_display";
 import DesktopProfilePage from "@/components/profile/desktop/desktop_profile_page";
 import OrderDetails from "@/components/profile/mobile/orders/order_details";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 export async function generateMetadata({ params }: { params: { orderID: string } }): Promise<Metadata> {
-    const { orderID } = await params  
+    const { orderID } = params as { orderID: string };
+
     return {
         title: `Order #${orderID} - Melch`,
         description: `Details and status of your order #${orderID}.`,
         robots: "noindex, nofollow",
-    };
+    }
 }
 
 const ProfilePage = async () => {

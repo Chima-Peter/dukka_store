@@ -1,8 +1,8 @@
-import { BsArrowLeft } from "react-icons/bs"
 import Link from "next/link"
 import RenderCartProduct from "./render_cart_product"
 import addCommasToInt from "../../utils/add_commas_to_int"
 import { CartTypes } from "../../types/cart_type"
+import BackButton from "../ui/back_button"
 
 const CartComponentSmall = ({ allProducts }: { allProducts: CartTypes }) => {
     const totalAmount = allProducts.total || 0
@@ -11,9 +11,9 @@ const CartComponentSmall = ({ allProducts }: { allProducts: CartTypes }) => {
     return (
         <main className="flex flex-col gap-5 w-[100%] bg-[#F0F0F0] font-urbanist relative">
             <section className="bg-white px-4 sm:px-6 md:px-8 py-4 flex justify-center relative w-[100%] items-center">
-                <button className="absolute left-[5px] sm:left-[14px] md:left-[21px] h-fit w-fit">
-                    <BsArrowLeft className="cursor-pointer w-[38px] h-[25px] md:w-[50px] md:h-[30px]" />
-                </button>
+                <div className="absolute left-[5px] sm:left-[14px] md:left-[21px]">
+                    <BackButton />
+                </div>
                 <h1 className="text-[20px] md:text-[22px] font-[500] self-center">
                     Cart
                 </h1>

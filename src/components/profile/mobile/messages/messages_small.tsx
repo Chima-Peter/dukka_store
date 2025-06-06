@@ -1,15 +1,14 @@
 "use client"
 
 import { isToday } from 'date-fns'
-import { BsArrowLeft } from "react-icons/bs"
 import { FiSearch } from "react-icons/fi"
-import Link from 'next/link'
 import { useState, useEffect } from "react"
 import { IoIosArrowDown, IoMdClose } from "react-icons/io"
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md"
 import { MessagesType } from "../../../../types/profile"
 import MessageContent from "../../desktop/message/message_content"
 import Pagination from '@/components/ui/pagination'
+import BackButton from '@/components/ui/back_button'
 
 const MessagesSmall = () => {
     // state to collect message query
@@ -163,7 +162,7 @@ const MessagesSmall = () => {
             setRecentMessages(displayList.filter(message => isToday(message.time)))
             setOlderMessages(displayList.filter(message => !isToday(message.time)))
         }
-    }, [page])
+    }, [])
 
 
 
@@ -171,9 +170,7 @@ const MessagesSmall = () => {
         <main className="flex flex-col w-[100%] pt-[120px] gap-6 sm:pt-[130px] bg-[#F0F0F0] font-urbanist">
             <section className="w-[100%] h-fit flex flex-col gap-6 pb-4 pt-4 bg-white">
                 <section className="bg-white px-4 sm:px-6 md:px-8 flex  justify-between relative w-[100%] items-center">
-                    <Link href={'/profile'}  className="h-fit w-fit">
-                        <BsArrowLeft className="cursor-pointer w-[38px] h-[25px] md:w-[50px] md:h-[30px]" />
-                    </Link>
+                    <BackButton />
                     <h1 className="text-[20px] md:text-[22px] font-[500] self-center">
                         Messages
                     </h1>

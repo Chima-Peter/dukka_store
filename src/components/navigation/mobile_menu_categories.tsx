@@ -15,7 +15,7 @@ import { MdClose } from "react-icons/md"
 
 
 const MobileMenuCategories = () => {
-    const { showAllCategories } = useNavigationContext()
+    const { showAllCategories, setShowAllCategories } = useNavigationContext()
 
     const [activeSub, setActiveSub] = useState<boolean>(false)
 
@@ -72,7 +72,10 @@ const MobileMenuCategories = () => {
                 animate={{  display: activeSub ? "flex" : "none", opacity: activeSub ? 1 : 0, x: activeSub ? 0 : '-100%'}}>
             {
                 subCategory.subcategories.map((subcategory) => (
-                    <Link href={`/category/${subcategory.name}`} key={subcategory.name} className="gap-4  py-3 px-14 sm:px-16 md:px-[72px] hover:bg-[#F6F6F6] border-b-[1px] border-b-[#ADB1B1] w-[100%]">
+                    <Link 
+                        href={`/category/${subcategory.name}`}
+                        onClick={() => setShowAllCategories(false)} 
+                        key={subcategory.name} className="gap-4  py-3 px-14 sm:px-16 md:px-[72px] hover:bg-[#F6F6F6] border-b-[1px] border-b-[#ADB1B1] w-[100%]">
                         {subcategory.name}
                     </Link>
                 ))

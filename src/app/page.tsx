@@ -74,13 +74,13 @@ const HomePage = () => {
                 <div className="flex gap-0 items-start">
                     <Image width={92} height={89} src="/images/home_page/plus.svg" alt="plus icon" className="hidden min-lg:block aspect-square -translate-y-12 translate-x-4" />
                     <div className="flex flex-col gap-4 ">
-                        <p className="text-[16px] sm:text-[20px] min-lg:text-[24px] xl:text-[28px] 2xl:text-[30px] font-medium tracking-wide font-Philosopher">
+                        <p className="text-[16px] sm:text-[20px] font-medium tracking-wide font-Philosopher">
                             Our Products Are
                         </p>
-                        <h1 className="font-Philosopher font-semibold text-[3rem] xs:text-[4rem] sm:text-[5rem] md:text-[6rem] min-lg:text-[7rem] xl:text-[8rem] min-lg:w-[650px] xl:w-[750px] leading-none text-[#0D523F]">
+                        <h1 className="font-Philosopher font-semibold text-[3rem] xs:text-[4rem] sm:text-[5rem] md:text-[6rem] min-lg:w-[650px] xl:w-[750px] leading-none text-[#0D523F]">
                             Fresh From The Farm
                         </h1>
-                        <p className="border-l-4 border-l-[#4C3700] pl-4 text-[20px] sm:text-[24px] min-lg:text-[28px] xl:text-[33px] leading-normal xl:leading-relaxed tracking-wide font-urbanist w-[100%] min-lg:w-[540px] xl:w-[640px] 2xl:w-[900px] font-light">
+                        <p className="border-l-4 border-l-[#4C3700] pl-4 text-[20px] sm:text-[22px] min-lg:text-[24px] mb-2 leading-normal xl:leading-relaxed tracking-wide font-urbanist w-[100%] min-lg:w-[540px] xl:w-[640px] 2xl:w-[900px] font-light">
                             Truly no place like home, but home can come
                             to you anywhere you’re. That’s why we bring 9ja 
                             food ingredients to you.

@@ -2,10 +2,9 @@
 
 import { useState } from "react"
 import { DetailsType } from "../../../types/cart_type"
-import { BsArrowLeft } from "react-icons/bs"
-import Link from "next/link"
 import SingleProductSmall from "@/components/products/single_product/small"
 import Pagination from "@/components/ui/pagination"
+import BackButton from "@/components/ui/back_button"
 
 // we only want to access this screen on a mobile device so we ensure user cannot come here on desktop screens using search navigation
 const FavoriteSmall = () => {
@@ -55,9 +54,7 @@ const FavoriteSmall = () => {
             <section className="w-[100%] h-fit flex flex-col gap-8 pb-4 pt-4 bg-white">
 
                 <section className="bg-white px-4 sm:px-6 md:px-8 py-4 flex  justify-between relative w-[100%] items-center">
-                    <Link href={'/profile'}  className="h-fit w-fit">
-                        <BsArrowLeft className="cursor-pointer w-[38px] h-[25px] md:w-[50px] md:h-[30px]" />
-                    </Link>
+                   <BackButton />
                     <h1 className="text-[20px] md:text-[22px] font-[500] self-center">
                         Favorite
                     </h1>

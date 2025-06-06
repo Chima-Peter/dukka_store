@@ -10,7 +10,7 @@ import { CartTypes } from "@/types/cart_type"
 import { useAppSelector } from "@/redux/store"
 
 
-const CartUI = ({ dbCart }: { dbCart?: CartTypes }) => {
+const CartUI = () => {
     const fish_and_stock_product = [
         {
             title: "Smoked beef",

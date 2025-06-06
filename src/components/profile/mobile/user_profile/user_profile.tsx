@@ -1,13 +1,11 @@
 "use client"
 
 
-import { BsArrowLeft } from "react-icons/bs"
-import Link from "next/link"
 import { GoPerson } from "react-icons/go"
 import ProfileInput from "./profile_input"
 import React, { useState } from "react"
 import { isAlpha, isEmpty, isMobilePhone, isStrongPassword } from "validator"
-
+import BackButton from "@/components/ui/back_button"
 
 const UserProfile = () => {
     const [userDetails, setUserDetails] = useState({
@@ -54,9 +52,7 @@ const UserProfile = () => {
         <main className="flex flex-col w-[100%] pt-[120px] gap-6 sm:pt-[130px] bg-[#F0F0F0] font-urbanist">
             <section className="w-[100%] h-fit flex flex-col gap-6 pb-4 pt-4 bg-white">
                 <section className="bg-white px-4 sm:px-6 md:px-8 flex  justify-between relative w-[100%] items-center">
-                    <Link href={'/profile'}  className="h-fit w-fit">
-                        <BsArrowLeft className="cursor-pointer w-[38px] h-[25px] md:w-[50px] md:h-[30px]" />
-                    </Link>
+                    <BackButton />
                     <h1 className="text-[20px] md:text-[22px] font-[500] self-center">
                         User profile
                     </h1>

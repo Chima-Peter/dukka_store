@@ -1,11 +1,11 @@
 import { BiEdit, BiMessageSquareDetail } from "react-icons/bi"
-import { BsArrowLeft } from "react-icons/bs"
 import { FaChevronRight } from "react-icons/fa6"
 import { GoHeart, GoPerson } from "react-icons/go"
 import { LuHeadset } from "react-icons/lu"
 import { CgProfile } from "react-icons/cg";
 import Link from "next/link"
 import Image from "next/image"
+import BackButton from "@/components/ui/back_button"
 
 
 const MobileProfilePage = () => {
@@ -40,10 +40,10 @@ const MobileProfilePage = () => {
 
     return (
         <main className="flex flex-col w-[100%] pt-[120px] sm:pt-[130px] lg:pt-[230px] xl:pt-[270px] 2xl:pt-[270px] bg-[#F0F0F0] font-urbanist">
-            <section className="bg-white px-4 sm:px-6 md:px-8 py-4 flex justify-center relative w-[100%] items-center">
-                <Link href={'/'} className="absolute left-[5px] sm:left-[14px] md:left-[21px] h-fit w-fit">
-                    <BsArrowLeft className="cursor-pointer w-[38px] h-[25px] md:w-[50px] md:h-[30px]" />
-                </Link>
+            <section className="bg-white px-4 sm:px-6 md:px-8 py-4 flex justify-center relative w-[100%] items-center ">
+                <div className="absolute left-[5px] sm:left-[14px] md:left-[21px]">
+                    <BackButton />
+                </div>
                 <h1 className="text-[20px] md:text-[22px] font-[500] self-center">
                     Profile
                 </h1>

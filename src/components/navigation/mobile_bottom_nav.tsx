@@ -22,14 +22,6 @@ const MobileBottomNav = () => {
                     Home
                 </p>
             </Link>
-            <Link href={'/profile/messages'} className="flex flex-col gap-1 items-center">
-                {
-                    activeLink === '/deals' ? <Image width={23} height={23} src="/images/navigation/mobile/solar_ticket-sale-bold.svg" alt="Deals"  /> : <Image width={23} height={23} src="/images/navigation/mobile/solar_ticket-sale-outline.svg" alt="Deals"  />
-                }
-                <p className={`text-[12px] sm:text-[14px] font-[600] tracking-wide ${activeLink === '/deals' ? 'text-[#164D46]' : 'text-black'}`}>
-                    Deals
-                </p>
-            </Link>
             <Link href={'/cart'} className="flex flex-col gap-1 items-center">
                 {
                     activeLink === '/cart' ? <Image width={23} height={23} src="/images/navigation/mobile/mynaui_cart-solid.svg" alt="Cart"  /> : <Image width={23} height={23} src="/images/navigation/mobile/mynaui_cart.svg" alt="Cart"  />
@@ -54,6 +46,14 @@ const MobileBottomNav = () => {
                     Menu
                 </p>
             </Link> */}
+            <Link href={'/profile/messages'} className="flex flex-col gap-1 items-center">
+                {
+                    activeLink === '/profile/messages' ? <Image width={23} height={23} src="/images/navigation/mobile/solar_ticket-sale-bold.svg" alt="Promos"  /> : <Image width={23} height={23} src="/images/navigation/mobile/solar_ticket-sale-outline.svg" alt="Promos"  />
+                }
+                <p className={`text-[12px] sm:text-[14px] font-[600] tracking-wide ${activeLink === '/deals' ? 'text-[#164D46]' : 'text-black'}`}>
+                    Promos
+                </p>
+            </Link>
         </nav>
     )
 }
