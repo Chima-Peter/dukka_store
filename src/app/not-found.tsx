@@ -1,30 +1,8 @@
 import Link from "next/link"
 import ProductCollection from "@/components/products/products_collection"
+import { fish_and_stock_product } from "@/utils/sample_data"
 
 const NotFoundPage = () => {
-    const fish_and_stock_product = [
-        {
-            title: "Smoked beef",
-            price: "16,000",
-            image: "/images/home_page/smoked_beef.webp"
-        },
-        {
-            title: "Smoked goat meat",
-            price: "11,000",
-            image: "/images/home_page/smoked_goat_meat.webp"
-        },
-        {
-            title: "Kilishi",
-            price: "3,500",
-            image: "/images/home_page/kilishi.webp"
-        },
-        {
-            title: "Smoked guinea fowl",
-            price: "12,500",
-            image: "/images/home_page/smoked_guinea_fowl.webp"
-        }
-    ]
-
     return (
         <main className="flex flex-col gap-8 w-[100%] pt-[120px] sm:pt-[130px] lg:pt-[230px] xl:pt-[270px] 2xl:pt-[270px] bg-[#F0F0F0] font-urbanist">
             <section className="w-[100%] min-lg:w-[93%] self-center flex justify-center items-center bg-white h-[600px] xl:h-[700px] 2xl:h-[800px]">

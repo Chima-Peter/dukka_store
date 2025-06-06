@@ -8,31 +8,7 @@ import OrderTemplate from "./order_template_small"
 import ProductCollection from "@/components/products/products_collection"
 import Pagination from "@/components/ui/pagination"
 import BackButton from "@/components/ui/back_button"
-
-
-
-const fish_and_stock_product = [
-    {
-        title: "Smoked beef",
-        price: "16,000",
-        image: "/images/home_page/smoked_beef.webp"
-    },
-    {
-        title: "Smoked goat meat",
-        price: "11,000",
-        image: "/images/home_page/smoked_goat_meat.webp"
-    },
-    {
-        title: "Kilishi",
-        price: "3,500",
-        image: "/images/home_page/kilishi.webp"
-    },
-    {
-        title: "Smoked guinea fowl",
-        price: "12,500",
-        image: "/images/home_page/smoked_guinea_fowl.webp"
-    }
-]
+import { fish_and_stock_product } from "@/utils/sample_data"
 
 
 const OrdersSmall = () => {

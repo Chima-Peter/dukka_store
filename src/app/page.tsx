@@ -1,72 +1,11 @@
 import Link from "next/link"
 import Image from "next/image"
 import ProductCollection from "@/components/products/products_collection"
+import { fish_and_stock_product, grains_and_cereal_products, services_excerpts } from "@/utils/sample_data"
 
 
 const HomePage = () => {
-    const fish_and_stock_product = [
-        {
-            title: "Smoked beef",
-            price: "16,000",
-            image: "/images/home_page/smoked_beef.webp"
-        },
-        {
-            title: "Smoked goat meat",
-            price: "11,000",
-            image: "/images/home_page/smoked_goat_meat.webp"
-        },
-        {
-            title: "Kilishi",
-            price: "3,500",
-            image: "/images/home_page/kilishi.webp"
-        },
-        {
-            title: "Smoked guinea fowl",
-            price: "12,500",
-            image: "/images/home_page/smoked_guinea_fowl.webp"
-        }
-    ]
-
-    const grains_and_cereal_products = [
-        {
-            title: "Smoked beef",
-            price: "16,000",
-            image: "/images/home_page/smoked_beef.webp"
-        },
-        {
-            title: "Smoked goat meat",
-            price: "11,000",
-            image: "/images/home_page/smoked_goat_meat.webp"
-        },
-        {
-            title: "Kilishi",
-            price: "3,500",
-            image: "/images/home_page/kilishi.webp"
-        },
-        {
-            title: "Smoked guinea fowl",
-            price: "12,500",
-            image: "/images/home_page/smoked_guinea_fowl.webp"
-        }
-    ]
     
-    const services_excerpts = [
-        {
-            header: "Quick Delivery",
-            text: "With our 3-7 days delivery. we’ll get your good delivered",
-            icon: "/images/home_page/delivery_icon.svg"
-        },
-        {
-            header: "Easy and safe payment",
-            text: "With our integrated payment system. Payment is 100% secured.",
-            icon: "/images/home_page/payment_icon.svg"
-        },
-        {
-            header: "Need help?",
-            text: "With our integrated payment system. Payment is 100% secured.",
-            icon: "/images/home_page/help_icon.svg"
-        }
-    ]
   return (
     <main className="bg-[#F0F0F0] flex flex-col gap-8 w-[100%] items-center pb-12 pt-[120px] sm:pt-[130px] lg:pt-[230px] xl:pt-[270px] 2xl:pt-[270px]">
         <section className="bg-gradient-to-b from-white to-[#F0F0F0] w-[92%] flex flex-col gap-2 rounded-2xl border border-gray-100  py-12 md:py-24 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16 mx-12">

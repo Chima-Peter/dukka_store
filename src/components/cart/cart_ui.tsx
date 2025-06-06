@@ -8,31 +8,10 @@ import CartComponentSmall from "./cart_component_small"
 import { useEffect, useState } from "react"
 import { CartTypes } from "@/types/cart_type"
 import { useAppSelector } from "@/redux/store"
+import { fish_and_stock_product } from "@/utils/sample_data"
 
 
 const CartUI = () => {
-    const fish_and_stock_product = [
-        {
-            title: "Smoked beef",
-            price: "16,000",
-            image: "/images/home_page/smoked_beef.webp"
-        },
-        {
-            title: "Smoked goat meat",
-            price: "11,000",
-            image: "/images/home_page/smoked_goat_meat.webp"
-        },
-        {
-            title: "Kilishi",
-            price: "3,500",
-            image: "/images/home_page/kilishi.webp"
-        },
-        {
-            title: "Smoked guinea fowl",
-            price: "12,500",
-            image: "/images/home_page/smoked_guinea_fowl.webp"
-        }
-    ]
 
     const temp: CartTypes = useAppSelector(state => state.cart)
 
