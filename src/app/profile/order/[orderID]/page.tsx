@@ -1,12 +1,10 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import ResponsiveDisplay from "@/utils/responsive_display";
 import DesktopProfilePage from "@/components/profile/desktop/desktop_profile_page";
 import OrderDetails from "@/components/profile/mobile/orders/order_details";
 import type { Metadata } from "next";
 
 export async function generateMetadata({ params }: { params: { orderID: string } }): Promise<Metadata> {
-    const { orderID } = params as { orderID: string };
+    const { orderID } = await params;
 
     return {
         title: `Order #${orderID} - Melch`,
@@ -16,13 +14,13 @@ export async function generateMetadata({ params }: { params: { orderID: string }
 }
 
 const ProfilePage = async () => {
-    // load authorization token
-    const authToken = (await cookies()).get("authToken")?.value
+    // // load authorization token
+    // const authToken = (await cookies()).get("authToken")?.value
 
-    // if user hasn't logged in, then user cart is not saved to db, so we use localstorage cart data
-    if (authToken) {
-        redirect("/login")
-    }
+    // // if user hasn't logged in, then user cart is not saved to db, so we use localstorage cart data
+    // if (authToken) {
+    //     redirect("/login")
+    // }
     return (
         <>
             <ResponsiveDisplay maxWidth={1000}>
