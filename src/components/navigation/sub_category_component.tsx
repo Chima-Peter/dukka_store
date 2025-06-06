@@ -34,7 +34,7 @@ const CategoryComponent = () => {
                       <ul className="flex flex-col gap-4">
                           {
                               category.products.map((sub) => (
-                                  <Link href={sub.name} key={sub.name} className="text-[#888B8B] text-[18px] xl:text-[20px] 2xl:text-[22px] hover:text-[#FEB100] font-medium">
+                                  <Link href={`/category/${sub.name}`} key={sub.name} className="text-[#888B8B] text-[18px] xl:text-[20px] 2xl:text-[22px] hover:text-[#FEB100] font-medium">
                                       {sub.name}
                                   </Link>
                               ))
