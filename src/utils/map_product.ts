@@ -1,10 +1,12 @@
 import type { ProductListItem } from "@/types/api";
 import type { DetailsType } from "@/types/cart_type";
 import addCommasToInt from "@/utils/add_commas_to_int";
-import { PRODUCT_FALLBACK_IMAGE } from "@/components/ui/product_image";
+const PRODUCT_FALLBACK_IMAGE = "/images/products/placeholder.png";
 
 function resolveProductImage(imageUrl?: string | null) {
-    if (!imageUrl) return PRODUCT_FALLBACK_IMAGE;
+    if (!imageUrl || imageUrl === "/dukka_logo.png" || imageUrl === "/logo.svg") {
+        return PRODUCT_FALLBACK_IMAGE;
+    }
     try {
         const url = new URL(imageUrl);
         if (url.hostname.endsWith(".local") || url.hostname === "localhost") {

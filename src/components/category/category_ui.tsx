@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IoFilter } from "react-icons/io5";
-import ProductCounter from "@/components/products/product_counter";
+import ProductGridCard from "@/components/products/product_grid_card";
 import {
     useGetCategoriesQuery,
     useGetProductsQuery,
@@ -116,7 +116,10 @@ const CategoryUI = ({ subCategory }: { subCategory: string }) => {
                         </h1>
                         <div className="mt-1 text-[14px] text-[#6B7373]">
                             {isLoading || isFetching ? (
-                                <DukkaLoader variant="inline" label="Loading products" />
+                                <DukkaLoader
+                                    variant="inline"
+                                    label="Loading products"
+                                />
                             ) : (
                                 `${details.length} item${details.length === 1 ? "" : "s"}`
                             )}
@@ -134,7 +137,7 @@ const CategoryUI = ({ subCategory }: { subCategory: string }) => {
             </div>
 
             <div className="mx-auto grid w-full max-w-[1600px] grid-cols-1 gap-6 px-4 py-6 sm:px-6 md:px-8 lg:grid-cols-12 lg:gap-8 lg:px-12 lg:py-8 xl:px-14 2xl:px-16">
-                <div className="hidden border border-[#E8EBEB] bg-white p-5 lg:col-span-3 lg:block xl:p-6">
+                <div className="hidden h-fit border border-[#E8EBEB] bg-white p-5 lg:col-span-3 lg:sticky lg:top-[250px] lg:block xl:p-6">
                     <CategoryFilters {...filterProps} />
                 </div>
 
@@ -159,18 +162,24 @@ const CategoryUI = ({ subCategory }: { subCategory: string }) => {
                         </div>
                     ) : (
                         <motion.div
-                            className="grid grid-cols-1 gap-4 xs:grid-cols-2 md:grid-cols-2 xl:grid-cols-3"
+                            className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4"
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.35 }}
                         >
-                            {details.map((detail) => (
-                                <div
+                            {details.map((detail, index) => (
+                                <motion.div
                                     key={detail.id || detail.title}
-                                    className="flex justify-center bg-white p-3"
+                                    initial={{ opacity: 0, y: 12 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{
+                                        duration: 0.3,
+                                        delay: Math.min(index * 0.03, 0.3),
+                                    }}
+                                    className="min-w-0"
                                 >
-                                    <ProductCounter detail={detail} />
-                                </div>
+                                    <ProductGridCard detail={detail} />
+                                </motion.div>
                             ))}
                         </motion.div>
                     )}

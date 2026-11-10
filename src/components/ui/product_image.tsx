@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export const PRODUCT_FALLBACK_IMAGE = "/dukka_logo.png";
+export const PRODUCT_FALLBACK_IMAGE = "/images/products/placeholder.png";
 
 type ProductImageProps = {
     src?: string | null;
@@ -13,13 +13,14 @@ type ProductImageProps = {
 };
 
 function isUsableSrc(src?: string | null): src is string {
-    if (!src || !src.trim() || src === "/logo.svg") return false;
+    if (!src || !src.trim() || src === "/logo.svg" || src === "/dukka_logo.png") {
+        return false;
+    }
     if (src.startsWith("/")) return true;
 
     try {
         const url = new URL(src);
         if (url.protocol !== "http:" && url.protocol !== "https:") return false;
-        // Seed / placeholder hosts that are not real CDNs
         if (url.hostname.endsWith(".local") || url.hostname === "localhost") {
             return false;
         }
@@ -41,7 +42,6 @@ const ProductImage = ({ src, alt, width, height, className }: ProductImageProps)
     }, [src]);
 
     return (
-        // Native img avoids next/image remote-host crashes on bad product URLs
         // eslint-disable-next-line @next/next/no-img-element
         <img
             src={currentSrc}

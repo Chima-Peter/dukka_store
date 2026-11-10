@@ -27,7 +27,7 @@ export function mapCartViewToState(view: CartView): CartTypes {
         cart: (view.items ?? []).map((item) => ({
             id: item.id,
             name: item.product_name,
-            image: item.product_image || "/dukka_logo.png",
+            image: item.product_image || "/images/products/placeholder.png",
             price: Number(item.price ?? 0),
             quantity: item.quantity,
             market_variant_id: item.market_variant_id,
