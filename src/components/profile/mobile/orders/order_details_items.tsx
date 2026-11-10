@@ -27,6 +27,7 @@ const OrderDetailsItems = ({ order }: { order?: OrderDetail }) => {
                         height={50}
                         src={item.product_image}
                         alt={item.product_name}
+                        seed={item.market_variant_id || item.product_name}
                     />
                     <div className="flex max-xs:flex-col xs:gap-2 justify-between w-[100%]">
                         <div className="flex flex-col w-fit">

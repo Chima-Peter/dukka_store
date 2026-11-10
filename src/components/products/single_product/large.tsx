@@ -84,7 +84,13 @@ const SingleProduct = ({
                 href={productHref}
                 className={`w-[100%] bg-[#F0F0F0] ${changeGrid === "3x3" && "py-2 rounded-t-2xl rounded-l-none rounded-ss-2xl"} rounded-l-2xl flex justify-center items-center`}
             >
-                <ProductImage width={300} height={160} src={image} alt={title} />
+                <ProductImage
+                    width={300}
+                    height={160}
+                    src={image}
+                    alt={title}
+                    seed={id || title}
+                />
             </Link>
             <div
                 className={`flex flex-col gap-2 w-[100%] items-center ${changeGrid === "1x3" ? "py-2" : "py-0"}`}

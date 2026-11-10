@@ -56,7 +56,13 @@ const RenderCartProduct = (props: ProductType) => {
         <div className="flex w-[100%] justify-start gap-6 border-b border-b-gray-300 min-lg:last:border-0 min-lg:py-4 min-lg:first:pt-6 p-2 min-lg:px-0 max-md:items-center max-md:border max-md:border-gray-400 max-md:rounded-lg">
             <div className="flex gap-2 min-lg:gap-6 max-w-fit min-lg:w-[48%] min-lg:pl-6">
                 <div className="min-lg:w-[35%] bg-[#F0F0F0] py-2 px-4 h-[100px] xl:h-[150px] flex justify-center items-center rounded-xl ">
-                    <ProductImage src={props.image} alt={props.name} width={192} height={102} />
+                    <ProductImage
+                        src={props.image}
+                        alt={props.name}
+                        seed={props.market_variant_id || props.name}
+                        width={192}
+                        height={102}
+                    />
                 </div>
                 <div className="flex flex-col max-md:py-2 max-md:h-[100px] justify-between min-lg:gap-6">
                     <h3 className="text-[16px] font-[500]">{props.name}</h3>

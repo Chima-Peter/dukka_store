@@ -78,6 +78,7 @@ const ProductGridCard = ({ detail }: { detail: DetailsType }) => {
                 <ProductImage
                     src={detail.image}
                     alt={detail.title}
+                    seed={detail.id || detail.title}
                     width={480}
                     height={600}
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"

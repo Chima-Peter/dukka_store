@@ -77,7 +77,13 @@ const ProductCounter = ({ detail }: { detail: DetailsType }) => {
                 href={productHref}
                 className="flex h-[150px] w-[100%] items-center justify-center bg-[#F5F6F5] py-2"
             >
-                <ProductImage width={250} height={100} src={detail.image} alt={detail.title} />
+                <ProductImage
+                    width={250}
+                    height={100}
+                    src={detail.image}
+                    alt={detail.title}
+                    seed={detail.id || detail.title}
+                />
             </Link>
             {detail.category_name && (
                 <p className="text-[12px] md:text-[14px] text-[#0D523F] mt-2 px-2 text-center">

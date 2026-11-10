@@ -8,9 +8,10 @@ import { useGetProductQuery } from "@/redux/services/catalog_api";
 import { useCartActions } from "@/hooks/use_cart_actions";
 import { formatMoney } from "@/utils/format_money";
 import ReviewDropdown from "@/components/products/dropdowns/review/review_dropdown";
-import ProductImage, { PRODUCT_FALLBACK_IMAGE } from "@/components/ui/product_image";
+import ProductImage from "@/components/ui/product_image";
 import { useActiveMarketId } from "@/hooks/use_active_market_id";
 import DukkaLoader from "@/components/ui/dukka_loader";
+import { getProductPlaceholder } from "@/utils/product_placeholders";
 
 const ProductPage = () => {
     const params = useParams<{ id: string; product_name: string }>();
@@ -47,11 +48,11 @@ const ProductPage = () => {
         return [
             {
                 id: "fallback",
-                image_url: PRODUCT_FALLBACK_IMAGE,
+                image_url: getProductPlaceholder(data?.id || data?.name),
                 sort_order: 0,
             },
         ];
-    }, [data?.images, selectedVariant?.image_url]);
+    }, [data?.images, data?.id, data?.name, selectedVariant?.image_url]);
 
     const onAdd = async () => {
         if (!selectedVariant?.market_variant_id) {
@@ -118,6 +119,7 @@ const ProductPage = () => {
                                 <ProductImage
                                     src={images[activeImage]?.image_url}
                                     alt={data.name}
+                                    seed={data.id}
                                     width={520}
                                     height={520}
                                     className="max-h-[420px] w-auto object-contain"
@@ -139,6 +141,7 @@ const ProductPage = () => {
                                             <ProductImage
                                                 src={image.image_url}
                                                 alt={`${data.name} ${index + 1}`}
+                                                seed={`${data.id}-${index}`}
                                                 width={72}
                                                 height={72}
                                                 className="h-[72px] w-[72px] object-contain"

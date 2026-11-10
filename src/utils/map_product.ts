@@ -1,29 +1,36 @@
 import type { ProductListItem } from "@/types/api";
 import type { DetailsType } from "@/types/cart_type";
 import addCommasToInt from "@/utils/add_commas_to_int";
-const PRODUCT_FALLBACK_IMAGE = "/images/products/placeholder.png";
+import { getProductPlaceholder } from "@/utils/product_placeholders";
 
-function resolveProductImage(imageUrl?: string | null) {
-    if (!imageUrl || imageUrl === "/dukka_logo.png" || imageUrl === "/logo.svg") {
-        return PRODUCT_FALLBACK_IMAGE;
+function resolveProductImage(imageUrl?: string | null, seed?: string | null) {
+    if (
+        !imageUrl ||
+        imageUrl === "/dukka_logo.png" ||
+        imageUrl === "/melch_logo.png" ||
+        imageUrl === "/logo.svg" ||
+        imageUrl.endsWith(".svg")
+    ) {
+        return getProductPlaceholder(seed);
     }
     try {
         const url = new URL(imageUrl);
         if (url.hostname.endsWith(".local") || url.hostname === "localhost") {
-            return PRODUCT_FALLBACK_IMAGE;
+            return getProductPlaceholder(seed);
         }
     } catch {
-        if (!imageUrl.startsWith("/")) return PRODUCT_FALLBACK_IMAGE;
+        if (!imageUrl.startsWith("/")) return getProductPlaceholder(seed);
     }
     return imageUrl;
 }
 
 export function toDetailsType(product: ProductListItem): DetailsType {
     const priceNumber = Number(product.price ?? 0);
+    const seed = product.id || product.name;
     return {
         id: product.id,
         title: product.name,
-        image: resolveProductImage(product.image_url),
+        image: resolveProductImage(product.image_url, seed),
         price: addCommasToInt(Number.isFinite(priceNumber) ? priceNumber : 0),
         market_variant_id: product.market_variant_id,
         currency: product.currency,

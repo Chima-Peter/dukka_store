@@ -84,7 +84,13 @@ const SingleProductSmall = ({
                 href={productHref}
                 className={`${profile ? "w-[100%] py-4 rounded-t-2xl" : "w-[80%] rounded-l-2xl"} bg-[#F0F0F0]  flex justify-center items-center`}
             >
-                <ProductImage width={87} height={87} src={image} alt={title} />
+                <ProductImage
+                    width={87}
+                    height={87}
+                    src={image}
+                    alt={title}
+                    seed={id || title}
+                />
             </Link>
             <div
                 className={`flex flex-col gap-0 w-[100%] items-center py-2 ${profile ? "justify-between h-[100%] px-2" : "px-0"}`}

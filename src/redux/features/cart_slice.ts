@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CartProductTypes, CartTypes } from "../../types/cart_type";
 import type { CartView } from "@/types/api";
+import { getProductPlaceholder } from "@/utils/product_placeholders";
 
 const initialState: CartTypes = {
     cart: [],
@@ -27,7 +28,9 @@ export function mapCartViewToState(view: CartView): CartTypes {
         cart: (view.items ?? []).map((item) => ({
             id: item.id,
             name: item.product_name,
-            image: item.product_image || "/images/products/placeholder.png",
+            image:
+                item.product_image ||
+                getProductPlaceholder(item.market_variant_id || item.product_name),
             price: Number(item.price ?? 0),
             quantity: item.quantity,
             market_variant_id: item.market_variant_id,
