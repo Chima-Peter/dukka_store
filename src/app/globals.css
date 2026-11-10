@@ -18,6 +18,59 @@
       }
 }
 
+@keyframes dukka-ring-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dukka-bar-pulse {
+    0%,
+    100% {
+        transform: scaleY(0.45);
+        opacity: 0.35;
+        background-color: #0d523f;
+    }
+    50% {
+        transform: scaleY(1);
+        opacity: 1;
+        background-color: #feb100;
+    }
+}
+
+.dukka-loader-ring {
+    position: absolute;
+    inset: 0;
+    border: 2px solid rgba(13, 82, 63, 0.15);
+    border-top-color: #feb100;
+    border-right-color: #0d523f;
+    animation: dukka-ring-spin 0.9s linear infinite;
+}
+
+.dukka-loader-bars {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 14px;
+}
+
+.dukka-loader-bars > span {
+    display: block;
+    width: 3px;
+    height: 100%;
+    transform-origin: center bottom;
+    background-color: #0d523f;
+    animation: dukka-bar-pulse 0.9s ease-in-out infinite;
+}
+
+.dukka-loader-bars > span:nth-child(2) {
+    animation-delay: 0.12s;
+}
+
+.dukka-loader-bars > span:nth-child(3) {
+    animation-delay: 0.24s;
+}
+
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {

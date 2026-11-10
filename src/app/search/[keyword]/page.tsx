@@ -6,6 +6,7 @@ import { useGetProductsQuery } from "@/redux/services/catalog_api";
 import { toDetailsType, normalizeList } from "@/utils/map_product";
 import SearchResultNotFound from "@/components/search/search_result_not_found";
 import { useActiveMarketId } from "@/hooks/use_active_market_id";
+import DukkaLoader from "@/components/ui/dukka_loader";
 
 const SearchPage = () => {
     const params = useParams<{ keyword: string }>();
@@ -23,11 +24,10 @@ const SearchPage = () => {
                 <h1 className="text-2xl font-semibold text-[#0D523F]">
                     Search results for &ldquo;{keyword}&rdquo;
                 </h1>
-                {(isLoading || isFetching) && details.length === 0 && (
-                    <p className="mt-2 text-sm text-gray-600">Searching...</p>
-                )}
             </section>
-            {!isLoading && !isFetching && details.length === 0 ? (
+            {(isLoading || isFetching) && details.length === 0 ? (
+                <DukkaLoader label="Searching catalog" />
+            ) : !isLoading && !isFetching && details.length === 0 ? (
                 <SearchResultNotFound />
             ) : (
                 <ProductCollection

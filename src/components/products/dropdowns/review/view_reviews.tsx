@@ -4,6 +4,7 @@ import { IoIosStar } from "react-icons/io";
 import { MdOutlineCancel } from "react-icons/md";
 import { useGetReviewsQuery } from "@/redux/services/reviews_api";
 import ProductImage from "@/components/ui/product_image";
+import DukkaLoader from "@/components/ui/dukka_loader";
 
 interface ViewReviewsTypes {
     setWriteReview: React.Dispatch<React.SetStateAction<boolean>>;
@@ -41,7 +42,7 @@ const ViewReviews = ({
                 >
                     Write a review
                 </button>
-                {isLoading && <p className="text-sm text-gray-500">Loading...</p>}
+                {isLoading && <DukkaLoader variant="inline" label="Loading reviews" />}
                 {!isLoading && reviewList.length === 0 && (
                     <p className="text-sm text-gray-600">No reviews yet.</p>
                 )}

@@ -5,6 +5,7 @@ import WriteReview from "./write_review";
 import { IoIosStar } from "react-icons/io";
 import ViewReviews from "./view_reviews";
 import { useGetReviewsQuery } from "@/redux/services/reviews_api";
+import DukkaLoader from "@/components/ui/dukka_loader";
 
 const ReviewDropdown = ({
     marketVariantId,
@@ -31,7 +32,7 @@ const ReviewDropdown = ({
             >
                 Write a review
             </button>
-            {isLoading && <p className="text-sm text-gray-500">Loading reviews...</p>}
+            {isLoading && <DukkaLoader variant="inline" label="Loading reviews" />}
             {!isLoading && !latest && (
                 <p className="text-[16px] text-gray-600">No reviews yet.</p>
             )}

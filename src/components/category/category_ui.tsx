@@ -15,6 +15,7 @@ import CategoryFilters, {
     type SortOption,
     type StockFilter,
 } from "./category_filters";
+import DukkaLoader from "@/components/ui/dukka_loader";
 
 const CategoryUI = ({ subCategory }: { subCategory: string }) => {
     const marketId = useActiveMarketId();
@@ -113,11 +114,13 @@ const CategoryUI = ({ subCategory }: { subCategory: string }) => {
                         <h1 className="text-[clamp(1.75rem,3vw,2.75rem)] font-semibold tracking-tight text-[#0D523F]">
                             {title}
                         </h1>
-                        <p className="mt-1 text-[14px] text-[#6B7373]">
-                            {isLoading || isFetching
-                                ? "Loading products..."
-                                : `${details.length} item${details.length === 1 ? "" : "s"}`}
-                        </p>
+                        <div className="mt-1 text-[14px] text-[#6B7373]">
+                            {isLoading || isFetching ? (
+                                <DukkaLoader variant="inline" label="Loading products" />
+                            ) : (
+                                `${details.length} item${details.length === 1 ? "" : "s"}`
+                            )}
+                        </div>
                     </div>
                     <button
                         type="button"
@@ -137,7 +140,7 @@ const CategoryUI = ({ subCategory }: { subCategory: string }) => {
 
                 <section className="lg:col-span-9">
                     {(isLoading || isFetching) && details.length === 0 ? (
-                        <p className="text-sm text-gray-600">Loading products...</p>
+                        <DukkaLoader label="Loading products" />
                     ) : details.length === 0 ? (
                         <div className="border border-[#E8EBEB] bg-white p-8">
                             <p className="text-[#0D523F]">

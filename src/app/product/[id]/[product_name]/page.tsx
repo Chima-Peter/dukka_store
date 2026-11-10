@@ -10,6 +10,7 @@ import { formatMoney } from "@/utils/format_money";
 import ReviewDropdown from "@/components/products/dropdowns/review/review_dropdown";
 import ProductImage, { PRODUCT_FALLBACK_IMAGE } from "@/components/ui/product_image";
 import { useActiveMarketId } from "@/hooks/use_active_market_id";
+import DukkaLoader from "@/components/ui/dukka_loader";
 
 const ProductPage = () => {
     const params = useParams<{ id: string; product_name: string }>();
@@ -99,12 +100,8 @@ const ProductPage = () => {
             </div>
 
             <div className="mx-auto w-full max-w-[1600px] px-4 py-8 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
-                {!marketId && (
-                    <p className="text-sm text-gray-600">Resolving your market...</p>
-                )}
-                {isLoading && (
-                    <p className="text-sm text-gray-600">Loading product...</p>
-                )}
+                {!marketId && <DukkaLoader label="Finding your market" />}
+                {isLoading && <DukkaLoader label="Loading product" />}
                 {error && (
                     <p className="text-sm text-red-600">Product not found.</p>
                 )}

@@ -4,6 +4,7 @@ import ProductCollection from "@/components/products/products_collection";
 import { useGetProductsQuery, useGetCategoriesQuery } from "@/redux/services/catalog_api";
 import { useActiveMarketId } from "@/hooks/use_active_market_id";
 import { toDetailsType, normalizeList } from "@/utils/map_product";
+import DukkaLoader from "@/components/ui/dukka_loader";
 
 const HomeProductSections = () => {
     const marketId = useActiveMarketId();
@@ -47,15 +48,11 @@ const HomeProductSections = () => {
     const cat2Details = normalizeList(cat2Products).map(toDetailsType);
 
     if (!marketId) {
-        return (
-            <p className="px-6 text-sm text-gray-600">
-                Resolving your market to load products...
-            </p>
-        );
+        return <DukkaLoader label="Finding your market" />;
     }
 
     if ((isLoading || isFetching) && !featuredDetails.length) {
-        return <p className="px-6 text-sm text-gray-600">Loading products...</p>;
+        return <DukkaLoader label="Loading products" />;
     }
 
     if (isError && !featuredDetails.length && !cat1Details.length) {

@@ -13,6 +13,7 @@ import { useAppSelector } from "@/redux/store";
 import { normalizeList } from "@/utils/map_product";
 import { clearCart } from "@/redux/features/cart_slice";
 import { useAppDispatch } from "@/redux/store";
+import DukkaLoader from "@/components/ui/dukka_loader";
 
 const CardDetailsForm = () => {
     const dispatch = useAppDispatch();
@@ -80,7 +81,7 @@ const CardDetailsForm = () => {
                     collect card numbers on Dukka.
                 </p>
                 {loadingMethods ? (
-                    <p className="text-sm text-gray-500">Loading payment methods...</p>
+                    <DukkaLoader variant="inline" label="Loading payment methods" />
                 ) : (
                     <select
                         className="w-full rounded-md border border-gray-400 px-4 py-3 text-[16px] bg-white"
