@@ -59,6 +59,12 @@ const cartSlice = createSlice({
             state.server_cart_id = null;
             state.market_id = null;
         },
+        restoreCartSnapshot: (state, action: PayloadAction<CartTypes>) => {
+            state.cart = action.payload.cart.map((item) => ({ ...item }));
+            state.total = action.payload.total ?? 0;
+            state.server_cart_id = action.payload.server_cart_id ?? null;
+            state.market_id = action.payload.market_id ?? null;
+        },
         addToCart: (state, action: PayloadAction<CartProductTypes>) => {
             const key = action.payload.market_variant_id || action.payload.name;
             const item = state.cart.find(
@@ -113,6 +119,7 @@ export const {
     updateQuantity,
     setCartFromServer,
     clearCart,
+    restoreCartSnapshot,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

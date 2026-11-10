@@ -33,7 +33,12 @@ const ProductCounter = ({ detail }: { detail: DetailsType }) => {
         if (!detail.market_variant_id || busy || detail.sold_out) return;
         setBusy(true);
         try {
-            await addItem(detail.market_variant_id, 1);
+            await addItem(detail.market_variant_id, 1, {
+                name: detail.title,
+                image: detail.image,
+                price: Number(detail.price.replace(/,/g, "")) || 0,
+                currency: detail.currency,
+            });
             setMethod("add");
         } finally {
             setBusy(false);

@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 type DukkaLoaderProps = {
     label?: string;
     variant?: "page" | "section" | "inline";
@@ -12,15 +14,11 @@ const DukkaLoader = ({
     if (variant === "inline") {
         return (
             <span
-                className="inline-flex items-center gap-2 font-urbanist text-[13px] text-[#0D523F]"
+                className="inline-flex items-center gap-2.5 font-urbanist text-[13px] text-[#0D523F]"
                 role="status"
                 aria-live="polite"
             >
-                <span className="dukka-loader-bars" aria-hidden>
-                    <span />
-                    <span />
-                    <span />
-                </span>
+                <span className="dukka-loader-inline" aria-hidden />
                 <span className="tracking-wide">{label}</span>
             </span>
         );
@@ -28,33 +26,40 @@ const DukkaLoader = ({
 
     const shell =
         variant === "page"
-            ? "flex min-h-[50vh] w-full items-center justify-center bg-[#F0F0F0] px-6 py-16"
-            : "flex w-full items-center justify-center px-6 py-12";
+            ? "flex min-h-[55vh] w-full items-center justify-center bg-[#F0F0F0] px-6 py-20"
+            : "flex w-full items-center justify-center px-6 py-16";
 
     return (
         <div className={shell} role="status" aria-live="polite">
-            <div className="flex flex-col items-center gap-5 font-urbanist">
-                <div className="relative flex h-14 w-14 items-center justify-center">
-                    <span className="dukka-loader-ring" aria-hidden />
-                    <span className="relative z-10 text-[18px] font-semibold tracking-tight text-[#0D523F]">
-                        D
-                    </span>
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#888B8B]">
+            <div className="flex w-full max-w-[220px] flex-col items-center gap-6 font-urbanist">
+                <motion.div
+                    className="flex flex-col items-center gap-3"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.45, ease: "easeOut" }}
+                >
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-[#888B8B]">
                         Dukka
                     </p>
-                    <div className="flex items-center gap-3">
-                        <span className="dukka-loader-bars" aria-hidden>
-                            <span />
-                            <span />
-                            <span />
-                        </span>
-                        <p className="text-[14px] font-medium text-[#0D523F]">
-                            {label}
-                        </p>
+                    <div className="relative">
+                        <motion.p
+                            className="text-[42px] font-semibold leading-none tracking-tight text-[#0D523F]"
+                            animate={{ opacity: [0.55, 1, 0.55] }}
+                            transition={{
+                                duration: 1.8,
+                                ease: "easeInOut",
+                                repeat: Infinity,
+                            }}
+                        >
+                            Store
+                        </motion.p>
+                        <span className="dukka-loader-line" aria-hidden />
                     </div>
-                </div>
+                </motion.div>
+
+                <p className="text-center text-[13px] font-medium tracking-wide text-[#5B6363]">
+                    {label}
+                </p>
             </div>
         </div>
     );

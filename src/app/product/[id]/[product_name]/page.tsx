@@ -55,15 +55,22 @@ const ProductPage = () => {
     }, [data?.images, data?.id, data?.name, selectedVariant?.image_url]);
 
     const onAdd = async () => {
-        if (!selectedVariant?.market_variant_id) {
+        if (!selectedVariant?.market_variant_id || !data) {
             setMessage("This product is unavailable in your market.");
             return;
         }
         setBusy(true);
-        setMessage("");
+        setMessage("Added to cart");
         try {
-            await addItem(selectedVariant.market_variant_id, 1);
-            setMessage("Added to cart");
+            await addItem(selectedVariant.market_variant_id, 1, {
+                name: data.name,
+                image:
+                    selectedVariant.image_url ||
+                    images[0]?.image_url ||
+                    getProductPlaceholder(data.id || data.name),
+                price: Number(selectedVariant.price ?? 0),
+                currency: selectedVariant.currency,
+            });
         } catch {
             setMessage("Could not add to cart");
         } finally {

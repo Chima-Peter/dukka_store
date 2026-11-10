@@ -39,7 +39,12 @@ const SingleProduct = ({
         if (!market_variant_id || busy || sold_out) return;
         setBusy(true);
         try {
-            await addItem(market_variant_id, 1);
+            await addItem(market_variant_id, 1, {
+                name: title,
+                image,
+                price: Number(String(price).replace(/,/g, "")) || 0,
+                currency,
+            });
             setMethod("add");
         } finally {
             setBusy(false);

@@ -1,28 +1,48 @@
-import Link from "next/link"
-import { BsCart2 } from "react-icons/bs"
+"use client";
+
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { BsCart2 } from "react-icons/bs";
 
 const EmptyCart = () => {
     return (
-        <main className="flex flex-col gap-8 w-[100%] bg-[#F0F0F0] font-urbanist">
-            <section className="w-[100%] min-lg:w-[93%] self-center flex justify-center items-center bg-white h-[600px] xl:h-[700px] 2xl:h-[800px]">
-                <div className="flex flex-col gap-4 py-10 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16 border border-gray-100 items-center w-[90%] sm:w-[400px] min-lg:w-[500px] drop-shadow-md xl:w-[600px]">
-                    <BsCart2 className="w-12 h-12 min-lg:w-14 min-lg:h-14 xl:w-16 xl:h-16 2xl:w-20 2xl:h-20 text-[#FEB100]" />
-                    <h2 className="text-[16px] min-lg:text-lg xl:text-xl font-medium">
-                        Sorry your cart is empty
+        <section className="relative overflow-hidden bg-[#031815] px-4 py-20 text-white sm:px-6 md:px-8 md:py-24 lg:px-12 xl:px-14 2xl:px-16">
+            <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 opacity-40"
+                style={{
+                    background:
+                        "radial-gradient(ellipse 70% 60% at 15% 20%, rgba(254,177,0,0.28), transparent 55%), radial-gradient(ellipse 50% 45% at 90% 80%, rgba(13,82,63,0.9), transparent 60%)",
+                }}
+            />
+            <motion.div
+                className="relative mx-auto flex max-w-[560px] flex-col items-start gap-5"
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, ease: "easeOut" }}
+            >
+                <BsCart2 className="h-10 w-10 text-[#FEB100]" />
+                <div className="space-y-3">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#FEB100]">
+                        Your cart
+                    </p>
+                    <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] font-semibold leading-tight tracking-tight">
+                        Nothing here yet
                     </h2>
-                    <p className="text-[14px] min-lg:text-[16px] xl:text-[18px] 2xl:text-[20px] leading-relaxed tracking-wide font-[400] w-[100%] sm:w-[80%] text-center">
-                        Any goods you pick will be found here
+                    <p className="max-w-[36ch] text-[15px] leading-relaxed text-white/75 sm:text-[16px]">
+                        Browse the market and add items — they&apos;ll show up
+                        here ready for checkout.
                     </p>
-                    <p className="text-[14px] min-lg:text-[16px] xl:text-[18px] 2xl:text-[20px] leading-relaxed tracking-wide font-[400] w-[80%] text-center">
-                        Or
-                    </p>
-                    <Link href={'/'} className="text-[14px] xs:text-[16px] xl:text-[24px] 2xl:text-[36px] text-black bg-[#FEB100] rounded-md py-3 pl-12 pr-2 w-fit font-urbanist">
-                        Continue shopping
-                    </Link>
                 </div>
-            </section>
-        </main>
-    )
-}
+                <Link
+                    href="/"
+                    className="mt-2 inline-flex items-center justify-center bg-[#FEB100] px-6 py-3 text-[15px] font-semibold text-[#031815] transition-colors hover:bg-white"
+                >
+                    Continue shopping
+                </Link>
+            </motion.div>
+        </section>
+    );
+};
 
-export default EmptyCart
+export default EmptyCart;
