@@ -2,23 +2,27 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
-  const url = req.nextUrl.pathname;
-  const referrer = req.headers.get("referer"); // Get the previous page
+    const url = req.nextUrl.pathname;
+    const referrer = req.headers.get("referer") ?? "";
 
-  // Only allow navigation if coming from checkout
-  if ((url.startsWith("/cart/checkout/payment") &&(!referrer || !referrer.includes("/cart/checkout")))) {
-    return NextResponse.redirect(new URL("/", req.url)); // Send back to home page
-  }
+    // Allow Paystack (or any external) return onto the success page.
+    if (url.startsWith("/cart/checkout/payment/success")) {
+        return NextResponse.next();
+    }
 
-  // Only allow navigation if coming from payment
-  if (url.startsWith("/cart/checkout/payment/success") &&(!referrer || !referrer.includes("/cart/checkout/payment"))) {
-      return NextResponse.redirect(new URL("/", req.url)); // Send back to home page
-  }
+    // Soften payment entry: allow from checkout or when already in payment funnel.
+    if (
+        url.startsWith("/cart/checkout/payment") &&
+        referrer &&
+        !referrer.includes("/cart/checkout") &&
+        !referrer.includes("paystack")
+    ) {
+        return NextResponse.redirect(new URL("/cart/checkout", req.url));
+    }
 
-  return NextResponse.next();
+    return NextResponse.next();
 }
 
-// Apply middleware only to these paths
 export const config = {
-  matcher: ["/cart/checkout/payment", "/cart/checkout/payment/success"],
+    matcher: ["/cart/checkout/payment", "/cart/checkout/payment/success"],
 };
