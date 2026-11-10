@@ -1,35 +1,38 @@
-import Link from "next/link"
-import ProductCollection from "../products/products_collection"
-import Image from "next/image"
-import { fish_and_stock_product } from "@/utils/sample_data"
+"use client";
 
+import ProductCollection from "@/components/products/products_collection";
+import { useGetProductsQuery } from "@/redux/services/catalog_api";
+import { useActiveMarketId } from "@/hooks/use_active_market_id";
+import { toDetailsType, normalizeList } from "@/utils/map_product";
 
 const SearchResultNotFound = () => {
+    const marketId = useActiveMarketId();
+    const { data } = useGetProductsQuery(
+        { market_id: marketId, limit: 8 },
+        { skip: !marketId },
+    );
+    const details = normalizeList(data).map(toDetailsType);
 
     return (
-        <main className="flex flex-col gap-8 w-[100%] bg-[#F0F0F0] font-urbanist">
-            <section className="w-[100%] min-lg:w-[93%] self-center flex justify-center items-center bg-white h-[600px] xl:h-[700px] 2xl:h-[800px]">
-                <div className="flex flex-col gap-4 py-10 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16 border border-gray-100 items-center w-[90%] sm:w-[400px] min-lg:w-[500px] drop-shadow-md xl:w-[600px]">
-                    <Image width={100} height={100} src="/images/search/not_found.svg" alt="Search result not found" />
-                    <h2 className="text-lg min-lg:text-xl xl:text-2xl font-medium">
-                        No result could be found for 
-                    </h2>
-                    <p className="text-[14px] min-lg:text-[16px] xl:text-[18px] 2xl:text-[20px] leading-relaxed tracking-wide font-[400] w-[100%] sm:w-[80%] text-center">
-                        Keep calm and try searching for more general terms or shop from the categories.
-                    </p>
-                    <p className="text-[14px] min-lg:text-[16px] xl:text-[18px] 2xl:text-[20px] leading-relaxed tracking-wide font-[400] w-[80%] text-center">
-                        Or
-                    </p>
-                    <Link href={'/'} className="text-[14px] xs:text-[16px] xl:text-[24px] 2xl:text-[36px] text-black bg-[#FEB100] rounded-md py-3 pl-12 pr-2 w-fit font-urbanist">
-                        Continue shopping
-                    </Link>
-                </div>
+        <>
+            <section className="w-[100%] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16 py-10 bg-white font-urbanist">
+                <h2 className="text-2xl font-semibold text-[#0D523F] mb-2">
+                    No results found
+                </h2>
+                <p className="text-gray-600">
+                    Keep calm and try searching for more general terms or shop from the
+                    categories.
+                </p>
             </section>
+            {details.length > 0 && (
+                <ProductCollection
+                    header="You might also like"
+                    link="/category/all"
+                    details={details}
+                />
+            )}
+        </>
+    );
+};
 
-
-            <ProductCollection header="You might also like" link="/category/fish and stock" details={fish_and_stock_product} />
-        </main>
-    )
-}
-
-export default SearchResultNotFound
+export default SearchResultNotFound;

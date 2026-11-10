@@ -14,6 +14,7 @@ import AuthOptions from "../authentication/auth_options"
 import { useEffect, useState } from "react"
 import { useAppSelector } from "../../redux/store"
 import AllCategoryComponent from "./all_categories_component"
+import { useNavCategories } from "@/hooks/use_nav_categories"
 
 
 interface PropTypes { 
@@ -25,6 +26,8 @@ interface PropTypes {
 
 const DesktopNav = ({ userLocation, flag, currency, language }: PropTypes) => {
     const { setShowCategories, showCategories, setShowLoginBox, showLoginBox, setCategoryIndex, showAllCategories, setShowAllCategories, categoryIndex } = useNavigationContext()
+    const navCategories = useNavCategories()
+
 
     // managing user state for either login or logout
     const user = useAppSelector(state => state.auth)
@@ -93,7 +96,7 @@ const DesktopNav = ({ userLocation, flag, currency, language }: PropTypes) => {
             <section>
                 <div className="w-[100%] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16 py-4 flex justify-between items-center">
                     <Link href={'/'}>
-                        <Image width={205} height={47} src="/logo.svg" alt="Melch.store" priority />
+                        <Image width={205} height={47} src="/logo.svg" alt="Dukka" priority />
                     </Link>
                     <div className="flex gap-2 items-center">
                         <Image width={32} height={32} src="/images/navigation/Location.svg" alt="location icon" />
@@ -131,30 +134,18 @@ const DesktopNav = ({ userLocation, flag, currency, language }: PropTypes) => {
                         </p>
                         <VscMenu className="w-5 h-5 xl:w-7 xl:h-7 2xl:w-10 2xl:h-10" />
                     </button>
-                    <button onMouseMove={() => openCategoryComponent(0)} className={`flex ${categoryIndex === 0 ? 'bg-[#FEB100]' : 'bg-white'} items-center gap-2 rounded-md hover:bg-[#FEB100] py-3 px-6`}>
-                        <p className="font-normal text-[16px] xl:text-[22px] 2xl:text-[28px]">
-                            Meat & Seafood
-                        </p>
-                        <RiArrowDropDownLine className="w-5 h-5 xl:w-7 xl:h-7 2xl:w-10 2xl:h-10" />
-                    </button>
-                    <button onMouseMove={() => openCategoryComponent(1)} className={`flex items-center gap-2 rounded-md hover:bg-[#FEB100] py-3 px-6 ${categoryIndex === 1 ? 'bg-[#FEB100]' : 'bg-white'}`}>
-                        <p className="font-normal text-[16px] xl:text-[22px] 2xl:text-[28px]">
-                            Grains & Flour
-                        </p>
-                        <RiArrowDropDownLine className="w-5 h-5 xl:w-7 xl:h-7 2xl:w-10 2xl:h-10" />
-                    </button>
-                    <button onMouseMove={() => openCategoryComponent(2)} className={`flex items-center gap-2 rounded-md hover:bg-[#FEB100] py-3 px-6 ${categoryIndex === 2 ? 'bg-[#FEB100]' : 'bg-white'}`}>
-                        <p className="font-normal text-[16px] xl:text-[22px] 2xl:text-[28px]">
-                            Condiments
-                        </p>
-                        <RiArrowDropDownLine className="w-5 h-5 xl:w-7 xl:h-7 2xl:w-10 2xl:h-10" />
-                    </button>
-                    <button onMouseMove={() => openCategoryComponent(3)} className={`flex items-center gap-2 rounded-md hover:bg-[#FEB100] py-3 px-6 ${categoryIndex === 3 ? 'bg-[#FEB100]' : 'bg-white'}`}>
-                        <p className="font-normal text-[16px] xl:text-[22px] 2xl:text-[28px]">
-                            Snack & Confectioneries
-                        </p>
-                        <RiArrowDropDownLine className="w-5 h-5 xl:w-7 xl:h-7 2xl:w-10 2xl:h-10" />
-                    </button>
+                    {navCategories.slice(0, 4).map((category, index) => (
+                        <button
+                            key={category.category}
+                            onMouseMove={() => openCategoryComponent(index)}
+                            className={`flex items-center gap-2 rounded-md hover:bg-[#FEB100] py-3 px-6 ${categoryIndex === index ? 'bg-[#FEB100]' : 'bg-white'}`}
+                        >
+                            <p className="font-normal text-[16px] xl:text-[22px] 2xl:text-[28px]">
+                                {category.category}
+                            </p>
+                            <RiArrowDropDownLine className="w-5 h-5 xl:w-7 xl:h-7 2xl:w-10 2xl:h-10" />
+                        </button>
+                    ))}
                 </div>
             </section>
             {

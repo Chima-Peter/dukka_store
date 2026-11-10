@@ -1,22 +1,23 @@
 export interface OrdersType {
-    order_id: string;
+    id: string;
+    order_number: string;
     date: string;
     items: number;
     amount: number;
-    status: string
+    status: string;
+    name?: string | null;
+    market_id?: string;
 }
-
 
 export interface MessagesType {
-    header: string,
-    message: string,
-    time: string,
-    hasRead: boolean,
+    header: string;
+    message: string;
+    time: string;
+    hasRead: boolean;
 }
-
 
 export interface SingleOrderTemplateType {
     order: OrdersType;
     index?: number;
-    tracker?: number
+    tracker?: number;
 }

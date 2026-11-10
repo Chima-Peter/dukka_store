@@ -159,7 +159,15 @@ const ByCategoryLarge = ({header, details, caller, link}: ByCategoryTypes) => {
                     <section className="flex w-[100%] justify-between flex-wrap gap-y-6 pb-8 px-2">
                         {
                             detailsList.map((field: DetailsType, index: number) => (
-                                <SingleProduct title={field.title} image={field.image} price={field.price} changeGrid={grid} key={`${index} -${field.title}`} />
+                                <SingleProduct
+                                    id={field.id}
+                                    title={field.title}
+                                    image={field.image}
+                                    price={field.price}
+                                    market_variant_id={field.market_variant_id}
+                                    changeGrid={grid}
+                                    key={`${index} -${field.id || field.title}`}
+                                />
                             ))
                         }
                     </section>

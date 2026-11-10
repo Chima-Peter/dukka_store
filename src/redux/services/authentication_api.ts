@@ -1,33 +1,50 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { SignUpResponse, SignUpRequest, LoginResponse, LoginRequest } from "../../types/authentication_type";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { dukkaBaseQuery } from "./base_query";
+import type {
+    LoginData,
+    LoginRequest,
+    PublicCustomer,
+    RegisterRequest,
+} from "@/types/api";
+import { getRefreshToken } from "@/lib/cookies";
 
-
-// api for authenticating users
 export const AuthApi = createApi({
-    reducerPath: 'authApi',                     // name of api slice
-    baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:8000'        // define api url
+    reducerPath: "authApi",
+    baseQuery: dukkaBaseQuery,
+    endpoints: (builder) => ({
+        register: builder.mutation<PublicCustomer, RegisterRequest>({
+            query: (body) => ({
+                url: "/authentication/customer/register",
+                method: "POST",
+                body,
+            }),
+        }),
+        login: builder.mutation<LoginData, LoginRequest>({
+            query: (body) => ({
+                url: "/authentication/customer/login",
+                method: "POST",
+                body,
+            }),
+        }),
+        logout: builder.mutation<null, void>({
+            query: () => ({
+                url: "/authentication/customer/logout",
+                method: "POST",
+                headers: {
+                    "x-refresh-token": getRefreshToken() ?? "",
+                },
+            }),
+        }),
     }),
-    endpoints: (builder) => ({                  // define endpoints
-
-        postSignUp: builder.mutation<SignUpResponse, SignUpRequest>({     // endpoint for posting signup request
-            query:(data: SignUpRequest) => ({
-                url: '/signup',
-                method: 'POST',
-                body: data
-            })
-        }),
-
-        postLogin: builder.mutation<LoginResponse, LoginRequest>({        // endpoint for posting signin request
-            query:(data: LoginRequest) => ({
-                url: '/signin',
-                method: 'POST',
-                body: data
-            })
-        }),
-    })
-})
+});
 
 export const {
-    usePostSignUpMutation, usePostLoginMutation
-} = AuthApi
+    useRegisterMutation,
+    useLoginMutation,
+    useLogoutMutation,
+} = AuthApi;
+
+/** @deprecated use useLoginMutation / useRegisterMutation */
+export const usePostSignUpMutation = useRegisterMutation;
+/** @deprecated use useLoginMutation */
+export const usePostLoginMutation = useLoginMutation;

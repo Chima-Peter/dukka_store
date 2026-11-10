@@ -1,40 +1,30 @@
-"use client"
+"use client";
 
-import ResponsiveDisplay from "@/utils/responsive_display"
-import CartComponentLarge from "./cart_component_large"
-import EmptyCart from "../../components/cart/empty_cart"
-import ProductCollection from "../products/products_collection"
-import CartComponentSmall from "./cart_component_small"
-import { useEffect, useState } from "react"
-import { CartTypes } from "@/types/cart_type"
-import { useAppSelector } from "@/redux/store"
-import { fish_and_stock_product } from "@/utils/sample_data"
-
+import ResponsiveDisplay from "@/utils/responsive_display";
+import CartComponentLarge from "./cart_component_large";
+import EmptyCart from "../../components/cart/empty_cart";
+import ProductCollection from "../products/products_collection";
+import CartComponentSmall from "./cart_component_small";
+import { useAppSelector } from "@/redux/store";
+import { useGetProductsQuery } from "@/redux/services/catalog_api";
+import { useActiveMarketId } from "@/hooks/use_active_market_id";
+import { toDetailsType, normalizeList } from "@/utils/map_product";
 
 const CartUI = () => {
-
-    const temp: CartTypes = useAppSelector(state => state.cart)
-
-    const [allProducts, setAllProducts] = useState<CartTypes>(temp)
-
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            // load data from localstorage for guest users
-            const storedCart = localStorage.getItem("cart")
-            if (storedCart) {
-                setAllProducts(JSON.parse(storedCart) as CartTypes)
-            }
-        }
-    }, [])
-
-    useEffect(() => {
-        setAllProducts(temp)
-    }, [temp])
+    const allProducts = useAppSelector((state) => state.cart);
+    const marketId = useActiveMarketId();
+    const { data } = useGetProductsQuery(
+        { market_id: marketId, limit: 8 },
+        { skip: !marketId },
+    );
+    const recommendations = normalizeList(data).map(toDetailsType);
 
     return (
         <main className="flex flex-col gap-8 w-[100%] pt-[120px] sm:pt-[120px] md:pt-[130px] lg:pt-[230px] xl:pt-[270px] 2xl:pt-[270px] bg-[#F0F0F0] font-urbanist">
-            {
-                allProducts?.cart?.length === 0 ? <EmptyCart /> : <>
+            {allProducts?.cart?.length === 0 ? (
+                <EmptyCart />
+            ) : (
+                <>
                     <ResponsiveDisplay minWidth={1000}>
                         <CartComponentLarge allProducts={allProducts} />
                     </ResponsiveDisplay>
@@ -42,10 +32,14 @@ const CartUI = () => {
                         <CartComponentSmall allProducts={allProducts} />
                     </ResponsiveDisplay>
                 </>
-            }
-            <ProductCollection header="People also viewed" link="/category/fish and stock" details={fish_and_stock_product} />
+            )}
+            <ProductCollection
+                header="People also viewed"
+                link="/category/all"
+                details={recommendations}
+            />
         </main>
-    )
-}
+    );
+};
 
-export default CartUI
+export default CartUI;

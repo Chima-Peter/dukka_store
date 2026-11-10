@@ -1,117 +1,100 @@
-import { IoIosStar } from "react-icons/io"
-import { MdOutlineCancel } from "react-icons/md"
+"use client";
+
+import { IoIosStar } from "react-icons/io";
+import { MdOutlineCancel } from "react-icons/md";
+import { useGetReviewsQuery } from "@/redux/services/reviews_api";
+import ProductImage from "@/components/ui/product_image";
 
 interface ViewReviewsTypes {
-    setWriteReview: React.Dispatch<React.SetStateAction<boolean>>
-    setViewReview: React.Dispatch<React.SetStateAction<boolean>>
+    setWriteReview: React.Dispatch<React.SetStateAction<boolean>>;
+    setViewReview: React.Dispatch<React.SetStateAction<boolean>>;
+    marketVariantId?: string | null;
 }
 
-
-const ViewReviews = ({ setWriteReview, setViewReview }: ViewReviewsTypes ) => {
-    //  method to open write review modal
-    const openWriteReviewModal = () => {
-        setWriteReview(true)
-        closeViewReviewModal()
-    }
-
-    //  method to close view review modal
-    const closeViewReviewModal = () => {
-        setViewReview(false)
-    }
-
-    const reviewList = [
-        {
-            text: "It is super dry and crunchy. It slaps beyond recognition.",
-            star: 5,
-            author: "Habeeb March 27, 2024."
-        },
-        {
-            text: "Absolutely delicious! The texture is perfect, and the flavor is rich.",
-            star: 5,
-            author: "Aisha April 5, 2024."
-        },
-        {
-            text: "Pretty good, but I wish it had a little more seasoning. Still worth it!",
-            star: 4,
-            author: "David April 10, 2024."
-        },
-        {
-            text: "Not bad at all! It has a nice crunch, but it could be a bit fresher.",
-            star: 3,
-            author: "Chinedu April 15, 2024."
-        },
-        {
-            text: "Amazing quality! I love how crispy it is. Definitely buying again.",
-            star: 5,
-            author: "Fatima April 20, 2024."
-        },
-        {
-            text: "The taste is good, but it's slightly too hard for my liking.",
-            star: 3,
-            author: "James April 25, 2024."
-        },
-        {
-            text: "Perfectly made! The balance of flavor and crunch is spot on.",
-            star: 5,
-            author: "Sophia May 1, 2024."
-        },
-        {
-            text: "It was okay, but I expected it to be a bit more flavorful.",
-            star: 3,
-            author: "Emeka May 5, 2024."
-        },
-        {
-            text: "One of the best I've had in a while! Worth every penny.",
-            star: 5,
-            author: "Zainab May 10, 2024."
-        },
-        {
-            text: "Decent, but not my favorite. Might give it another try though.",
-            star: 4,
-            author: "Joshua May 15, 2024."
-        }
-    ];
-    
-
+const ViewReviews = ({
+    setWriteReview,
+    setViewReview,
+    marketVariantId,
+}: ViewReviewsTypes) => {
+    const { data, isLoading } = useGetReviewsQuery(
+        { market_variant_id: marketVariantId!, limit: 50 },
+        { skip: !marketVariantId },
+    );
+    const reviewList = data?.items ?? [];
 
     return (
-        <section className="min-h-[100vh] backdrop-brightness-50 w-[100%] z-40 fixed backdrop-blur-sm left-0 top-0 flex items-center justify-center">
-            <div className="w-[90%] sm:w-[500px] md:w-[600px] min-lg:w-[700px] h-[500px] px-2 text-black z-50 flex flex-col gap-6 rounded-md drop-shadow-md bg-white">
-                <div className="w-[100%] flex justify-between sticky top-0 py-3 pt-4 px-8 border-b border-b-[#ADB1B1]">
-                    <h4 className="font-[500] text-[18px] xl:text-[20px] tracking-wide">
-                        Reviews ({reviewList.length})
-                    </h4>
-                    <button className="w-fit hidden h-hit px-5 py-2 text-white rounded-md bg-[#FEB100] font-[400] text-[16px] xl:text-[18px]" onClick={openWriteReviewModal}>
-                        Write a review
-                    </button>
-                    <button onClick={closeViewReviewModal}>
-                        <MdOutlineCancel className="w-[30px] h-[30px] text-[#75716F]" />
+        <section className="fixed inset-0 z-50 flex items-center justify-center backdrop-brightness-50">
+            <div className="bg-white w-[90%] max-w-[640px] max-h-[80vh] overflow-y-auto rounded-xl p-6 flex flex-col gap-4">
+                <div className="flex justify-between items-center">
+                    <h2 className="text-xl font-semibold">Reviews</h2>
+                    <button onClick={() => setViewReview(false)}>
+                        <MdOutlineCancel className="w-7 h-7" />
                     </button>
                 </div>
-                <ul className="flex flex-col gap-3 px-2 pb-8 overflow-y-auto customScroll">
-                    {
-                        reviewList.map((review) => (
-                            <li className="flex flex-col gap-4 w-[100%] rounded-lg items-center py-4 px-8 border border-[#ADB1B1]" key={review.text}>
-                                <div className="w-[100%] flex justify-between items-center">
-                                    <div className="flex gap-0">
-                                        {Array.from({ length: review.star }, (_, index) => (
-                                            <IoIosStar key={index} className="text-[#FFA500] w-[26px] h-[26px]" />
-                                        ))}
-                                    </div>
-                                    <p className="text-[16px] xl:text-[18px] font-semibold text-[#888B8B] tracking-wide">
-                                        {review.author}
-                                    </p>
-                                </div>
-                                <p className="text-[16px] xl:text-[18px] font-semibold tracking-wider text-left">
-                                    {review.text}
-                                </p>
-                            </li>
-                        ))
-                    }
-                </ul>
+                <button
+                    className="w-fit px-5 py-2 text-white rounded-md bg-[#FEB100]"
+                    onClick={() => {
+                        setViewReview(false);
+                        setWriteReview(true);
+                    }}
+                    disabled={!marketVariantId}
+                >
+                    Write a review
+                </button>
+                {isLoading && <p className="text-sm text-gray-500">Loading...</p>}
+                {!isLoading && reviewList.length === 0 && (
+                    <p className="text-sm text-gray-600">No reviews yet.</p>
+                )}
+                {reviewList.map((review) => (
+                    <div
+                        key={review.id}
+                        className="border border-[#ADB1B1] rounded-lg p-4 flex flex-col gap-2"
+                    >
+                        <div className="flex justify-between items-center">
+                            <div className="flex">
+                                {Array.from({ length: 5 }, (_, index) => (
+                                    <IoIosStar
+                                        key={index}
+                                        className={`w-5 h-5 ${index < review.rating ? "text-[#FFA500]" : "text-[#888B8B]"}`}
+                                    />
+                                ))}
+                            </div>
+                            <p className="text-sm text-[#888B8B]">
+                                {review.customer_name || "Customer"}
+                                {review.created_at
+                                    ? ` ${new Date(review.created_at).toLocaleDateString()}`
+                                    : ""}
+                            </p>
+                        </div>
+                        {review.title && (
+                            <h3 className="font-semibold">{review.title}</h3>
+                        )}
+                        <p>{review.review}</p>
+                        {(review.likes != null || review.dislikes != null) && (
+                            <p className="text-sm text-[#888B8B]">
+                                Likes: {review.likes ?? 0} · Dislikes:{" "}
+                                {review.dislikes ?? 0}
+                            </p>
+                        )}
+                        {!!review.review_images?.length && (
+                            <div className="flex gap-2 flex-wrap">
+                                {review.review_images.map((image) => (
+                                    <ProductImage
+                                        key={image.id}
+                                        src={image.image_url}
+                                        alt={review.title}
+                                        width={64}
+                                        height={64}
+                                        className="w-16 h-16 object-cover rounded-md"
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                ))}
             </div>
         </section>
-    )
-}
+    );
+};
 
-export default ViewReviews
+export default ViewReviews;

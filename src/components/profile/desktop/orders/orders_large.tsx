@@ -84,7 +84,7 @@ const OrdersLarge = ({ orders }: { orders: OrdersType[] }) => {
                 <section className="flex flex-col w-[100%] border-t border-t-[#ADB1B1]">
                     {
                         displayList.map((order, index: number) => (
-                            <OrderTemplate key={`${index}-${order.order_id}`} order={order} tracker={pageIndex + 1} index={index}/>
+                            <OrderTemplate key={`${index}-${order.id}`} order={order} tracker={pageIndex + 1} index={index}/>
                         ))
                     }
                 </section>

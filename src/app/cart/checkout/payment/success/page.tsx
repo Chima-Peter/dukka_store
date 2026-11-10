@@ -1,24 +1,12 @@
-import { IoCheckmarkCircleOutline } from "react-icons/io5"
-import Link from "next/link"
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-
+import { IoCheckmarkCircleOutline } from "react-icons/io5";
+import Link from "next/link";
 
 export const metadata = {
-    title: "Payment successful - Melch.store",
-    description: "Your payment was successful! Your order is now processed."
-}
-
+    title: "Payment successful - Dukka.store",
+    description: "Your payment was successful! Your order is now processed.",
+};
 
 const PaymentSuccessPage = async () => {
-    // load authorization token
-    const authToken = (await cookies()).get("authToken")?.value
-
-    // if user hasn't logged in, then user cart is not saved to db, so we use localstorage cart data
-    if (authToken) {
-        return redirect("/")
-    }
-
     return (
         <main className="flex flex-col gap-8 w-[100%] pt-[120px] sm:pt-[130px] lg:pt-[230px] xl:pt-[270px] 2xl:pt-[270px] bg-[#F0F0F0] font-urbanist">
             <section className="w-[93%] self-center flex justify-center items-center bg-white h-[600px] xl:h-[700px] 2xl:h-[800px]">
@@ -28,18 +16,21 @@ const PaymentSuccessPage = async () => {
                         Payment successful
                     </h2>
                     <p className="text-[14px] min-lg:text-[16px] xl:text-[18px] 2xl:text-[20px] leading-relaxed tracking-wide font-[400] w-[60%] text-center">
-                        Thank you for your patronage.   Our logistics team is  processing your order.
+                        Thank you for your patronage. Our logistics team is processing your order.
                     </p>
                     <p className="text-[14px] min-lg:text-[16px] xl:text-[18px] 2xl:text-[20px] leading-relaxed tracking-wide font-[400] sm:w-[80%] md:w-[80%] text-center">
                         While you wait
                     </p>
-                    <Link href={'/homepage'} className="text-[14px] xs:text-[16px] xl:text-[24px] 2xl:text-[36px] text-black bg-[#FEB100] rounded-md py-3 pl-12 pr-2 w-fit font-urbanist">
+                    <Link
+                        href="/"
+                        className="text-[14px] xs:text-[16px] xl:text-[24px] 2xl:text-[36px] text-black bg-[#FEB100] rounded-md py-3 pl-12 pr-2 w-fit font-urbanist"
+                    >
                         Continue shopping
                     </Link>
                 </div>
             </section>
         </main>
-    )
-}
+    );
+};
 
-export default PaymentSuccessPage
+export default PaymentSuccessPage;

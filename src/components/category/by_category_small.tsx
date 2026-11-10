@@ -94,7 +94,15 @@ const ByCategorySmall = ({header, details, caller}: ByCategoryTypes) => {
             <section className="w-[100%] p-4 sm:p-6 md:p-8 flex flex-col gap-4 bg-white">
                 {
                     displayList.map((detail: DetailsType, index: number) => (
-                        <SingleProductSmall title={detail.title} image={detail.image} price={detail.price} changeGrid={'1x3'} key={`${index} -${detail.title}`} />
+                        <SingleProductSmall
+                            id={detail.id}
+                            title={detail.title}
+                            image={detail.image}
+                            price={detail.price}
+                            market_variant_id={detail.market_variant_id}
+                            changeGrid={'1x3'}
+                            key={`${index} -${detail.id || detail.title}`}
+                        />
                     ))
                 }
                 {

@@ -3,29 +3,35 @@
 
 import { motion } from 'framer-motion'
 import useNavigationContext from "../../hooks/use_category_component";
-import categories from "./categories_data";
 import { FaChevronRight, FaWhatsapp } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CategoryType } from "../../types/category_type";
 import { IoIosMenu } from "react-icons/io";
 import { IoMailOutline } from "react-icons/io5";
 import { FiPhone } from "react-icons/fi";
 import Link from 'next/link';
 import { MdClose } from "react-icons/md"
+import { useNavCategories } from "@/hooks/use_nav_categories";
 
 
 const MobileMenuCategories = () => {
     const { showAllCategories, setShowAllCategories } = useNavigationContext()
+    const categories = useNavCategories()
 
     const [activeSub, setActiveSub] = useState<boolean>(false)
 
     // state to control which category to show on side based on user's choice
     const [subCategory, setSubCategory] = useState<CategoryType>(categories[0])
 
+    useEffect(() => {
+        setSubCategory(categories[0])
+    }, [categories])
+
     const updateSubCategory = (index: number) => {
         setSubCategory(categories[index])
         setActiveSub(true)
     } 
+
 
       
     return (

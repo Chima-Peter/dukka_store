@@ -54,23 +54,23 @@ export const viewport = {
 
 
 export const metadata = {
-  title: "Melch.Store - Buy Premium Products Online",
+  title: "Dukka.Store - Buy Premium Products Online",
   description:
     "Shop high-quality fashion, electronics, and home essentials at unbeatable prices. Fast shipping & secure checkout.",
-  metadataBase: new URL("https://www.melch.store"),
+  metadataBase: new URL("https://www.dukka.store"),
   alternates: {
-    canonical: "https://www.melch.store",
+    canonical: "https://www.dukka.store",
   },
   openGraph: {
     type: "website",
-    title: "Melch.Store - Buy Premium Products Online",
+    title: "Dukka.Store - Buy Premium Products Online",
     description:
       "Shop high-quality fashion, electronics, and home essentials at unbeatable prices. Fast shipping & secure checkout.",
-    url: "https://www.melch.store",
-    siteName: "Melch.Store",
+    url: "https://www.dukka.store",
+    siteName: "Dukka.Store",
     images: [
       {
-        url: "/melch_logo.png",
+        url: "/dukka_logo.png",
         width: 1200,
         height: 630,
       },
@@ -79,16 +79,16 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    site: "@melchstore",
-    creator: "@melchstore",
-    title: "Melch.Store - Buy Premium Products Online",
+    site: "@dukkastore",
+    creator: "@dukkastore",
+    title: "Dukka.Store - Buy Premium Products Online",
     description:
       "Shop high-quality fashion, electronics, and home essentials at unbeatable prices. Fast shipping & secure checkout.",
-    images: ["/melch_logo.png"],
+    images: ["/dukka_logo.png"],
   },
   appleWebApp: {
     capable: true,
-    title: "Melch.Store",
+    title: "Dukka.Store",
     statusBarStyle: "default",
   },
   icons: {
@@ -98,9 +98,9 @@ export const metadata = {
   },
   other: {
     keywords:
-      "Melch.Store, online shopping, fashion, electronics, home essentials, best deals, fast shipping",
+      "Dukka.Store, online shopping, fashion, electronics, home essentials, best deals, fast shipping",
     robots: "index, follow",
-    author: "Melch.Store Team",
+    author: "Dukka.Store Team",
     viewport: "width=device-width, initial-scale=1",
     referrer: "no-referrer-when-downgrade",
   },

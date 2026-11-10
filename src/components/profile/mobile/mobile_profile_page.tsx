@@ -1,3 +1,5 @@
+"use client"
+
 import { BiEdit, BiMessageSquareDetail } from "react-icons/bi"
 import { FaChevronRight } from "react-icons/fa6"
 import { GoHeart, GoPerson } from "react-icons/go"
@@ -6,9 +8,12 @@ import { CgProfile } from "react-icons/cg";
 import Link from "next/link"
 import Image from "next/image"
 import BackButton from "@/components/ui/back_button"
+import { useGetMeQuery } from "@/redux/services/customer_api"
 
 
 const MobileProfilePage = () => {
+    const { data: me } = useGetMeQuery()
+
     const profileOptionsList = [
         {
             name: "Profile",
@@ -60,11 +65,11 @@ const MobileProfilePage = () => {
                     <div className="flex flex-col gap-1">
                         <div className="flex gap-3 items-center">
                             <h1 className="text-[18px] md:text-[20px] font-[500]">
-                                Esther Jones
+                                {me?.name || "Customer"}
                             </h1>
                         </div>
                         <p className="text-[14px] md:[16px] font-[300] tracking-wide font-mobile-nav">
-                            esther@gmail.com
+                            {me?.email || ""}
                         </p>
                     </div>
                 </div>

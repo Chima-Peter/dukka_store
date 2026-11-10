@@ -1,6 +1,4 @@
-import Link from "next/link"
-import ProductCollection from "@/components/products/products_collection"
-import { fish_and_stock_product } from "@/utils/sample_data"
+import Link from "next/link";
 
 const NotFoundPage = () => {
     return (
@@ -14,21 +12,18 @@ const NotFoundPage = () => {
                         Page not found
                     </h2>
                     <p className="text-[14px] min-lg:text-[16px] xl:text-[18px] 2xl:text-[20px] leading-relaxed tracking-wide font-[400] w-[100%] sm:w-[80%] text-center">
-                        The page you’re trying to view does not exist or has been removed
+                        The page you&apos;re trying to view does not exist or has been removed
                     </p>
-                    <p className="text-[14px] min-lg:text-[16px] xl:text-[18px] 2xl:text-[20px] leading-relaxed tracking-wide font-[400] w-[80%] text-center">
-                        Or
-                    </p>
-                    <Link href={'/'} className="text-[14px] xs:text-[16px] xl:text-[24px] 2xl:text-[36px] text-black bg-[#FEB100] rounded-md py-3 pl-12 pr-2 w-fit font-urbanist">
+                    <Link
+                        href="/"
+                        className="text-[14px] xs:text-[16px] xl:text-[24px] 2xl:text-[36px] text-black bg-[#FEB100] rounded-md py-3 pl-12 pr-2 w-fit font-urbanist"
+                    >
                         Go to homepage
                     </Link>
                 </div>
             </section>
-
-
-            <ProductCollection header="You might also like" link="/category/fish and stock" details={fish_and_stock_product} />
         </main>
-    )
-}
+    );
+};
 
-export default NotFoundPage
+export default NotFoundPage;

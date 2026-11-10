@@ -3,13 +3,15 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import store from './store'
+import MarketBootstrap from '@/components/providers/market_bootstrap'
 
-// we wrap all the children with redux here as redux is only accessible from client components
 const ReduxProvider = ({ children }: { children: React.ReactNode }) => {
     return (
         <Provider store={store}>
-            {children}
-        </Provider>   
+            <MarketBootstrap>
+                {children}
+            </MarketBootstrap>
+        </Provider>
     )
 }
 

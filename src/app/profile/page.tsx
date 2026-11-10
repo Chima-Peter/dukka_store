@@ -1,24 +1,16 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import ResponsiveDisplay from "@/utils/responsive_display";
 import MobileProfilePage from "@/components/profile/mobile/mobile_profile_page";
 import DesktopProfilePage from "@/components/profile/desktop/desktop_profile_page";
-
+import { requireCustomerAuth } from "@/lib/require_auth";
 
 export const metadata = {
-    title: "Account Settings - Melch.store",
-    description: "Access your profile details, update information, and customize your experience on Melch.",
+    title: "Account Settings - Dukka.store",
+    description: "Access your profile details, update information, and customize your experience on Dukka.",
     robots: "noindex, nofollow",
-}
+};
 
 const ProfilePage = async () => {
-    // load authorization token
-    const authToken = (await cookies()).get("authToken")?.value
-
-    // if user hasn't logged in, then user cart is not saved to db, so we use localstorage cart data
-    if (authToken) {
-        redirect("/login")
-    }
+    await requireCustomerAuth();
     return (
         <>
             <ResponsiveDisplay maxWidth={1000}>
@@ -28,7 +20,7 @@ const ProfilePage = async () => {
                 <DesktopProfilePage />
             </ResponsiveDisplay>
         </>
-    )
-}
+    );
+};
 
-export default ProfilePage
+export default ProfilePage;

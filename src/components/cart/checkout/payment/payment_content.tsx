@@ -44,29 +44,12 @@ const PaymentContent = () => {
                             </h3>
                         </li>
 
-                        <li className="flex justify-between">
-                            <p className="text-[14px] min-lg:text-[16px] xl:text-[18px] 2xl:text-[20px] text-black font-[400] tracking-wide">
-                                Discount:
-                            </p>
-                            <h3 className="text-[16px] min-lg:text-[18px] xl:text-[20px] 2xl:text-[22px] text-black font-semibold">
-                                &#8358;0
-                            </h3>
-                        </li>
-                        
-                        <li className="flex justify-between">
-                            <p className="text-[14px] min-lg:text-[16px] xl:text-[18px] 2xl:text-[20px] text-black font-[400] tracking-wide">
-                                Tax:
-                            </p>
-                            <h3 className="text-[16px] min-lg:text-[18px] xl:text-[20px] 2xl:text-[22px] text-black font-semibold">
-                                &#8358;{addCommasToInt(totalAmount * 0.075)}
-                            </h3>
-                        </li>
                         <li className="flex justify-between mt-6 py-1 border-b border-b-gray-300">
                             <p className="text-[14px] min-lg:text-[16px] xl:text-[18px] 2xl:text-[20px] text-black font-[400] tracking-wide">
                                 Grand Total:
                             </p>
                             <h3 className="text-[17px] min-lg:text-[20px] xl:text-[22px] 2xl:text-[24px] text-black font-bold">
-                                &#8358;{addCommasToInt(totalAmount + (totalAmount * 0.075))}
+                                &#8358;{addCommasToInt(totalAmount)}
                             </h3>
                         </li>
                     </ul>

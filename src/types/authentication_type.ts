@@ -1,29 +1,36 @@
-
 export interface SignUpRequest {
-    full_name: string,
-    email: string,
-    password: string
+    name: string;
+    email: string;
+    password: string;
 }
 
 export interface SignUpResponse {
-    status: number,
-    message: string
+    id: string;
+    name: string;
+    email: string;
 }
 
 export interface LoginRequest {
-    email: string,
-    password: string
+    email: string;
+    password: string;
 }
 
-
 export interface LoginResponse {
-    status: number,
-    message: string,
+    accessToken: string;
+    refreshToken: string;
+    customer: {
+        id: string;
+        name: string;
+        email: string;
+        active_market_id: string | null;
+    };
 }
 
 export interface AuthenticationType {
-    first_name?: string
-    full_name?: string
-    isAuthenticated?: boolean
-    email?: string
+    first_name?: string;
+    full_name?: string;
+    isAuthenticated?: boolean;
+    email?: string;
+    cart_id?: string | null;
+    customer_id?: string;
 }

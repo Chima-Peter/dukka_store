@@ -36,7 +36,18 @@ const CartComponentLarge = ({ allProducts }: { allProducts: CartTypes }) => {
                     <section className="w-[100%] flex flex-col gap-4">
                         {
                             allProducts.cart.map((product, index: number) => (
-                                <RenderCartProduct name={product.name} price={product.price} image={product.image} key={`${index}-${product.name}`}  quantity={product.quantity || 1}/>
+                                <RenderCartProduct
+                                    id={product.id}
+                                    name={product.name}
+                                    price={product.price}
+                                    image={product.image}
+                                    market_variant_id={product.market_variant_id}
+                                    discount_amount={product.discount_amount}
+                                    currency={product.currency}
+                                    sold_out={product.sold_out}
+                                    key={`${index}-${product.id || product.name}`}
+                                    quantity={product.quantity || 1}
+                                />
                             ))
                         }
                     </section>
@@ -52,20 +63,12 @@ const CartComponentLarge = ({ allProducts }: { allProducts: CartTypes }) => {
                                 &#8358;{addCommasToInt(totalAmount)}
                             </h3>
                         </li>
-                        <li className="flex justify-between">
-                            <p className="text-[14px] min-lg:text-[16px] xl:text-[18px] 2xl:text-[20px] text-black font-[400] tracking-wide">
-                                Tax:
-                            </p>
-                            <h3 className="text-[16px] min-lg:text-[18px] xl:text-[20px] 2xl:text-[22px] text-black font-semibold">
-                                &#8358;{addCommasToInt(totalAmount * 0.075)}
-                            </h3>
-                        </li>
                         <li className="flex justify-between mt-6 py-1 border-b border-b-gray-300">
                             <p className="text-[14px] min-lg:text-[16px] xl:text-[18px] 2xl:text-[20px] text-black font-[400] tracking-wide">
                                 Grand Total:
                             </p>
                             <h3 className="text-[17px] min-lg:text-[20px] xl:text-[22px] 2xl:text-[24px] text-black font-bold">
-                                &#8358;{addCommasToInt(totalAmount + (totalAmount * 0.075))}
+                                &#8358;{addCommasToInt(totalAmount)}
                             </h3>
                         </li>
                     </ul>

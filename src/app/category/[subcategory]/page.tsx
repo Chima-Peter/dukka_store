@@ -13,25 +13,25 @@ export const generateMetadata = async (
   const category = decodeURIComponent(subcategory);
   // Ensure the category is sanitized and formatted correctly
 
-  const title = `${category} - Melch`;
-  const description = `Explore top ${category} products tailored to your needs on Melch.`;
+  const title = `${category} - Dukka`;
+  const description = `Explore top ${category} products tailored to your needs on Dukka.`;
 
   return {
     title,
     description,
-    keywords: `Melch, ${category}, products, shop by category`,
+    keywords: `Dukka, ${category}, products, shop by category`,
     robots: "index, follow",
     openGraph: {
       title,
       description,
-      url: `https://melch.com/category/${category}`,
-      siteName: "Melch",
+      url: `https://dukka.store/category/${category}`,
+      siteName: "Dukka",
       images: [
         {
-          url: `https://melch.com/og-images/${category}.jpg`, // Optional: category-based OG image
+          url: `https://dukka.store/og-images/${category}.jpg`, // Optional: category-based OG image
           width: 1200,
           height: 630,
-          alt: `${category} category on Melch`,
+          alt: `${category} category on Dukka`,
         },
       ],
       locale: "en_US",

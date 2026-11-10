@@ -69,7 +69,7 @@ const Footer = () => {
         <footer className="bg-black w-[100%] flex flex-col gap-8 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16 pt-14 pb-24 min-lg:pb-8 font-urbanist">
             <section className="flex w-[100%] justify-between flex-wrap gap-y-12 min-lg:gap-0">
                 <div className="flex flex-col gap-4 w-[100%] sm:w-[48%] min-lg:w-[23%]">
-                    <Image width={200} height={44} src="/logo.svg" alt="Melch.store" />
+                    <Image width={200} height={44} src="/logo.svg" alt="Dukka" />
                     <p className="text-[#888B8B] font-normal tracking-wide leading-relaxed text-[14px] md:text-[16px] xl:text-[18px] 2xl:text-[20px]">
                         Mile 12 is your #1 Closest Online Naija Food Market place with amazing deals on all Naija food items you can think of
                     </p>

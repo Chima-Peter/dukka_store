@@ -23,7 +23,18 @@ const CartComponentSmall = ({ allProducts }: { allProducts: CartTypes }) => {
                 <section className="flex flex-col w-[100%] gap-4">
                     {
                         allProducts.cart.map((product, index: number) => (
-                            <RenderCartProduct name={product.name} price={product.price} image={product.image} key={`${index}-${product.name}`} quantity={product.quantity || 1} />
+                            <RenderCartProduct
+                                id={product.id}
+                                name={product.name}
+                                price={product.price}
+                                image={product.image}
+                                market_variant_id={product.market_variant_id}
+                                discount_amount={product.discount_amount}
+                                currency={product.currency}
+                                sold_out={product.sold_out}
+                                key={`${index}-${product.id || product.name}`}
+                                quantity={product.quantity || 1}
+                            />
                         ))
                     }
                 </section>
