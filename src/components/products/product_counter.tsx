@@ -69,14 +69,13 @@ const ProductCounter = ({ detail }: { detail: DetailsType }) => {
     return (
         <motion.div
             key={detail.title}
-            className="max-[801px]:w-[170px] max-[801px]:flex-shrink-0 border rounded-2xl border-gray-400 flex flex-col min-[801px]:w-[23%] xl:w-[300px] 2xl:w-[400px] items-center pb-3 cursor-pointer"
-            whileHover={{ scale: 1.02, boxShadow: "0px 20px 20px rgba(0, 0, 0, 0.3)" }}
-            whileFocus={{ scale: 1.02, boxShadow: "0px 20px 20px rgba(0, 0, 0, 0.3)" }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="flex w-full max-w-[320px] min-w-[170px] flex-shrink-0 cursor-pointer flex-col items-center border border-[#D5DADA] bg-white pb-3"
+            whileHover={{ y: -2 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
         >
             <Link
                 href={productHref}
-                className="w-[100%] bg-[#F0F0F0] py-2 flex justify-center items-center rounded-t-2xl min-[801px]:h-[150px]"
+                className="flex h-[150px] w-[100%] items-center justify-center bg-[#F5F6F5] py-2"
             >
                 <ProductImage width={250} height={100} src={detail.image} alt={detail.title} />
             </Link>
