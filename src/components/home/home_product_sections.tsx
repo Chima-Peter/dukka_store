@@ -76,6 +76,13 @@ const HomeProductSections = () => {
 
     return (
         <>
+            {featuredDetails.length > 0 && (
+                <ProductCollection
+                    header="Popular now"
+                    link="/category/all"
+                    details={featuredDetails}
+                />
+            )}
             {(cat1Details.length > 0 || featuredDetails.length > 0) && (
                 <ProductCollection
                     header={firstCategory?.name || "Featured products"}
@@ -96,13 +103,6 @@ const HomeProductSections = () => {
                             : "/category/all"
                     }
                     details={cat2Details.length ? cat2Details : featuredDetails}
-                />
-            )}
-            {featuredDetails.length > 0 && (
-                <ProductCollection
-                    header="Popular products"
-                    link="/category/all"
-                    details={featuredDetails}
                 />
             )}
         </>

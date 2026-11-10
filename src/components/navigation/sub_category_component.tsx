@@ -9,47 +9,45 @@ const CategoryComponent = () => {
     const { setShowCategories, categoryIndex } = useNavigationContext();
     const categories = useNavCategories();
     const selectedCategory = categories[categoryIndex] ?? categories[0];
+    const href = `/category/${encodeURIComponent(selectedCategory?.category || "all")}`;
 
     const closeCategories = () => {
         setShowCategories(false);
     };
 
+    if (!selectedCategory) return null;
+
     return (
         <motion.section
-            className="w-[100%] min-h-[100vh] backdrop-brightness-90 fixed py-[15%] flex justify-center overflow-hidden z-30"
-            transition={{ duration: 1 }}
+            className="fixed z-30 flex min-h-[100vh] w-full justify-center overflow-hidden py-[12%] backdrop-brightness-90"
+            transition={{ duration: 0.35 }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
         >
             <section
-                className="w-[90%] rounded-xl bg-white overflow-y-auto customScroll max-h-[70vh] h-fit p-12 flex z-30 justify-between gap-y-12 flex-wrap font-urbanist"
+                className="z-30 flex h-fit w-[90%] max-w-[720px] flex-col gap-5 border border-[#E4E7E7] bg-white px-8 py-8 font-urbanist shadow-sm"
                 onMouseLeave={closeCategories}
             >
-                {selectedCategory?.subcategories.map((category) => (
-                    <div
-                        key={category.name}
-                        className="flex flex-col gap-6 w-[100%] xs:w-[48%] sm:w-[30%] h-fit"
-                    >
-                        <h2 className="text-[22px] xl:text-[24px] 2xl:text-[26px] font-semibold tracking-wide">
-                            {category.name}
-                        </h2>
-                        <ul className="flex flex-col gap-4">
-                            {category.products.map((sub) => (
-                                <Link
-                                    href={`/category/${encodeURIComponent(sub.name)}`}
-                                    key={sub.name}
-                                    className="text-[#888B8B] text-[18px] xl:text-[20px] 2xl:text-[22px] hover:text-[#FEB100] font-medium"
-                                    onClick={closeCategories}
-                                >
-                                    {sub.name}
-                                </Link>
-                            ))}
-                        </ul>
-                    </div>
-                ))}
+                <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#888B8B]">
+                    Category
+                </p>
+                <h2 className="text-[28px] font-semibold tracking-tight text-[#0D523F] xl:text-[32px]">
+                    {selectedCategory.category}
+                </h2>
+                <p className="max-w-[36rem] text-[16px] leading-relaxed text-[#5B6363]">
+                    Browse products in {selectedCategory.category} with live market
+                    pricing.
+                </p>
+                <Link
+                    href={href}
+                    onClick={closeCategories}
+                    className="mt-2 w-fit bg-[#FEB100] px-6 py-3 text-[15px] font-semibold text-[#031815] transition-colors hover:bg-[#0D523F] hover:text-white"
+                >
+                    Shop {selectedCategory.category}
+                </Link>
             </section>
             <section
-                className="w-[100vw] h-[100vh] min-h-[100vh] fixed top-0 left-0 z-20"
+                className="fixed left-0 top-0 z-20 h-[100vh] min-h-[100vh] w-[100vw]"
                 onClick={closeCategories}
             />
         </motion.section>

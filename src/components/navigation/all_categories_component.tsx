@@ -3,80 +3,59 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import useNavigationContext from "../../hooks/use_category_component";
-import { FaChevronRight } from "react-icons/fa6";
-import { useEffect, useState } from "react";
-import { CategoryType } from "../../types/category_type";
 import { useNavCategories } from "@/hooks/use_nav_categories";
 
 const AllCategoryComponent = () => {
     const { setShowAllCategories } = useNavigationContext();
     const categories = useNavCategories();
-    const [subCategory, setSubCategory] = useState<CategoryType>(categories[0]);
-
-    useEffect(() => {
-        setSubCategory(categories[0]);
-    }, [categories]);
 
     const closeCategories = () => {
         setShowAllCategories(false);
     };
 
-    const updateSubCategory = (index: number) => {
-        setSubCategory(categories[index]);
-    };
-
     return (
         <motion.section
-            className="w-[100%] min-h-[100vh] backdrop-brightness-90 fixed py-[15%] flex justify-center overflow-hidden z-50"
-            transition={{ duration: 1 }}
+            className="fixed z-50 flex min-h-[100vh] w-full justify-center overflow-hidden py-[12%] backdrop-brightness-90"
+            transition={{ duration: 0.35 }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
         >
             <section
-                className="w-[90%] rounded-xl bg-white h-[70vh] flex justify-between font-urbanist gap-4 z-50"
+                className="z-50 flex max-h-[70vh] w-[90%] max-w-[960px] flex-col gap-6 overflow-y-auto border border-[#E4E7E7] bg-white px-8 py-8 font-urbanist"
                 onMouseLeave={closeCategories}
             >
-                <div className="flex flex-col w-fit max-w-[35%] bg-[#F6F6F6] rounded-l-lg overflow-y-auto">
-                    {categories.map((category, index) => (
-                        <button
-                            key={category.category}
-                            className="flex gap-4  py-6 px-6 hover:bg-gray-200 justify-between w-[100%] items-center"
-                            onMouseMove={() => updateSubCategory(index)}
-                        >
-                            <h2 className="min-lg:text-[16px] lg:text-[20px] xl:text-[22px] 2xl:text-[24px] font-normal tracking-wide">
-                                {category.category}
-                            </h2>
-                            <FaChevronRight className="w-3 h-3 min-lg:w-4 min-lg:h-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6" />
-                        </button>
-                    ))}
+                <div className="flex items-end justify-between gap-4 border-b border-[#E8EBEB] pb-4">
+                    <div>
+                        <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#888B8B]">
+                            Browse
+                        </p>
+                        <h2 className="mt-1 text-[28px] font-semibold tracking-tight text-[#0D523F]">
+                            All categories
+                        </h2>
+                    </div>
+                    <Link
+                        href="/category/all"
+                        onClick={closeCategories}
+                        className="text-[14px] font-semibold text-[#0D523F] underline-offset-4 hover:underline"
+                    >
+                        Shop all products
+                    </Link>
                 </div>
-                <div className="overflow-y-auto customScroll flex justify-between  gap-y-12 w-[70%] flex-wrap pt-6 pb-10 px-4">
-                    {subCategory?.subcategories.map((category) => (
-                        <div
-                            key={category.name}
-                            className="flex flex-col gap-6 w-[100%] xs:w-[48%] sm:w-[30%] h-fit"
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
+                    {categories.map((category) => (
+                        <Link
+                            key={category.category}
+                            href={`/category/${encodeURIComponent(category.category)}`}
+                            onClick={closeCategories}
+                            className="border border-[#E4E7E7] px-4 py-4 text-[16px] font-medium text-[#0D523F] transition-colors duration-200 hover:border-[#0D523F] hover:bg-[#0D523F] hover:text-white"
                         >
-                            <h2 className="text-[22px] xl:text-[24px] 2xl:text-[26px] font-semibold tracking-wide">
-                                {category.name}
-                            </h2>
-                            <ul className="flex flex-col gap-4">
-                                {category.products.map((sub) => (
-                                    <Link
-                                        key={sub.name}
-                                        href={`/category/${encodeURIComponent(sub.name)}`}
-                                        className="text-[#888B8B] text-[18px] xl:text-[20px] 2xl:text-[22px] hover:text-[#FEB100] font-medium"
-                                        onClick={closeCategories}
-                                    >
-                                        {sub.name}
-                                    </Link>
-                                ))}
-                            </ul>
-                        </div>
+                            {category.category}
+                        </Link>
                     ))}
                 </div>
             </section>
             <section
-                className="w-[100vw] h-[100vh] min-h-[100vh] fixed top-0 left-0 z-40"
+                className="fixed left-0 top-0 z-40 h-[100vh] min-h-[100vh] w-[100vw]"
                 onClick={closeCategories}
             />
         </motion.section>

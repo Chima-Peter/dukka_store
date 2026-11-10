@@ -7,7 +7,6 @@ import SearchBar from "../search/search_bar"
 import { BsCart2 } from "react-icons/bs"
 import { GoPerson } from "react-icons/go"
 import { VscMenu } from "react-icons/vsc"
-import { RiArrowDropDownLine } from "react-icons/ri"
 import CategoryComponent from "./sub_category_component"
 import useNavigationContext from "../../hooks/use_category_component"
 import AuthOptions from "../authentication/auth_options"
@@ -127,25 +126,39 @@ const DesktopNav = ({ userLocation, flag, currency, language }: PropTypes) => {
                         {showLoginBox && <AuthOptions />}
                     </div>
                 </div>
-                <div className="w-[100%] px-20 py-4 flex justify-between items-center border-t border-[#ADB1B1]">
-                    <button className={`py-3 px-6 ${categoryIndex === 100 ? 'bg-[#FEB100]' : 'bg-white'} flex items-center gap-3 rounded-md`} onMouseMove={openAllCategoryComponent}>
-                        <p className="font-medium text-[16px] xl:text-[22px] 2xl:text-[28px] font-urbanist">
-                            All Categories
-                        </p>
-                        <VscMenu className="w-5 h-5 xl:w-7 xl:h-7 2xl:w-10 2xl:h-10" />
-                    </button>
-                    {navCategories.slice(0, 4).map((category, index) => (
+                <div className="w-full border-t border-[#E4E7E7] bg-[#FAFBFA]">
+                    <div className="mx-auto flex w-full max-w-[1600px] items-center gap-1 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
                         <button
-                            key={category.category}
-                            onMouseMove={() => openCategoryComponent(index)}
-                            className={`flex items-center gap-2 rounded-md hover:bg-[#FEB100] py-3 px-6 ${categoryIndex === index ? 'bg-[#FEB100]' : 'bg-white'}`}
+                            className={`flex shrink-0 items-center gap-2 border-b-2 px-3 py-3.5 transition-colors duration-200 xl:px-4 ${
+                                categoryIndex === 100
+                                    ? "border-[#FEB100] text-[#0D523F]"
+                                    : "border-transparent text-[#0D523F]/80 hover:text-[#0D523F]"
+                            }`}
+                            onMouseEnter={openAllCategoryComponent}
                         >
-                            <p className="font-normal text-[16px] xl:text-[22px] 2xl:text-[28px]">
-                                {category.category}
-                            </p>
-                            <RiArrowDropDownLine className="w-5 h-5 xl:w-7 xl:h-7 2xl:w-10 2xl:h-10" />
+                            <VscMenu className="h-4 w-4 xl:h-5 xl:w-5" />
+                            <span className="text-[13px] font-semibold uppercase tracking-[0.14em] xl:text-[14px]">
+                                All
+                            </span>
                         </button>
-                    ))}
+                        <div className="h-5 w-px shrink-0 bg-[#D5DADA]" />
+                        <div className="flex min-w-0 flex-1 items-center gap-0 overflow-x-auto scrollbar-hide">
+                            {navCategories.map((category, index) => (
+                                <Link
+                                    key={category.category}
+                                    href={`/category/${encodeURIComponent(category.category)}`}
+                                    onMouseEnter={() => openCategoryComponent(index)}
+                                    className={`shrink-0 border-b-2 px-3 py-3.5 text-[14px] font-medium transition-colors duration-200 xl:px-4 xl:text-[15px] ${
+                                        categoryIndex === index
+                                            ? "border-[#0D523F] text-[#0D523F]"
+                                            : "border-transparent text-[#4B5555] hover:border-[#FEB100] hover:text-[#0D523F]"
+                                    }`}
+                                >
+                                    {category.category}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </section>
             {

@@ -15,12 +15,20 @@ interface ProductCollectionType {
 const ProductCollection = (props: ProductCollectionType) => {
 
     return (
-        <section className="w-[100%] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16 bg-white flex flex-col font-urbanist py-6 md:py-8 h-fit min-lg:py-12 gap-8">
-            <div className="w-[100%] flex justify-between items-center">
-                <h2 className="text-[16px] font-semibold md:text-xl xl:text-2xl 2xl:text-3xl">
-                    {props.header}
-                </h2>
-                <Link href={props.link} className="text-[16px] md:text-[18px] xl:text-[20px] text-[#0D523F]">
+        <section className="flex h-fit w-[100%] flex-col gap-8 bg-white px-4 py-8 font-urbanist sm:px-6 md:px-8 md:py-10 lg:px-12 min-lg:py-12 xl:px-14 2xl:px-16">
+            <div className="flex w-[100%] items-end justify-between gap-4 border-b border-[#E8EBEB] pb-4">
+                <div className="flex flex-col gap-1">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#888B8B]">
+                        Catalog
+                    </p>
+                    <h2 className="text-[22px] font-semibold tracking-tight text-[#0D523F] md:text-2xl xl:text-[28px]">
+                        {props.header}
+                    </h2>
+                </div>
+                <Link
+                    href={props.link}
+                    className="shrink-0 text-[14px] font-semibold text-[#0D523F] underline-offset-4 transition-colors hover:text-[#031815] hover:underline md:text-[16px]"
+                >
                     See all
                 </Link>
             </div>
