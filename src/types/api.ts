@@ -405,3 +405,53 @@ export interface ReviewPage {
     items: ReviewSummary[];
     next_cursor: string | null;
 }
+
+export interface OpenMarket {
+    id: string;
+    name: string;
+    code: string;
+    status: string;
+    iso2: string;
+    currency_code: string;
+    created_at: string;
+}
+
+export interface PointsHistoryItem {
+    id: string;
+    status: "EARNED" | "REDEEMED" | "EXPIRED" | string;
+    description: string | null;
+    count: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface PointsHistoryPage {
+    items: PointsHistoryItem[];
+    next_cursor: string | null;
+}
+
+export interface NotificationItem {
+    id: string;
+    title: string;
+    type: string;
+    text: string;
+    has_read: boolean;
+    created_at: string;
+    read_at: string | null;
+}
+
+export interface NotificationsPage {
+    items: NotificationItem[];
+    next_cursor: string | null;
+}
+
+export interface UpdateAddressRequest {
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    phone_number?: string;
+    whatsapp_number?: string;
+    country?: string;
+    state?: string;
+    street_address?: string;
+}

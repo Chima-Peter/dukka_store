@@ -7,6 +7,7 @@ import { useAppSelector } from "@/redux/store";
 import { DetailsType } from "@/types/cart_type";
 import { useState } from "react";
 import { useCartActions } from "@/hooks/use_cart_actions";
+import { formatMoney } from "@/utils/format_money";
 import ProductImage from "@/components/ui/product_image";
 
 const SingleProduct = ({
@@ -77,117 +78,134 @@ const SingleProduct = ({
         }
     };
 
+    const isRow = changeGrid === "1x3";
+
     return (
-        <motion.div
+        <motion.article
             key={title}
-            className={`border rounded-2xl border-gray-400 flex cursor-pointer flex-shrink-0 ${changeGrid === "3x3" && "w-[32%] flex-col pb-3 items-center"} ${changeGrid === "1x3" && "w-[49%] flex-row"}`}
-            whileHover={{ scale: 1.02, boxShadow: "0px 20px 20px rgba(0, 0, 0, 0.3)" }}
-            whileFocus={{ scale: 1.02, boxShadow: "0px 20px 20px rgba(0, 0, 0, 0.3)" }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className={`group flex min-w-0 overflow-hidden border border-[#E4E7E7] bg-white ${
+                isRow ? "w-full flex-row" : "h-full w-full flex-col"
+            }`}
+            whileHover={{ y: -2 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
         >
             <Link
                 href={productHref}
-                className={`w-[100%] bg-[#F0F0F0] ${changeGrid === "3x3" && "py-2 rounded-t-2xl rounded-l-none rounded-ss-2xl"} rounded-l-2xl flex justify-center items-center`}
+                className={`relative block overflow-hidden bg-[#F5F6F5] ${
+                    isRow
+                        ? "aspect-square w-[42%] shrink-0 self-stretch"
+                        : "aspect-[4/5] w-full"
+                }`}
             >
                 <ProductImage
                     width={300}
-                    height={160}
+                    height={isRow ? 300 : 375}
                     src={image}
                     alt={title}
                     seed={id || title}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                 />
+                {sold_out && (
+                    <span className="absolute left-3 top-3 bg-[#031815] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">
+                        Sold out
+                    </span>
+                )}
             </Link>
             <div
-                className={`flex flex-col gap-2 w-[100%] items-center ${changeGrid === "1x3" ? "py-2" : "py-0"}`}
+                className={`flex flex-1 flex-col gap-2 p-3.5 sm:p-4 ${
+                    isRow ? "justify-center" : ""
+                }`}
             >
-                <p className="text-[14px] md:text-[16px] font-[400] mt-2">{title}</p>
-                <p className="text-[16px] md:text-[18px] lg:text-[20px] font-bold mt-2 text-[#0D523F]">
-                    {currency && currency.toUpperCase() !== "NGN"
-                        ? `${currency.toUpperCase()} ${price}`
-                        : `₦ ${price}`}
-                </p>
-                {sold_out && <p className="text-sm text-red-600">Sold out</p>}
-                <AnimatePresence mode="popLayout">
-                    {!market_variant_id ? (
-                        <motion.div
-                            key="view-button"
-                            className="mt-2 w-[90%]"
-                            initial={{ opacity: 1, y: 0 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.4 }}
-                        >
-                            <Link
-                                href={productHref}
-                                className="flex gap-4 border-2 items-center justify-center border-[#FEB100] py-3 w-full rounded-lg"
-                            >
-                                <p className="text-[18px]">
-                                    {sold_out ? "View product" : "Select options"}
-                                </p>
-                            </Link>
-                        </motion.div>
-                    ) : quantity < 1 ? (
-                        <motion.button
-                            key="add-button"
-                            className="flex gap-4 border-2 items-center justify-center mt-2 border-[#FEB100] py-3 w-[90%] rounded-lg disabled:opacity-60"
-                            whileFocus={{ backgroundColor: "#FEB100" }}
-                            whileHover={{ backgroundColor: "#FEB100" }}
-                            onClick={addProductToCart}
-                            disabled={busy || sold_out}
-                            initial={{ opacity: 1, y: 0 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.4 }}
-                        >
-                            <BsCart2 className="w-5 h-5 xl:w-7 xl:h-7 2xl:w-10 2xl:h-10" />
-                            <p className="text-[18px]">{sold_out ? "Sold out" : "Add to cart"}</p>
-                        </motion.button>
-                    ) : (
-                        <motion.div
-                            key="counter"
-                            className="flex p-1 px-4 justify-between gap-4 border-2 items-center mt-2 border-[#FEB100] w-[90%] rounded-lg"
-                            initial={{ opacity: 0, y: -10, scaleY: "50%" }}
-                            animate={{ opacity: 1, y: 0, scaleY: "100%" }}
-                            exit={{ opacity: 0, y: -10, scaleY: "50%" }}
-                            transition={{ duration: 0.4 }}
-                        >
-                            <button
-                                className="bg-[#FEB100] h-7 w-8 flex items-center justify-center text-[20px] font-[500]"
-                                onClick={removeQuantityFromProduct}
-                            >
-                                -
-                            </button>
-                            <div className="relative flex items-center justify-center w-6 h-7 overflow-hidden">
-                                <AnimatePresence mode="popLayout">
-                                    <motion.span
-                                        key={quantity}
-                                        initial={{
-                                            y: method === "add" ? 10 : -10,
-                                            opacity: 0,
-                                        }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        exit={{
-                                            y: method === "add" ? 10 : -10,
-                                            opacity: 0,
-                                        }}
-                                        transition={{ duration: 0.2 }}
-                                        className="absolute"
-                                    >
-                                        {quantity}
-                                    </motion.span>
-                                </AnimatePresence>
-                            </div>
-                            <button
-                                className="bg-[#FEB100] h-7 w-8 flex items-center justify-center text-[20px] font-[500]"
-                                onClick={addQuantityToProduct}
-                            >
-                                +
-                            </button>
-                        </motion.div>
+                <Link
+                    href={productHref}
+                    className="line-clamp-2 min-h-[2.6em] text-[15px] font-medium leading-snug text-[#0D523F] sm:text-[16px]"
+                >
+                    {title}
+                </Link>
+                <p className="text-[17px] font-semibold tracking-tight text-[#031815] sm:text-[18px]">
+                    {formatMoney(
+                        Number(String(price).replace(/,/g, "")),
+                        currency,
                     )}
-                </AnimatePresence>
+                </p>
+                <div className="mt-auto pt-2">
+                    <AnimatePresence mode="popLayout">
+                        {!market_variant_id ? (
+                            <motion.div
+                                key="view-button"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                            >
+                                <Link
+                                    href={productHref}
+                                    className="flex w-full items-center justify-center gap-2 border border-[#FEB100] bg-[#FEB100] py-2.5 text-[14px] font-semibold text-[#031815] transition-colors hover:border-[#0D523F] hover:bg-[#0D523F] hover:text-white"
+                                >
+                                    {sold_out ? "View product" : "Select options"}
+                                </Link>
+                            </motion.div>
+                        ) : quantity < 1 ? (
+                            <motion.button
+                                key="add-button"
+                                type="button"
+                                className="flex w-full items-center justify-center gap-2 border border-[#FEB100] bg-[#FEB100] py-2.5 text-[14px] font-semibold text-[#031815] transition-colors hover:border-[#0D523F] hover:bg-[#0D523F] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                                onClick={addProductToCart}
+                                disabled={busy || sold_out}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                            >
+                                <BsCart2 className="h-4 w-4" />
+                                {sold_out ? "Sold out" : busy ? "Adding..." : "Add to cart"}
+                            </motion.button>
+                        ) : (
+                            <motion.div
+                                key="counter"
+                                className="flex w-full items-center justify-between border border-[#FEB100]"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                            >
+                                <button
+                                    type="button"
+                                    className="bg-[#FEB100] px-3 py-2 text-[18px] font-medium"
+                                    onClick={removeQuantityFromProduct}
+                                >
+                                    -
+                                </button>
+                                <div className="relative flex h-7 w-8 items-center justify-center overflow-hidden">
+                                    <AnimatePresence mode="popLayout">
+                                        <motion.span
+                                            key={quantity}
+                                            initial={{
+                                                y: method === "add" ? 10 : -10,
+                                                opacity: 0,
+                                            }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            exit={{
+                                                y: method === "add" ? 10 : -10,
+                                                opacity: 0,
+                                            }}
+                                            transition={{ duration: 0.2 }}
+                                            className="absolute text-[15px] font-semibold"
+                                        >
+                                            {quantity}
+                                        </motion.span>
+                                    </AnimatePresence>
+                                </div>
+                                <button
+                                    type="button"
+                                    className="bg-[#FEB100] px-3 py-2 text-[18px] font-medium"
+                                    onClick={addQuantityToProduct}
+                                >
+                                    +
+                                </button>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
             </div>
-        </motion.div>
+        </motion.article>
     );
 };
 

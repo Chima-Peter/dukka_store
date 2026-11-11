@@ -25,12 +25,24 @@ const FavouriteLarge = ({header, details}: ByCategoryTypes) => {
                     {details.length} Products
                 </p>
             </div>
-            <section className="flex w-[100%] justify-between flex-wrap gap-y-6 pb-8 px-2">
-                {
-                    displayList.map((field: DetailsType, index: number) => (
-                        <SingleProduct title={field.title} image={field.image} price={field.price} changeGrid={'3x3'} key={`${index} -${field.title}`} />
-                    ))
-                }
+            <section className="grid w-full grid-cols-2 gap-3 px-2 pb-8 sm:gap-4 md:grid-cols-3">
+                {displayList.map((field: DetailsType, index: number) => (
+                    <div
+                        key={`${index}-${field.id || field.title}`}
+                        className="min-w-0"
+                    >
+                        <SingleProduct
+                            id={field.id}
+                            title={field.title}
+                            image={field.image}
+                            price={field.price}
+                            currency={field.currency}
+                            sold_out={field.sold_out}
+                            market_variant_id={field.market_variant_id}
+                            changeGrid="3x3"
+                        />
+                    </div>
+                ))}
             </section>
             {
                 details.length > 0 && <Pagination itemsPerPage={10} totalItems={details.length} onPageChange={setPage} />

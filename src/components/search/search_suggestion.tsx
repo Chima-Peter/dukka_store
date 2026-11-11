@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useGetProductsQuery } from "@/redux/services/catalog_api";
 import { useActiveMarketId } from "@/hooks/use_active_market_id";
@@ -8,13 +9,20 @@ const SearchSuggestion = ({ query }: { query: string }) => {
     const router = useRouter();
     const marketId = useActiveMarketId();
     const trimmed = query.trim();
+    const [debounced, setDebounced] = useState(trimmed);
+
+    useEffect(() => {
+        const timer = window.setTimeout(() => setDebounced(trimmed), 250);
+        return () => window.clearTimeout(timer);
+    }, [trimmed]);
+
     const { data, isFetching } = useGetProductsQuery(
         {
             market_id: marketId,
-            name: trimmed || undefined,
+            name: debounced,
             limit: 8,
         },
-        { skip: !marketId },
+        { skip: !marketId || debounced.length < 2 },
     );
 
     const suggestions = (data?.items ?? []).map((item) => item.name);
@@ -29,10 +37,15 @@ const SearchSuggestion = ({ query }: { query: string }) => {
                 Suggestions
             </h2>
             <ul className="flex flex-col pb-4 w-[100%]">
-                {isFetching && (
+                {debounced.length < 2 && (
+                    <li className="text-[14px] py-2 px-4 text-gray-500">
+                        Type at least 2 characters to search
+                    </li>
+                )}
+                {debounced.length >= 2 && isFetching && (
                     <li className="text-[14px] py-2 px-4 text-gray-500">Searching...</li>
                 )}
-                {!isFetching && suggestions.length === 0 && (
+                {debounced.length >= 2 && !isFetching && suggestions.length === 0 && (
                     <li className="text-[14px] py-2 px-4 text-gray-500">
                         No products found
                     </li>

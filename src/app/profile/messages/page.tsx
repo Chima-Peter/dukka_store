@@ -1,11 +1,11 @@
 import ResponsiveDisplay from "@/utils/responsive_display";
 import DesktopProfilePage from "@/components/profile/desktop/desktop_profile_page";
-import MessagesSmall from "@/components/profile/mobile/messages/messages_small";
+import ProfileMobileSection from "@/components/profile/mobile/profile_mobile_section";
+import ProfileNotificationsPanel from "@/components/profile/profile_notifications_panel";
 import { requireCustomerAuth } from "@/lib/require_auth";
 
 export const metadata = {
-    title: "Your Messages - Dukka",
-    description: "Check and respond to messages from buyers and sellers.",
+    title: "Notifications - Dukka",
     robots: "noindex, nofollow",
 };
 
@@ -14,10 +14,12 @@ const ProfileMessagesPage = async () => {
     return (
         <>
             <ResponsiveDisplay maxWidth={1000}>
-                <MessagesSmall />
+                <ProfileMobileSection>
+                    <ProfileNotificationsPanel backHref="/profile" />
+                </ProfileMobileSection>
             </ResponsiveDisplay>
             <ResponsiveDisplay minWidth={1001}>
-                <DesktopProfilePage />
+                <DesktopProfilePage initialStep={3} />
             </ResponsiveDisplay>
         </>
     );

@@ -156,9 +156,18 @@ const ByCategoryLarge = ({header, details, caller, link}: ByCategoryTypes) => {
                             }
                         </button>
                     </div>
-                    <section className="flex w-[100%] justify-between flex-wrap gap-y-6 pb-8 px-2">
-                        {
-                            detailsList.map((field: DetailsType, index: number) => (
+                    <section
+                        className={`grid w-full gap-3 px-2 pb-8 sm:gap-4 ${
+                            grid === "1x3"
+                                ? "grid-cols-1 md:grid-cols-2"
+                                : "grid-cols-2 md:grid-cols-3"
+                        }`}
+                    >
+                        {detailsList.map((field: DetailsType, index: number) => (
+                            <div
+                                key={`${index}-${field.id || field.title}`}
+                                className="min-w-0"
+                            >
                                 <SingleProduct
                                     id={field.id}
                                     title={field.title}
@@ -166,11 +175,11 @@ const ByCategoryLarge = ({header, details, caller, link}: ByCategoryTypes) => {
                                     price={field.price}
                                     currency={field.currency}
                                     sold_out={field.sold_out}
+                                    market_variant_id={field.market_variant_id}
                                     changeGrid={grid}
-                                    key={`${index} -${field.id || field.title}`}
                                 />
-                            ))
-                        }
+                            </div>
+                        ))}
                     </section>
                     {
                         detailsList.length > 0 && <Pagination itemsPerPage={length} totalItems={details.length} onPageChange={setPage} />

@@ -11,6 +11,8 @@ import { CartApi } from "./services/cart_api";
 import { CheckoutApi } from "./services/checkout_api";
 import { OrdersApi } from "./services/orders_api";
 import { ReviewsApi } from "./services/reviews_api";
+import { AddressApi } from "./services/address_api";
+import { NotificationsApi } from "./services/notifications_api";
 
 const store = configureStore({
     reducer: {
@@ -23,6 +25,8 @@ const store = configureStore({
         [CheckoutApi.reducerPath]: CheckoutApi.reducer,
         [OrdersApi.reducerPath]: OrdersApi.reducer,
         [ReviewsApi.reducerPath]: ReviewsApi.reducer,
+        [AddressApi.reducerPath]: AddressApi.reducer,
+        [NotificationsApi.reducerPath]: NotificationsApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(
@@ -33,6 +37,8 @@ const store = configureStore({
             CheckoutApi.middleware,
             OrdersApi.middleware,
             ReviewsApi.middleware,
+            AddressApi.middleware,
+            NotificationsApi.middleware,
         ),
 });
 

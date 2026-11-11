@@ -1,10 +1,10 @@
 import ResponsiveDisplay from "@/utils/responsive_display";
-import MobileProfilePage from "@/components/profile/mobile/mobile_profile_page";
-import DesktopProfilePage from "@/components/profile/desktop/desktop_profile_page";
+import UserProfile from "@/components/profile/mobile/user_profile/user_profile";
+import DesktopProfileSettingsPage from "@/components/profile/desktop/profile/desktop_profile_settings_page";
 import { requireCustomerAuth } from "@/lib/require_auth";
 
 export const metadata = {
-    title: "Your Profile - Dukka",
+    title: "Profile settings - Dukka",
     robots: "noindex, nofollow",
 };
 
@@ -13,10 +13,10 @@ const ProfileUserPage = async () => {
     return (
         <>
             <ResponsiveDisplay maxWidth={1000}>
-                <MobileProfilePage />
+                <UserProfile />
             </ResponsiveDisplay>
             <ResponsiveDisplay minWidth={1001}>
-                <DesktopProfilePage />
+                <DesktopProfileSettingsPage />
             </ResponsiveDisplay>
         </>
     );

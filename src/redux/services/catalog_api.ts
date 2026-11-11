@@ -3,6 +3,7 @@ import { dukkaBaseQuery } from "./base_query";
 import type {
     CategoryPage,
     MarketSearchMatch,
+    OpenMarket,
     ProductDetail,
     ProductListPage,
     ServiceStatePage,
@@ -15,6 +16,10 @@ export const CatalogApi = createApi({
     endpoints: (builder) => ({
         searchMarket: builder.query<MarketSearchMatch | null, void>({
             query: () => "/markets/search",
+            providesTags: ["Market"],
+        }),
+        getOpenMarkets: builder.query<OpenMarket[], void>({
+            query: () => "/markets/open",
             providesTags: ["Market"],
         }),
         getProducts: builder.query<
@@ -57,6 +62,7 @@ export const CatalogApi = createApi({
 
 export const {
     useSearchMarketQuery,
+    useGetOpenMarketsQuery,
     useGetProductsQuery,
     useGetProductQuery,
     useGetCategoriesQuery,
