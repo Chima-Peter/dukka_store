@@ -59,6 +59,10 @@ export interface ProductListPage {
     next_cursor: string | null;
 }
 
+export interface ProductSuggestionsPage {
+    items: ProductListItem[];
+}
+
 export interface ProductVariantDetail {
     id: string;
     variant_code: string;

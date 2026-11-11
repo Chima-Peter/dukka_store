@@ -3,7 +3,6 @@
 import { BiEdit } from "react-icons/bi";
 import { useGetMeQuery } from "@/redux/services/customer_api";
 import { useGetOpenMarketsQuery } from "@/redux/services/catalog_api";
-import { normalizeList } from "@/utils/map_product";
 
 function formatDate(value?: string | null) {
     if (!value) return "Not set";
@@ -23,80 +22,101 @@ const UserDetails = ({
 }) => {
     const { data: me, isLoading } = useGetMeQuery();
     const { data: marketsData } = useGetOpenMarketsQuery();
-    const markets = Array.isArray(marketsData)
-        ? marketsData
-        : normalizeList(marketsData as { items?: typeof marketsData });
-    const activeMarket = markets.find((market) => market.id === me?.active_market_id);
+    const markets = marketsData ?? [];
+    const activeMarket = markets.find(
+        (market) => market.id === me?.active_market_id,
+    );
     const points = Number(me?.points?.balance ?? 0);
 
     return (
-        <section className="md:w-[68%] lg:w-[74%] h-fit flex flex-col pb-4 border border-[#ADB1B1] rounded-xl font-urbanist">
-            <div className="flex justify-between py-6 border-b border-[#ADB1B1] items-center w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
-                <h1 className="font-[500] min-lg:text-[22px] xl:text-[24px] 2xl:text-[26px] tracking-wide capitalize">
-                    Profile overview
-                </h1>
+        <section className="flex h-fit w-full flex-col border border-[#E4E7E7] bg-white font-urbanist">
+            <div className="flex w-full items-center justify-between border-b border-[#E4E7E7] px-4 py-5 sm:px-6 md:px-8">
+                <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#888B8B]">
+                        Overview
+                    </p>
+                    <h1 className="text-[22px] font-semibold tracking-tight text-[#0D523F]">
+                        Profile
+                    </h1>
+                </div>
                 <button
                     type="button"
                     onClick={() => setStep(4)}
-                    className="inline-flex items-center gap-2 text-[#164D46]"
+                    className="inline-flex items-center gap-2 border border-[#0D523F] px-3 py-2 text-[#0D523F] transition-colors hover:bg-[#0D523F] hover:text-white"
                 >
-                    <BiEdit className="h-5 w-5 xl:h-6 xl:w-6" />
-                    <span className="text-sm font-medium xl:text-base">Edit profile</span>
+                    <BiEdit className="h-4 w-4" />
+                    <span className="text-sm font-semibold">Edit profile</span>
                 </button>
             </div>
 
             <section className="grid w-full gap-4 px-4 py-6 sm:px-6 md:grid-cols-2 md:px-8">
-                <div className="flex flex-col rounded-xl border border-[#ADB1B1]">
-                    <h2 className="border-b border-[#ADB1B1] px-6 py-4 text-[18px] font-[400] tracking-wide">
+                <div className="flex flex-col border border-[#E4E7E7]">
+                    <h2 className="border-b border-[#E4E7E7] px-5 py-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-[#888B8B]">
                         Account
                     </h2>
-                    <dl className="grid gap-4 px-6 py-5">
+                    <dl className="grid gap-4 px-5 py-5">
                         <div>
-                            <dt className="text-sm text-gray-500">Full name</dt>
-                            <dd className="text-[17px] text-[#0D3833]">
+                            <dt className="text-[12px] uppercase tracking-[0.12em] text-[#888B8B]">
+                                Full name
+                            </dt>
+                            <dd className="mt-1 text-[16px] text-[#031815]">
                                 {isLoading ? "Loading..." : me?.name || "—"}
                             </dd>
                         </div>
                         <div>
-                            <dt className="text-sm text-gray-500">Email</dt>
-                            <dd className="text-[17px] text-[#164D46]">{me?.email || "—"}</dd>
+                            <dt className="text-[12px] uppercase tracking-[0.12em] text-[#888B8B]">
+                                Email
+                            </dt>
+                            <dd className="mt-1 text-[16px] text-[#0D523F]">
+                                {me?.email || "—"}
+                            </dd>
                         </div>
                         <div>
-                            <dt className="text-sm text-gray-500">Phone</dt>
-                            <dd className="text-[17px] text-[#0D3833]">
+                            <dt className="text-[12px] uppercase tracking-[0.12em] text-[#888B8B]">
+                                Phone
+                            </dt>
+                            <dd className="mt-1 text-[16px] text-[#031815]">
                                 {me?.phone_number || "Not set"}
                             </dd>
                         </div>
                         <div>
-                            <dt className="text-sm text-gray-500">Date of birth</dt>
-                            <dd className="text-[17px] text-[#0D3833]">
+                            <dt className="text-[12px] uppercase tracking-[0.12em] text-[#888B8B]">
+                                Date of birth
+                            </dt>
+                            <dd className="mt-1 text-[16px] text-[#031815]">
                                 {formatDate(me?.date_of_birth)}
                             </dd>
                         </div>
                     </dl>
                 </div>
 
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-3">
                     <button
                         type="button"
                         onClick={() => setStep(5)}
-                        className="rounded-xl border border-[#ADB1B1] px-6 py-5 text-left hover:border-[#FEB100]"
+                        className="border border-[#E4E7E7] px-5 py-4 text-left transition-colors hover:border-[#FEB100] hover:bg-[#FEB100]/20"
                     >
-                        <p className="text-sm text-gray-500">Points</p>
+                        <p className="text-[12px] uppercase tracking-[0.12em] text-[#888B8B]">
+                            Points
+                        </p>
                         <p className="mt-1 text-2xl font-semibold text-[#0D523F]">
-                            {Number.isFinite(points) ? points.toLocaleString() : "0"}
+                            {Number.isFinite(points)
+                                ? points.toLocaleString()
+                                : "0"}
                         </p>
                     </button>
                     <button
                         type="button"
                         onClick={() => setStep(7)}
-                        className="rounded-xl border border-[#ADB1B1] px-6 py-5 text-left hover:border-[#FEB100]"
+                        className="border border-[#E4E7E7] px-5 py-4 text-left transition-colors hover:border-[#FEB100] hover:bg-[#FEB100]/20"
                     >
-                        <p className="text-sm text-gray-500">Active market</p>
-                        <p className="mt-1 text-xl font-medium text-[#0D3833]">
+                        <p className="text-[12px] uppercase tracking-[0.12em] text-[#888B8B]">
+                            Active market
+                        </p>
+                        <p className="mt-1 text-xl font-semibold text-[#031815]">
                             {activeMarket?.name || "Not set"}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-[#6B7373]">
                             {activeMarket
                                 ? `${activeMarket.code} · ${activeMarket.currency_code}`
                                 : "Choose a market to shop"}
@@ -105,17 +125,19 @@ const UserDetails = ({
                     <button
                         type="button"
                         onClick={() => setStep(6)}
-                        className="rounded-xl border border-[#ADB1B1] px-6 py-5 text-left hover:border-[#FEB100]"
+                        className="border border-[#E4E7E7] px-5 py-4 text-left transition-colors hover:border-[#FEB100] hover:bg-[#FEB100]/20"
                     >
-                        <p className="text-sm text-gray-500">Addresses</p>
-                        <p className="mt-1 text-xl font-medium text-[#0D3833]">
+                        <p className="text-[12px] uppercase tracking-[0.12em] text-[#888B8B]">
+                            Addresses
+                        </p>
+                        <p className="mt-1 text-xl font-semibold text-[#031815]">
                             {(me?.shipping_address?.length || 0) +
                                 (me?.billing_address?.length || 0)}{" "}
                             saved
                         </p>
-                        <p className="text-sm text-gray-500">
-                            Shipping {me?.shipping_address?.length || 0} · Billing{" "}
-                            {me?.billing_address?.length || 0}
+                        <p className="text-sm text-[#6B7373]">
+                            Shipping {me?.shipping_address?.length || 0} ·
+                            Billing {me?.billing_address?.length || 0}
                         </p>
                     </button>
                 </div>

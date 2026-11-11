@@ -21,24 +21,26 @@ function recalculateTotal(cart: CartProductTypes[]) {
 }
 
 export function mapCartViewToState(view: CartView): CartTypes {
+    const cart = (view.items ?? []).map((item) => ({
+        id: item.id,
+        name: item.product_name,
+        image:
+            item.product_image ||
+            getProductPlaceholder(item.market_variant_id || item.product_name),
+        price: Number(item.price ?? 0),
+        quantity: item.quantity,
+        market_variant_id: item.market_variant_id,
+        discount_amount: Number(item.discount_amount ?? 0),
+        currency: item.currency,
+        sold_out: item.sold_out,
+        product_specs: item.product_specs,
+    }));
+    const serverTotal = Number(view.total ?? 0);
     return {
         server_cart_id: view.id,
-        total: Number(view.total ?? 0),
+        total: serverTotal > 0 ? serverTotal : recalculateTotal(cart),
         market_id: view.market_id,
-        cart: (view.items ?? []).map((item) => ({
-            id: item.id,
-            name: item.product_name,
-            image:
-                item.product_image ||
-                getProductPlaceholder(item.market_variant_id || item.product_name),
-            price: Number(item.price ?? 0),
-            quantity: item.quantity,
-            market_variant_id: item.market_variant_id,
-            discount_amount: Number(item.discount_amount ?? 0),
-            currency: item.currency,
-            sold_out: item.sold_out,
-            product_specs: item.product_specs,
-        })),
+        cart,
     };
 }
 

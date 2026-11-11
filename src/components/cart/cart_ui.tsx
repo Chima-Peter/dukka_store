@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import EmptyCart from "@/components/cart/empty_cart";
 import RenderCartProduct from "@/components/cart/render_cart_product";
@@ -15,17 +16,34 @@ import { normalizeList, toDetailsType } from "@/utils/map_product";
 const CartUI = () => {
     const cartState = useAppSelector((state) => state.cart);
     const marketId = useActiveMarketId();
-    const { removeItems } = useCartActions();
+    const { removeItems, flushQuantityDebounces } = useCartActions();
+
+    useEffect(() => {
+        return () => {
+            flushQuantityDebounces();
+        };
+    }, [flushQuantityDebounces]);
     const { data } = useGetProductsQuery(
         { market_id: marketId, limit: 8 },
         { skip: !marketId },
     );
     const recommendations = normalizeList(data).map(toDetailsType);
     const items = cartState.cart;
-    const itemCount = items.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    const lineCount = items.length;
+    const unitCount = items.reduce((sum, item) => sum + (item.quantity || 0), 0);
     const currency = items[0]?.currency;
-    const totalAmount = cartState.total || 0;
+    const totalAmount = items.reduce(
+        (sum, item) =>
+            sum +
+            Math.max(Number(item.price) - Number(item.discount_amount ?? 0), 0) *
+                (item.quantity || 1),
+        0,
+    );
     const isEmpty = items.length === 0;
+    const itemLabel =
+        lineCount === unitCount
+            ? `${lineCount} ${lineCount === 1 ? "item" : "items"}`
+            : `${lineCount} ${lineCount === 1 ? "item" : "items"} · ${unitCount} units`;
 
     const clearCart = async () => {
         const ids = items.map((item) => item.id).filter(Boolean) as string[];
@@ -63,7 +81,7 @@ const CartUI = () => {
                                 Your cart
                             </h1>
                             <p className="mt-2 text-[14px] text-[#6B7373]">
-                                {itemCount} {itemCount === 1 ? "item" : "items"}
+                                {itemLabel}
                             </p>
                         </div>
                         <button
@@ -133,7 +151,13 @@ const CartUI = () => {
                                 <div className="flex items-center justify-between gap-4 text-[14px]">
                                     <dt className="text-white/70">Items</dt>
                                     <dd className="font-medium tabular-nums">
-                                        {itemCount}
+                                        {lineCount}
+                                    </dd>
+                                </div>
+                                <div className="flex items-center justify-between gap-4 text-[14px]">
+                                    <dt className="text-white/70">Units</dt>
+                                    <dd className="font-medium tabular-nums">
+                                        {unitCount}
                                     </dd>
                                 </div>
                                 <div className="flex items-center justify-between gap-4 text-[14px]">
@@ -184,9 +208,7 @@ const CartUI = () => {
                                 {formatMoney(totalAmount, currency)}
                             </p>
                         </div>
-                        <p className="text-[13px] text-[#6B7373]">
-                            {itemCount} {itemCount === 1 ? "item" : "items"}
-                        </p>
+                        <p className="text-[13px] text-[#6B7373]">{itemLabel}</p>
                     </div>
                     <Link
                         href="/cart/checkout"

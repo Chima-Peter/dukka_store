@@ -10,7 +10,6 @@ import {
     useSetActiveMarketMutation,
 } from "@/redux/services/customer_api";
 import { setActiveMarketId } from "@/lib/cookies";
-import { normalizeList } from "@/utils/map_product";
 import { useAppDispatch } from "@/redux/store";
 import ProfileSectionShell from "./profile_section_shell";
 
@@ -27,10 +26,7 @@ const ProfileMarketPanel = ({ onBack, backHref }: Props) => {
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
 
-    const markets = useMemo(() => {
-        if (Array.isArray(data)) return data;
-        return normalizeList(data as { items?: typeof data });
-    }, [data]);
+    const markets = useMemo(() => data ?? [], [data]);
 
     const activeId = me?.active_market_id || undefined;
 

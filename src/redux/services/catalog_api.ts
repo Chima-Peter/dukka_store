@@ -6,6 +6,7 @@ import type {
     OpenMarket,
     ProductDetail,
     ProductListPage,
+    ProductSuggestionsPage,
     ServiceStatePage,
 } from "@/types/api";
 
@@ -38,6 +39,19 @@ export const CatalogApi = createApi({
             }),
             providesTags: ["Products"],
         }),
+        getProductSuggestions: builder.query<
+            ProductSuggestionsPage,
+            {
+                q: string;
+                market_id?: string;
+                limit?: number;
+            }
+        >({
+            query: (params) => ({
+                url: "/products/suggestions",
+                params,
+            }),
+        }),
         getProduct: builder.query<ProductDetail, { id: string; market_id: string }>({
             query: ({ id, market_id }) => ({
                 url: `/products/${id}`,
@@ -64,6 +78,7 @@ export const {
     useSearchMarketQuery,
     useGetOpenMarketsQuery,
     useGetProductsQuery,
+    useGetProductSuggestionsQuery,
     useGetProductQuery,
     useGetCategoriesQuery,
     useGetServiceStatesQuery,

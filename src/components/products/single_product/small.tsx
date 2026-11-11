@@ -29,52 +29,36 @@ const SingleProductSmall = ({
     const quantity = cartItem?.quantity || 0;
     const { addItem, setQuantity, removeItems } = useCartActions();
     const [method, setMethod] = useState<string>("add");
-    const [busy, setBusy] = useState(false);
 
     const productHref = id
         ? `/product/${id}/${encodeURIComponent(title)}`
         : `/product/${encodeURIComponent(title)}/${encodeURIComponent(title)}`;
 
-    const addProductToCart = async () => {
-        if (!market_variant_id || busy || sold_out) return;
-        setBusy(true);
-        try {
-            await addItem(market_variant_id, 1, {
-                name: title,
-                image,
-                price: Number(String(price).replace(/,/g, "")) || 0,
-                currency,
-            });
-            setMethod("add");
-        } finally {
-            setBusy(false);
-        }
+    const addProductToCart = () => {
+        if (!market_variant_id || sold_out) return;
+        setMethod("add");
+        void addItem(market_variant_id, 1, {
+            name: title,
+            image,
+            price: Number(String(price).replace(/,/g, "")) || 0,
+            currency,
+        }).catch(() => undefined);
     };
 
-    const addQuantityToProduct = async () => {
-        if (!cartItem?.id || busy) return;
-        setBusy(true);
-        try {
-            await setQuantity(cartItem.id, quantity + 1);
-            setMethod("add");
-        } finally {
-            setBusy(false);
-        }
+    const addQuantityToProduct = () => {
+        if (!cartItem?.id) return;
+        setMethod("add");
+        void setQuantity(cartItem.id, quantity + 1).catch(() => undefined);
     };
 
-    const removeQuantityFromProduct = async () => {
-        if (!cartItem?.id || busy) return;
-        setBusy(true);
-        try {
-            if (quantity - 1 < 1) {
-                await removeItems([cartItem.id]);
-            } else {
-                await setQuantity(cartItem.id, quantity - 1);
-                setMethod("sub");
-            }
-        } finally {
-            setBusy(false);
+    const removeQuantityFromProduct = () => {
+        if (!cartItem?.id) return;
+        if (quantity - 1 < 1) {
+            void removeItems([cartItem.id]).catch(() => undefined);
+            return;
         }
+        setMethod("sub");
+        void setQuantity(cartItem.id, quantity - 1).catch(() => undefined);
     };
 
     return (
@@ -136,7 +120,7 @@ const SingleProductSmall = ({
                             whileFocus={{ backgroundColor: "#FEB100" }}
                             whileHover={{ backgroundColor: "#FEB100" }}
                             onClick={addProductToCart}
-                            disabled={busy || sold_out}
+                            disabled={sold_out}
                             initial={{ opacity: 1, y: 0 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}

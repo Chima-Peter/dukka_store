@@ -22,33 +22,31 @@ interface ProductType {
 }
 
 const RenderCartProduct = (props: ProductType) => {
-    const [busy, setBusy] = useState(false);
-    const { setQuantity: setServerQuantity, removeItems } = useCartActions();
+    const [removing, setRemoving] = useState(false);
+    const { setQuantityDebounced, removeItems } = useCartActions();
     const quantity = props.quantity;
-    const unitPrice = Math.max(props.price - Number(props.discount_amount ?? 0), 0);
+    const unitPrice = Math.max(
+        props.price - Number(props.discount_amount ?? 0),
+        0,
+    );
     const lineTotal = unitPrice * quantity;
 
-    const syncQuantity = async (next: number) => {
-        if (!props.id || busy || props.sold_out) return;
-        setBusy(true);
-        try {
-            if (next < 1) {
-                await removeItems([props.id]);
-            } else {
-                await setServerQuantity(props.id, next);
-            }
-        } finally {
-            setBusy(false);
+    const bumpQuantity = (next: number) => {
+        if (!props.id || removing || props.sold_out) return;
+        if (next < 1) {
+            void removeProduct();
+            return;
         }
+        setQuantityDebounced(props.id, next);
     };
 
-    const deleteProduct = async () => {
-        if (!props.id || busy) return;
-        setBusy(true);
+    const removeProduct = async () => {
+        if (!props.id || removing) return;
+        setRemoving(true);
         try {
             await removeItems([props.id]);
         } finally {
-            setBusy(false);
+            setRemoving(false);
         }
     };
 
@@ -96,7 +94,7 @@ const RenderCartProduct = (props: ProductType) => {
                 <div className="flex flex-wrap items-center gap-4">
                     <div
                         className={`inline-flex items-stretch border border-[#FEB100] ${
-                            busy || props.sold_out
+                            removing || props.sold_out
                                 ? "pointer-events-none opacity-50"
                                 : ""
                         }`}
@@ -104,8 +102,8 @@ const RenderCartProduct = (props: ProductType) => {
                         <button
                             type="button"
                             aria-label="Decrease quantity"
-                            disabled={busy || props.sold_out}
-                            onClick={() => syncQuantity(quantity - 1)}
+                            disabled={removing || props.sold_out}
+                            onClick={() => bumpQuantity(quantity - 1)}
                             className="bg-[#FEB100] px-2.5 py-2 text-[#031815] transition-colors hover:bg-[#0D523F] hover:text-white disabled:cursor-not-allowed"
                         >
                             <HiMinus className="h-3.5 w-3.5" />
@@ -116,8 +114,8 @@ const RenderCartProduct = (props: ProductType) => {
                         <button
                             type="button"
                             aria-label="Increase quantity"
-                            disabled={busy || props.sold_out}
-                            onClick={() => syncQuantity(quantity + 1)}
+                            disabled={removing || props.sold_out}
+                            onClick={() => bumpQuantity(quantity + 1)}
                             className="bg-[#FEB100] px-2.5 py-2 text-[#031815] transition-colors hover:bg-[#0D523F] hover:text-white disabled:cursor-not-allowed"
                         >
                             <LuPlus className="h-3.5 w-3.5" />
@@ -126,8 +124,8 @@ const RenderCartProduct = (props: ProductType) => {
 
                     <button
                         type="button"
-                        onClick={deleteProduct}
-                        disabled={busy}
+                        onClick={() => void removeProduct()}
+                        disabled={removing}
                         className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#888B8B] transition-colors hover:text-[#0D523F] disabled:opacity-50"
                     >
                         <BiTrash className="h-4 w-4" />

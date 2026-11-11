@@ -21,7 +21,6 @@ const ProductPage = () => {
         { skip: !params.id || !marketId },
     );
     const { addItem } = useCartActions();
-    const [busy, setBusy] = useState(false);
     const [message, setMessage] = useState("");
     const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
     const [activeImage, setActiveImage] = useState(0);
@@ -54,28 +53,23 @@ const ProductPage = () => {
         ];
     }, [data?.images, data?.id, data?.name, selectedVariant?.image_url]);
 
-    const onAdd = async () => {
+    const onAdd = () => {
         if (!selectedVariant?.market_variant_id || !data) {
             setMessage("This product is unavailable in your market.");
             return;
         }
-        setBusy(true);
         setMessage("Added to cart");
-        try {
-            await addItem(selectedVariant.market_variant_id, 1, {
-                name: data.name,
-                image:
-                    selectedVariant.image_url ||
-                    images[0]?.image_url ||
-                    getProductPlaceholder(data.id || data.name),
-                price: Number(selectedVariant.price ?? 0),
-                currency: selectedVariant.currency,
-            });
-        } catch {
+        void addItem(selectedVariant.market_variant_id, 1, {
+            name: data.name,
+            image:
+                selectedVariant.image_url ||
+                images[0]?.image_url ||
+                getProductPlaceholder(data.id || data.name),
+            price: Number(selectedVariant.price ?? 0),
+            currency: selectedVariant.currency,
+        }).catch(() => {
             setMessage("Could not add to cart");
-        } finally {
-            setBusy(false);
-        }
+        });
     };
 
     const specEntries = Object.entries(data?.specs ?? {}).filter(
@@ -265,14 +259,12 @@ const ProductPage = () => {
 
                             <button
                                 onClick={onAdd}
-                                disabled={busy || !!selectedVariant?.sold_out}
+                                disabled={!!selectedVariant?.sold_out}
                                 className="mt-2 w-full bg-[#FEB100] px-8 py-3.5 text-[15px] font-semibold text-[#031815] transition-colors hover:bg-[#0D523F] hover:text-white disabled:cursor-not-allowed disabled:opacity-50 sm:w-fit"
                             >
                                 {selectedVariant?.sold_out
                                     ? "Sold out"
-                                    : busy
-                                      ? "Adding..."
-                                      : "Add to cart"}
+                                    : "Add to cart"}
                             </button>
                             {message && (
                                 <p className="text-sm text-[#0D523F]">{message}</p>

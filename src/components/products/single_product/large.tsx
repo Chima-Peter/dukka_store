@@ -30,52 +30,36 @@ const SingleProduct = ({
     const quantity = cartItem?.quantity || 0;
     const { addItem, setQuantity, removeItems } = useCartActions();
     const [method, setMethod] = useState<string>("add");
-    const [busy, setBusy] = useState(false);
 
     const productHref = id
         ? `/product/${id}/${encodeURIComponent(title)}`
         : `/product/${encodeURIComponent(title)}/${encodeURIComponent(title)}`;
 
-    const addProductToCart = async () => {
-        if (!market_variant_id || busy || sold_out) return;
-        setBusy(true);
-        try {
-            await addItem(market_variant_id, 1, {
-                name: title,
-                image,
-                price: Number(String(price).replace(/,/g, "")) || 0,
-                currency,
-            });
-            setMethod("add");
-        } finally {
-            setBusy(false);
-        }
+    const addProductToCart = () => {
+        if (!market_variant_id || sold_out) return;
+        setMethod("add");
+        void addItem(market_variant_id, 1, {
+            name: title,
+            image,
+            price: Number(String(price).replace(/,/g, "")) || 0,
+            currency,
+        }).catch(() => undefined);
     };
 
-    const addQuantityToProduct = async () => {
-        if (!cartItem?.id || busy) return;
-        setBusy(true);
-        try {
-            await setQuantity(cartItem.id, quantity + 1);
-            setMethod("add");
-        } finally {
-            setBusy(false);
-        }
+    const addQuantityToProduct = () => {
+        if (!cartItem?.id) return;
+        setMethod("add");
+        void setQuantity(cartItem.id, quantity + 1).catch(() => undefined);
     };
 
-    const removeQuantityFromProduct = async () => {
-        if (!cartItem?.id || busy) return;
-        setBusy(true);
-        try {
-            if (quantity - 1 < 1) {
-                await removeItems([cartItem.id]);
-            } else {
-                await setQuantity(cartItem.id, quantity - 1);
-                setMethod("sub");
-            }
-        } finally {
-            setBusy(false);
+    const removeQuantityFromProduct = () => {
+        if (!cartItem?.id) return;
+        if (quantity - 1 < 1) {
+            void removeItems([cartItem.id]).catch(() => undefined);
+            return;
         }
+        setMethod("sub");
+        void setQuantity(cartItem.id, quantity - 1).catch(() => undefined);
     };
 
     const isRow = changeGrid === "1x3";
@@ -150,13 +134,13 @@ const SingleProduct = ({
                                 type="button"
                                 className="flex w-full items-center justify-center gap-2 border border-[#FEB100] bg-[#FEB100] py-2.5 text-[14px] font-semibold text-[#031815] transition-colors hover:border-[#0D523F] hover:bg-[#0D523F] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
                                 onClick={addProductToCart}
-                                disabled={busy || sold_out}
+                                disabled={sold_out}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                             >
                                 <BsCart2 className="h-4 w-4" />
-                                {sold_out ? "Sold out" : busy ? "Adding..." : "Add to cart"}
+                                {sold_out ? "Sold out" : "Add to cart"}
                             </motion.button>
                         ) : (
                             <motion.div

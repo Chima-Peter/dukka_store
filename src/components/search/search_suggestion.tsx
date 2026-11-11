@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useGetProductsQuery } from "@/redux/services/catalog_api";
+import { useGetProductSuggestionsQuery } from "@/redux/services/catalog_api";
 import { useActiveMarketId } from "@/hooks/use_active_market_id";
+import { formatMoney } from "@/utils/format_money";
+import ProductImage from "@/components/ui/product_image";
 
 const SearchSuggestion = ({ query }: { query: string }) => {
     const router = useRouter();
@@ -16,50 +19,103 @@ const SearchSuggestion = ({ query }: { query: string }) => {
         return () => window.clearTimeout(timer);
     }, [trimmed]);
 
-    const { data, isFetching } = useGetProductsQuery(
+    const { data, isFetching } = useGetProductSuggestionsQuery(
         {
+            q: debounced,
             market_id: marketId,
-            name: debounced,
             limit: 8,
         },
         { skip: !marketId || debounced.length < 2 },
     );
 
-    const suggestions = (data?.items ?? []).map((item) => item.name);
+    const products = data?.items ?? [];
 
-    const makeSearch = (suggestion: string) => {
-        router.push(`/search/${encodeURIComponent(suggestion)}`);
+    const goToResults = () => {
+        if (!trimmed) return;
+        router.push(`/search/${encodeURIComponent(trimmed)}`);
     };
 
     return (
-        <div className="flex flex-col rounded-lg border border-white drop-shadow-xl w-[100%] lg:w-[400px] xl:w-[500px] 2xl:w-[600px] absolute top-12 bg-white z-50">
-            <h2 className="text-[16px] min-lg:text-lg xl:text-xl 2xl:text-2xl font-[400] text-[#888B8B] py-2 border-b-[1.3px] border-b-[#888B8B] px-4 uppercase">
-                Suggestions
-            </h2>
-            <ul className="flex flex-col pb-4 w-[100%]">
+        <div className="absolute left-0 right-0 top-full z-50 mt-1 border border-[#E4E7E7] bg-white shadow-[0_12px_24px_rgba(3,24,21,0.08)]">
+            <div className="flex items-center justify-between border-b border-[#E8EBEB] px-4 py-2.5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#888B8B]">
+                    Products
+                </p>
+                {debounced.length >= 2 && products.length > 0 && (
+                    <button
+                        type="button"
+                        onMouseDown={goToResults}
+                        className="text-[12px] font-semibold text-[#0D523F] underline-offset-4 hover:underline"
+                    >
+                        View all
+                    </button>
+                )}
+            </div>
+            <ul className="flex max-h-[360px] flex-col overflow-y-auto py-1">
                 {debounced.length < 2 && (
-                    <li className="text-[14px] py-2 px-4 text-gray-500">
+                    <li className="px-4 py-3 text-[14px] text-[#6B7373]">
                         Type at least 2 characters to search
                     </li>
                 )}
-                {debounced.length >= 2 && isFetching && (
-                    <li className="text-[14px] py-2 px-4 text-gray-500">Searching...</li>
-                )}
-                {debounced.length >= 2 && !isFetching && suggestions.length === 0 && (
-                    <li className="text-[14px] py-2 px-4 text-gray-500">
-                        No products found
+                {debounced.length >= 2 && isFetching && products.length === 0 && (
+                    <li className="px-4 py-3 text-[14px] text-[#6B7373]">
+                        Searching...
                     </li>
                 )}
-                {suggestions.map((suggestion) => (
-                    <li
-                        key={suggestion}
-                        onMouseDown={() => makeSearch(suggestion)}
-                        className="text-[14px] min-lg:text-[16px] w-[100%] hover:bg-gray-200 font-normal py-2 px-4 tracking-wide cursor-pointer"
-                    >
-                        {suggestion}
-                    </li>
-                ))}
+                {debounced.length >= 2 &&
+                    !isFetching &&
+                    products.length === 0 && (
+                        <li className="px-4 py-3 text-[14px] text-[#6B7373]">
+                            No products found
+                        </li>
+                    )}
+                {products.map((product) => {
+                    const href = `/product/${product.id}/${encodeURIComponent(product.name)}`;
+                    return (
+                        <li key={product.id}>
+                            <Link
+                                href={href}
+                                onMouseDown={(event) => {
+                                    event.preventDefault();
+                                    router.push(href);
+                                }}
+                                className="flex items-center gap-3 px-4 py-2.5 transition-colors hover:bg-[#FEB100]/35"
+                            >
+                                <div className="h-11 w-11 shrink-0 overflow-hidden bg-[#F5F6F5]">
+                                    <ProductImage
+                                        src={product.image_url}
+                                        alt={product.name}
+                                        seed={product.id}
+                                        width={44}
+                                        height={44}
+                                        className="h-full w-full object-cover"
+                                    />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className="truncate text-[14px] font-medium text-[#031815] xl:text-[15px]">
+                                        {product.name}
+                                    </p>
+                                    <p className="text-[13px] text-[#0D523F]">
+                                        {formatMoney(
+                                            Number(product.price ?? 0),
+                                            product.currency,
+                                        )}
+                                    </p>
+                                </div>
+                            </Link>
+                        </li>
+                    );
+                })}
             </ul>
+            {debounced.length >= 2 && products.length > 0 && (
+                <button
+                    type="button"
+                    onMouseDown={goToResults}
+                    className="w-full border-t border-[#E8EBEB] px-4 py-3 text-left text-[13px] font-semibold text-[#0D523F] transition-colors hover:bg-[#F7F8F7]"
+                >
+                    See all results for &ldquo;{trimmed}&rdquo;
+                </button>
+            )}
         </div>
     );
 };

@@ -21,53 +21,37 @@ const ProductGridCard = ({ detail }: { detail: DetailsType }) => {
     );
     const quantity = cartItem?.quantity || 0;
     const { addItem, setQuantity, removeItems } = useCartActions();
-    const [busy, setBusy] = useState(false);
     const [method, setMethod] = useState("add");
 
     const productHref = detail.id
         ? `/product/${detail.id}/${encodeURIComponent(detail.title)}`
         : `/product/${encodeURIComponent(detail.title)}/${encodeURIComponent(detail.title)}`;
 
-    const addProductToCart = async () => {
-        if (!detail.market_variant_id || busy || detail.sold_out) return;
-        setBusy(true);
-        try {
-            await addItem(detail.market_variant_id, 1, {
-                name: detail.title,
-                image: detail.image,
-                price: Number(detail.price.replace(/,/g, "")) || 0,
-                currency: detail.currency,
-            });
-            setMethod("add");
-        } finally {
-            setBusy(false);
-        }
+    const addProductToCart = () => {
+        if (!detail.market_variant_id || detail.sold_out) return;
+        setMethod("add");
+        void addItem(detail.market_variant_id, 1, {
+            name: detail.title,
+            image: detail.image,
+            price: Number(detail.price.replace(/,/g, "")) || 0,
+            currency: detail.currency,
+        }).catch(() => undefined);
     };
 
-    const addQuantity = async () => {
-        if (!cartItem?.id || busy) return;
-        setBusy(true);
-        try {
-            await setQuantity(cartItem.id, quantity + 1);
-            setMethod("add");
-        } finally {
-            setBusy(false);
-        }
+    const addQuantity = () => {
+        if (!cartItem?.id) return;
+        setMethod("add");
+        void setQuantity(cartItem.id, quantity + 1).catch(() => undefined);
     };
 
-    const removeQuantity = async () => {
-        if (!cartItem?.id || busy) return;
-        setBusy(true);
-        try {
-            if (quantity - 1 < 1) {
-                await removeItems([cartItem.id]);
-            } else {
-                await setQuantity(cartItem.id, quantity - 1);
-                setMethod("sub");
-            }
-        } finally {
-            setBusy(false);
+    const removeQuantity = () => {
+        if (!cartItem?.id) return;
+        if (quantity - 1 < 1) {
+            void removeItems([cartItem.id]).catch(() => undefined);
+            return;
         }
+        setMethod("sub");
+        void setQuantity(cartItem.id, quantity - 1).catch(() => undefined);
     };
 
     return (
@@ -122,18 +106,14 @@ const ProductGridCard = ({ detail }: { detail: DetailsType }) => {
                                 key="add"
                                 type="button"
                                 onClick={addProductToCart}
-                                disabled={busy || detail.sold_out}
+                                disabled={detail.sold_out}
                                 className="flex w-full items-center justify-center gap-2 border border-[#FEB100] bg-[#FEB100] py-2.5 text-[14px] font-semibold text-[#031815] transition-colors hover:bg-[#0D523F] hover:border-[#0D523F] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                             >
                                 <BsCart2 className="h-4 w-4" />
-                                {detail.sold_out
-                                    ? "Sold out"
-                                    : busy
-                                      ? "Adding..."
-                                      : "Add to cart"}
+                                {detail.sold_out ? "Sold out" : "Add to cart"}
                             </motion.button>
                         ) : (
                             <motion.div

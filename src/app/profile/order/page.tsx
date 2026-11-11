@@ -17,7 +17,7 @@ const ProfileOrdersPage = async () => {
                 <OrdersSmall />
             </ResponsiveDisplay>
             <ResponsiveDisplay minWidth={1001}>
-                <DesktopProfilePage />
+                <DesktopProfilePage initialStep={2} />
             </ResponsiveDisplay>
         </>
     );

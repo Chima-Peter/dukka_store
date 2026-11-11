@@ -32,7 +32,7 @@ const SearchBar = () => {
         <form
             noValidate
             onSubmit={handleSubmit}
-            className="flex border rounded-md border-[#ADB1B1] focus-within:border-gray-50 focus-within:drop-shadow-sm w-[100%] lg:w-[400px] xl:w-[500px] 2xl:w-[600px] font-urbanist relative"
+            className="relative flex w-full border border-[#E4E7E7] bg-white font-urbanist transition-colors focus-within:border-[#0D523F] min-[1050px]:w-[360px] xl:w-[440px] 2xl:w-[520px]"
         >
             <input
                 onFocus={turnOnSuggestion}
@@ -42,12 +42,16 @@ const SearchBar = () => {
                 type="search"
                 name="search"
                 id="search"
-                placeholder="Search for products"
+                placeholder="Search products"
                 autoComplete="off"
-                className="w-[100%] min-lg:h-[100%] placeholder:text-[14px] xl:placeholder:text-[18px] 2xl:placeholder:text-[22px] text-[16px] focus:drop-shadow-md outline-none xl:text-[22px] 2xl:text-[28px] placeholder:tracking-wide h-[36px] min-lg:py-3 px-6  rounded-l-md"
+                className="h-11 w-full bg-transparent px-4 text-[15px] text-[#031815] outline-none placeholder:text-[#888B8B] xl:h-12 xl:text-[16px]"
             />
-            <button type="submit" className="rounded-r-md bg-[#FEB100] min-lg:py-2 px-6">
-                <FiSearch className="w-5 h-5 text-black xl:w-7 xl:h-7 2xl:w-10 2xl:h-10" />
+            <button
+                type="submit"
+                aria-label="Search"
+                className="flex shrink-0 items-center justify-center bg-[#FEB100] px-4 text-[#031815] transition-colors hover:bg-[#0D523F] hover:text-white xl:px-5"
+            >
+                <FiSearch className="h-5 w-5" />
             </button>
             {showSuggestion && <SearchSuggestion query={search_query} />}
         </form>

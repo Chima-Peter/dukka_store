@@ -1,143 +1,84 @@
-"use client"
+"use client";
 
-
-import { motion } from 'framer-motion'
+import { motion } from "framer-motion";
 import useNavigationContext from "../../hooks/use_category_component";
-import { FaChevronRight, FaWhatsapp } from "react-icons/fa6";
-import { useEffect, useState } from "react";
-import { CategoryType } from "../../types/category_type";
-import { IoIosMenu } from "react-icons/io";
 import { IoMailOutline } from "react-icons/io5";
-import { FiPhone } from "react-icons/fi";
-import Link from 'next/link';
-import { MdClose } from "react-icons/md"
+import Link from "next/link";
 import { useNavCategories } from "@/hooks/use_nav_categories";
 
-
 const MobileMenuCategories = () => {
-    const { showAllCategories, setShowAllCategories } = useNavigationContext()
-    const categories = useNavCategories()
+    const { showAllCategories, setShowAllCategories } = useNavigationContext();
+    const categories = useNavCategories();
 
-    const [activeSub, setActiveSub] = useState<boolean>(false)
+    const close = () => setShowAllCategories(false);
 
-    // state to control which category to show on side based on user's choice
-    const [subCategory, setSubCategory] = useState<CategoryType>(categories[0])
-
-    useEffect(() => {
-        setSubCategory(categories[0])
-    }, [categories])
-
-    const updateSubCategory = (index: number) => {
-        setSubCategory(categories[index])
-        setActiveSub(true)
-    } 
-
-
-      
     return (
-       <motion.section  
-        className="fixed top-[7rem] min-h-[50vh] left-0 w-[100%] py-4 bg-white flex flex-col gap-4 pb-32  overflow-y-auto scrollbar-hide"
-        transition={{ duration: 0.5 }}
-        initial={{ opacity: 0, x: '-100%', display: "hidden" }}
-        animate={{ opacity: showAllCategories ? 1 : 0, x: showAllCategories ? 0 : '-100%', display: showAllCategories ? "flex" : "hidden" }}
+        <motion.section
+            className="fixed left-0 top-[7rem] flex min-h-[50vh] w-[100%] flex-col gap-4 overflow-y-auto bg-white py-4 pb-32 scrollbar-hide"
+            transition={{ duration: 0.35 }}
+            initial={{ opacity: 0, x: "-100%", display: "hidden" }}
+            animate={{
+                opacity: showAllCategories ? 1 : 0,
+                x: showAllCategories ? 0 : "-100%",
+                display: showAllCategories ? "flex" : "hidden",
+            }}
         >
-          <section className="w-[100%] flex-col font-urbanist gap-6">
-            <div className="flex flex-col">
-                <div className="flex gap-2 bg-[#FDE0C7] py-3 items-center  px-4 sm:px-6 md:px-8">
-                    {
-                        activeSub ? 
-                        <button onClick={() => setActiveSub(false)}>
-                            <MdClose className="w-8 h-8 md:w-9 md:h-9" />
-                        </button> : <button onClick={() => setActiveSub(true)}>
-                            <IoIosMenu className="w-8 h-8 md:w-9 md:h-9" />
-                        </button>
-                    }
-                    {
-                        activeSub ? <h1 className="text-[20px] font-[400] tracking-wider">
-                            {subCategory.category}
-                        </h1> : <h1 className="text-[20px] font-[400] tracking-wider">
-                            All category
+            <section className="w-[100%] flex-col gap-6 font-urbanist">
+                <div className="flex flex-col">
+                    <div className="flex items-center gap-2 bg-[#F7F8F7] px-4 py-3 sm:px-6 md:px-8">
+                        <h1 className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#0D523F]">
+                            All categories
                         </h1>
-                    }
-                </div>
-                {
-                    !activeSub && categories.map((category, index: number) => (
-                        <button key={category.category} className="flex gap-4  py-3 px-14 sm:px-16 md:px-[72px] hover:bg-[#F6F6F6] border-b-[1px] border-b-[#ADB1B1] justify-between w-[100%] items-center" onClick={() => updateSubCategory(index)}>
-                            <h2 className="text-[14px] xs:text-[16px] md:text-[18px] font-normal tracking-wide">
-                                {category.category}
-                            </h2>
-                            <FaChevronRight className="w-3 h-3 min-lg:w-4 min-lg:h-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6" />
-                        </button>
-                    ))
-                }
-            </div>
-            <motion.div
-                 className="overflow-y-auto scrollbar-hide justify-between  flex-col w-[100%] bg-white"
-                 transition={{ duration: 0.5 }}
-                initial={{ opacity: 0, x: '-100%', display: "hidden" }}
-                animate={{  display: activeSub ? "flex" : "none", opacity: activeSub ? 1 : 0, x: activeSub ? 0 : '-100%'}}>
-            {
-                subCategory.subcategories.map((subcategory) => (
-                    <Link 
-                        href={`/category/${subcategory.name}`}
-                        onClick={() => setShowAllCategories(false)} 
-                        key={subcategory.name} className="gap-4  py-3 px-14 sm:px-16 md:px-[72px] hover:bg-[#F6F6F6] border-b-[1px] border-b-[#ADB1B1] w-[100%]">
-                        {subcategory.name}
+                    </div>
+                    <Link
+                        href="/category/all"
+                        onClick={close}
+                        className="flex w-full items-center border-b border-[#E4E7E7] px-6 py-3.5 text-[15px] font-semibold text-[#0D523F] hover:bg-[#F7F8F7] sm:px-8 md:px-10 md:text-[16px]"
+                    >
+                        Shop all products
                     </Link>
-                ))
-            }
-            </motion.div>
-            <div className="w-[100%] flex flex-col gap-3 pt-6">
-                <h1 className="font-[400] text-[20px] bg-[#FDE0C7] py-3 px-[43px] sm:px-[52px] md:px-[60px] tracking-wider">
-                    Contact us
-                </h1>
-                <div className="flex flex-col  px-[43px] sm:px-[52px] md:px-[60px] gap-4">
-                    <div className="flex gap-4 items-center">
-                        <div className="w-[24px] h-[24px] flex justify-center items-center rounded-full bg-[#0D3833]">
-                            <IoMailOutline className="w-4 h-4 text-white" />
-                        </div>
-                        <div className="flex font-urbanist gap-0 flex-col">
-                            <p className="tracking-widest text-[16px] font-wide translate-y-[2px]">
-                                Email support
-                            </p>
-                            <p className="text-[14px] font-[400] text-[#646767] tracking-wider">
-                                support@mile12.store
-                            </p>
-                        </div>
-                    </div>
+                    {categories.map((category) => (
+                        <Link
+                            key={category.category}
+                            href={`/category/${encodeURIComponent(category.category)}`}
+                            onClick={close}
+                            className="flex w-full items-center border-b border-[#E4E7E7] px-6 py-3.5 text-[15px] font-medium text-[#031815] hover:bg-[#F7F8F7] hover:text-[#0D523F] sm:px-8 md:px-10 md:text-[16px]"
+                        >
+                            {category.category}
+                        </Link>
+                    ))}
+                </div>
 
-                    <div className="flex gap-4 items-center">
-                        <div className="w-[24px] h-[24px] flex justify-center items-center rounded-full bg-[#0D3833]">
-                            <FiPhone className="w-4 h-4 text-white" />
-                        </div>
-                        <div className="flex font-urbanist gap-0 flex-col">
-                            <p className="tracking-widest text-[16px] font-wide translate-y-[2px]">
-                                Phone support
-                            </p>
-                            <p className="text-[14px] font-[400] text-[#646767] tracking-wider">
-                                08077577065,08066596873
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="flex gap-4 items-center">
-                        <div className="w-[24px] h-[24px] flex justify-center items-center rounded-full bg-[#0D3833]">
-                            <FaWhatsapp className="w-4 h-4 text-white" />
-                        </div>
-                        <div className="flex font-urbanist gap-0 flex-col">
-                            <p className="tracking-widest text-[16px] font-wide translate-y-[2px]">
-                                Whatsapp support
-                            </p>
-                            <p className="text-[14px] font-[400] text-[#646767] tracking-wider">
-                                08077577065,08066596873
-                            </p>
-                        </div>
+                <div className="flex w-[100%] flex-col gap-3 pt-6">
+                    <h1 className="bg-[#F7F8F7] px-6 py-3 text-[12px] font-semibold uppercase tracking-[0.2em] text-[#0D523F] sm:px-8 md:px-10">
+                        Contact us
+                    </h1>
+                    <div className="flex flex-col gap-4 px-6 sm:px-8 md:px-10">
+                        <Link
+                            href="mailto:hello@dukka.store?subject=Dukka%20inquiry"
+                            className="flex items-center gap-4"
+                            onClick={close}
+                        >
+                            <div className="flex h-8 w-8 items-center justify-center bg-[#0D523F]">
+                                <IoMailOutline className="h-4 w-4 text-white" />
+                            </div>
+                            <div className="flex flex-col font-urbanist">
+                                <p className="text-[15px] font-medium text-[#031815]">
+                                    Email support
+                                </p>
+                                <p className="text-[14px] tracking-wide text-[#646767]">
+                                    hello@dukka.store
+                                </p>
+                            </div>
+                        </Link>
+                        <p className="text-[14px] text-[#646767]">
+                            www.dukka.store · @dukkastore
+                        </p>
                     </div>
                 </div>
-            </div>
-        </section> 
-       </motion.section>
-    )
-}
+            </section>
+        </motion.section>
+    );
+};
 
-export default MobileMenuCategories
+export default MobileMenuCategories;
