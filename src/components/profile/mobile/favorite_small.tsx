@@ -37,8 +37,9 @@ const FavoriteSmall = () => {
                                 title={detail.title}
                                 image={detail.image}
                                 price={detail.price}
+                                currency={detail.currency}
+                                sold_out={detail.sold_out}
                                 profile
-                                market_variant_id={detail.market_variant_id}
                                 id={detail.id}
                             />
                         ))

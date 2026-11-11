@@ -71,24 +71,15 @@ const ViewReviews = ({
                             <h3 className="font-semibold">{review.title}</h3>
                         )}
                         <p>{review.review}</p>
-                        {(review.likes != null || review.dislikes != null) && (
-                            <p className="text-sm text-[#888B8B]">
-                                Likes: {review.likes ?? 0} · Dislikes:{" "}
-                                {review.dislikes ?? 0}
-                            </p>
-                        )}
-                        {!!review.review_images?.length && (
+                        {review.image_url && (
                             <div className="flex gap-2 flex-wrap">
-                                {review.review_images.map((image) => (
-                                    <ProductImage
-                                        key={image.id}
-                                        src={image.image_url}
-                                        alt={review.title}
-                                        width={64}
-                                        height={64}
-                                        className="w-16 h-16 object-cover rounded-md"
-                                    />
-                                ))}
+                                <ProductImage
+                                    src={review.image_url}
+                                    alt={review.title}
+                                    width={64}
+                                    height={64}
+                                    className="w-16 h-16 object-cover rounded-md"
+                                />
                             </div>
                         )}
                     </div>

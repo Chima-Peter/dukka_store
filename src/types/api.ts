@@ -47,13 +47,7 @@ export interface ProductPromotion {
 export interface ProductListItem {
     id: string;
     name: string;
-    description: string;
-    category_id: string;
-    created_at: string;
-    updated_at: string;
-    category_name: string;
     image_url: string | null;
-    market_variant_id: string | null;
     price: string | number | null;
     currency: string | null;
     sold_out: boolean;
@@ -200,10 +194,10 @@ export interface MarketPaymentMethodDetail {
     id: string;
     market_id: string;
     payment_method_id: string;
+    payment_method_name: string;
+    market: { id: string; name: string; code: string };
     created_at?: string;
     updated_at?: string;
-    payment_method: { id: string; name: string };
-    market?: { id: string; name: string; code: string };
 }
 
 export interface CheckoutRequest {
@@ -214,19 +208,54 @@ export interface CheckoutRequest {
     points?: number;
 }
 
+export interface CheckoutOrder {
+    id: string;
+    order_number: string;
+    status: string;
+    currency: string;
+    subtotal: string | number;
+    shipping_fee: string | number;
+    discount_amount: string | number;
+    points_discount: string | number;
+    coupon_discount: string | number;
+    total_amount: string | number;
+    guest_email: string | null;
+    guest_name: string | null;
+    guest_phone_number: string | null;
+    shipping_address: OrderAddressSnapshot | null;
+    billing_address: OrderAddressSnapshot | null;
+    market_id: string;
+    customer_id: string | null;
+    created_at: string;
+}
+
+export interface CheckoutPaymentAttempt {
+    id: string;
+    status: string;
+    payment_method_name: string;
+    payment_intent_id: string | null;
+    payment_intent_url: string | null;
+    expires_at: string | null;
+    created_at: string;
+    updated_at: string;
+    order_id: string;
+    market_payment_method_id: string | null;
+    order_number: string;
+    order_status: string;
+    total_amount: string | number;
+    currency: string;
+    customer_id: string | null;
+    customer_name: string | null;
+    guest_name: string | null;
+    guest_email: string | null;
+    market_id: string;
+    warehouse_id: string;
+    warehouse_name: string;
+}
+
 export interface CheckoutResult {
-    order: {
-        id: string;
-        order_number: string;
-        status: string;
-        currency?: string;
-        subtotal?: string | number;
-        shipping_fee?: string | number;
-        discount_amount?: string | number;
-        total_amount?: string | number;
-        [key: string]: unknown;
-    };
-    payment_attempt?: Record<string, unknown>;
+    order: CheckoutOrder;
+    payment_attempt: CheckoutPaymentAttempt;
     authorization_url: string | null;
 }
 
@@ -237,7 +266,6 @@ export interface OrderSummary {
     amount: string | number;
     quantity: number;
     name: string | null;
-    market_id: string;
     created_at: string;
 }
 
@@ -274,7 +302,7 @@ export interface OrderItemDetail {
     product_name: string;
     product_image?: string | null;
     product_specs?: Record<string, unknown> | null;
-    market_variant_id: string;
+    market_variant_id?: string | null;
     created_at?: string;
     updated_at?: string;
 }
@@ -306,6 +334,14 @@ export interface ShipmentMovement {
     created_at?: string;
 }
 
+export interface OrderPaymentAttempt {
+    id: string;
+    status: string;
+    payment_method_name: string;
+    payment_method: { id: string; name: string } | null;
+    created_at: string;
+}
+
 export interface OrderDetail {
     id: string;
     order_number: string;
@@ -327,46 +363,45 @@ export interface OrderDetail {
     created_at: string;
     market?: { id: string; name: string; code: string };
     order_items?: OrderItemDetail[];
-    order_payment_attempt?: {
-        id?: string;
-        status?: string;
-        payment_method_name?: string | null;
-        created_at?: string;
-        market_payment_method?: {
-            id?: string;
-            payment_method?: { id: string; name: string } | null;
-        } | null;
-    } | null;
-    promotion_usages?: Array<Record<string, unknown>>;
-    coupon_usages?: Array<Record<string, unknown>>;
+    order_payment_attempt?: OrderPaymentAttempt | null;
+    promotion_usages?: Array<{
+        id: string;
+        discount_amount: string | number;
+        redeemed_at: string;
+        promotion_market_id: string;
+        customer_id: string | null;
+        created_at: string;
+    }>;
+    coupon_usages?: Array<{
+        id: string;
+        guest_email: string | null;
+        coupon_id: string;
+        customer_id: string | null;
+        created_at: string;
+        coupon: {
+            id: string;
+            code: string;
+            type: string;
+            value: string | number;
+        };
+    }>;
     shipment?: {
         tracking_number?: string | null;
         shipment_movements?: ShipmentMovement[];
     } | null;
 }
 
-export interface ReviewImage {
+export interface ReviewSummary {
     id: string;
-    image_url: string;
-    created_at?: string;
-    updated_at?: string;
-}
-
-export interface ReviewItem {
-    id: string;
-    customer_id?: string | null;
     customer_name: string;
     title: string;
     review: string;
     rating: number;
-    likes?: number | null;
-    dislikes?: number | null;
-    market_variant_id: string;
     created_at: string;
-    review_images?: ReviewImage[];
+    image_url: string | null;
 }
 
 export interface ReviewPage {
-    items: ReviewItem[];
+    items: ReviewSummary[];
     next_cursor: string | null;
 }

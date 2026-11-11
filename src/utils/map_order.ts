@@ -10,6 +10,5 @@ export function toOrdersType(order: OrderSummary): OrdersType {
         amount: Number(order.amount ?? 0),
         status: order.status,
         name: order.name,
-        market_id: order.market_id,
     };
 }

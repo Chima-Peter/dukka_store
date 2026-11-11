@@ -90,11 +90,6 @@ const ProductCounter = ({ detail }: { detail: DetailsType }) => {
                     seed={detail.id || detail.title}
                 />
             </Link>
-            {detail.category_name && (
-                <p className="text-[12px] md:text-[14px] text-[#0D523F] mt-2 px-2 text-center">
-                    {detail.category_name}
-                </p>
-            )}
             <p className="text-[14px] md:text-[18px] lg:text-[20px] xl:text-[22px] font-[400] mt-2 px-2 text-center">
                 {detail.title}
             </p>
@@ -108,14 +103,32 @@ const ProductCounter = ({ detail }: { detail: DetailsType }) => {
                 <p className="text-sm text-red-600 mt-1">Sold out</p>
             )}
             <AnimatePresence mode="popLayout">
-                {quantity < 1 ? (
+                {!detail.market_variant_id ? (
+                    <motion.div
+                        key="view-button"
+                        className="mt-2 w-[90%]"
+                        initial={{ opacity: 1, y: 0 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.4 }}
+                    >
+                        <Link
+                            href={productHref}
+                            className="flex gap-4 border-2 items-center justify-center border-[#FEB100] py-3 w-full rounded-lg"
+                        >
+                            <p className="text-[18px]">
+                                {detail.sold_out ? "View product" : "Select options"}
+                            </p>
+                        </Link>
+                    </motion.div>
+                ) : quantity < 1 ? (
                     <motion.button
                         key="add-button"
                         className="flex gap-4 border-2 items-center justify-center mt-2 border-[#FEB100] py-3 w-[90%] rounded-lg disabled:opacity-60"
                         whileFocus={{ backgroundColor: "#FEB100" }}
                         whileHover={{ backgroundColor: "#FEB100" }}
                         onClick={addProductToCart}
-                        disabled={!detail.market_variant_id || busy || detail.sold_out}
+                        disabled={busy || detail.sold_out}
                         initial={{ opacity: 1, y: 0 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}

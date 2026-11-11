@@ -32,11 +32,8 @@ export function toDetailsType(product: ProductListItem): DetailsType {
         title: product.name,
         image: resolveProductImage(product.image_url, seed),
         price: addCommasToInt(Number.isFinite(priceNumber) ? priceNumber : 0),
-        market_variant_id: product.market_variant_id,
         currency: product.currency,
         sold_out: product.sold_out,
-        category_name: product.category_name,
-        description: product.description,
         promotion_amount:
             product.promotion?.amount !== undefined && product.promotion?.amount !== null
                 ? Number(product.promotion.amount)

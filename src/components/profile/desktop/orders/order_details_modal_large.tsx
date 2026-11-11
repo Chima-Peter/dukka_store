@@ -40,8 +40,7 @@ const OrderDetailsModal = ({
 
     const amount = Number(order?.total_amount ?? 0);
     const paymentMethod =
-        order?.order_payment_attempt?.market_payment_method?.payment_method
-            ?.name ||
+        order?.order_payment_attempt?.payment_method?.name ||
         order?.order_payment_attempt?.payment_method_name ||
         "-";
 

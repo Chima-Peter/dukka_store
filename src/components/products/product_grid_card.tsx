@@ -96,11 +96,6 @@ const ProductGridCard = ({ detail }: { detail: DetailsType }) => {
             </Link>
 
             <div className="flex flex-1 flex-col gap-2 p-3.5 sm:p-4">
-                {detail.category_name && (
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#888B8B]">
-                        {detail.category_name}
-                    </p>
-                )}
                 <Link href={productHref} className="line-clamp-2 min-h-[2.6em] text-[15px] font-medium leading-snug text-[#0D523F] sm:text-[16px]">
                     {detail.title}
                 </Link>
@@ -113,16 +108,21 @@ const ProductGridCard = ({ detail }: { detail: DetailsType }) => {
 
                 <div className="mt-auto pt-2">
                     <AnimatePresence mode="popLayout">
-                        {quantity < 1 ? (
+                        {!detail.market_variant_id ? (
+                            <motion.div key="view" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                                <Link
+                                    href={productHref}
+                                    className="flex w-full items-center justify-center gap-2 border border-[#FEB100] bg-[#FEB100] py-2.5 text-[14px] font-semibold text-[#031815] transition-colors hover:bg-[#0D523F] hover:border-[#0D523F] hover:text-white"
+                                >
+                                    {detail.sold_out ? "View product" : "Select options"}
+                                </Link>
+                            </motion.div>
+                        ) : quantity < 1 ? (
                             <motion.button
                                 key="add"
                                 type="button"
                                 onClick={addProductToCart}
-                                disabled={
-                                    !detail.market_variant_id ||
-                                    busy ||
-                                    detail.sold_out
-                                }
+                                disabled={busy || detail.sold_out}
                                 className="flex w-full items-center justify-center gap-2 border border-[#FEB100] bg-[#FEB100] py-2.5 text-[14px] font-semibold text-[#031815] transition-colors hover:bg-[#0D523F] hover:border-[#0D523F] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}

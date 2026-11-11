@@ -110,14 +110,32 @@ const SingleProductSmall = ({
                 </p>
                 {sold_out && <p className="text-sm text-red-600">Sold out</p>}
                 <AnimatePresence mode="popLayout">
-                    {quantity < 1 ? (
+                    {!market_variant_id ? (
+                        <motion.div
+                            key="view-button"
+                            className="mt-2 w-[90%]"
+                            initial={{ opacity: 1, y: 0 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.4 }}
+                        >
+                            <Link
+                                href={productHref}
+                                className="flex gap-4 border-2 items-center justify-center border-[#FEB100] py-3 w-full rounded-lg"
+                            >
+                                <p className="text-[18px]">
+                                    {sold_out ? "View product" : "Select options"}
+                                </p>
+                            </Link>
+                        </motion.div>
+                    ) : quantity < 1 ? (
                         <motion.button
                             key="add-button"
                             className="flex gap-4 border-2 items-center justify-center mt-2 border-[#FEB100] py-3 w-[90%] rounded-lg disabled:opacity-60"
                             whileFocus={{ backgroundColor: "#FEB100" }}
                             whileHover={{ backgroundColor: "#FEB100" }}
                             onClick={addProductToCart}
-                            disabled={!market_variant_id || busy || sold_out}
+                            disabled={busy || sold_out}
                             initial={{ opacity: 1, y: 0 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}

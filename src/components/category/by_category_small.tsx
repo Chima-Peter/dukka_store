@@ -99,7 +99,8 @@ const ByCategorySmall = ({header, details, caller}: ByCategoryTypes) => {
                             title={detail.title}
                             image={detail.image}
                             price={detail.price}
-                            market_variant_id={detail.market_variant_id}
+                            currency={detail.currency}
+                            sold_out={detail.sold_out}
                             changeGrid={'1x3'}
                             key={`${index} -${detail.id || detail.title}`}
                         />

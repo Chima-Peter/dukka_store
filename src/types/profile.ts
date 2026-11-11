@@ -6,7 +6,6 @@ export interface OrdersType {
     amount: number;
     status: string;
     name?: string | null;
-    market_id?: string;
 }
 
 export interface MessagesType {

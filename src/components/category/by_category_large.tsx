@@ -164,7 +164,8 @@ const ByCategoryLarge = ({header, details, caller, link}: ByCategoryTypes) => {
                                     title={field.title}
                                     image={field.image}
                                     price={field.price}
-                                    market_variant_id={field.market_variant_id}
+                                    currency={field.currency}
+                                    sold_out={field.sold_out}
                                     changeGrid={grid}
                                     key={`${index} -${field.id || field.title}`}
                                 />

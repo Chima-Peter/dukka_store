@@ -28,7 +28,5 @@ export interface DetailsType {
     market_variant_id?: string | null;
     currency?: string | null;
     sold_out?: boolean;
-    category_name?: string;
-    description?: string;
     promotion_amount?: number | null;
 }
