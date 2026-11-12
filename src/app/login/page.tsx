@@ -49,7 +49,7 @@ export default function LoginPage() {
     };
 
     return (
-        <main className="flex min-h-[70vh] w-full items-center justify-center bg-[#F0F0F0] px-4 pt-[140px] pb-16 font-urbanist lg:pt-[230px]">
+        <main className="flex min-h-[70vh] w-full items-center justify-center bg-dukka-canvas px-4 page-nav-offset pb-16 font-urbanist">
             <form
                 onSubmit={onSubmit}
                 className="flex w-full max-w-md flex-col gap-4 rounded-xl border border-gray-200 bg-white p-8 shadow-sm"

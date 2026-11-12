@@ -26,7 +26,7 @@ const DukkaLoader = ({
 
     const shell =
         variant === "page"
-            ? "flex min-h-[55vh] w-full items-center justify-center bg-[#F0F0F0] px-6 py-20"
+            ? "flex min-h-[55vh] w-full items-center justify-center bg-dukka-canvas px-6 py-20"
             : "flex w-full items-center justify-center px-6 py-16";
 
     return (

@@ -4,10 +4,10 @@ import HomeProductSections from "@/components/home/home_product_sections";
 
 const HomePage = () => {
     return (
-        <main className="flex w-full flex-col bg-[#F0F0F0] pt-[120px] sm:pt-[130px] lg:pt-[230px] xl:pt-[270px] 2xl:pt-[270px]">
+        <main className="page-nav-offset flex w-full flex-col bg-dukka-canvas">
             <HomeHero />
             <HomeCategoryStrip />
-            <div className="flex w-full flex-col gap-6 pb-16 pt-6 md:gap-8 md:pt-8">
+            <div className="flex w-full flex-col gap-2 pb-16 pt-2 md:gap-4 md:pt-4">
                 <HomeProductSections />
             </div>
         </main>

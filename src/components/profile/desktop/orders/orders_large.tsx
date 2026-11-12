@@ -44,11 +44,16 @@ const OrdersLarge = ({ orders }: { orders: OrdersType[] }) => {
 
 
     return (
-        <section className="w-[74%] h-fit flex flex-col gap-8 pb-4 border border-[#ADB1B1] rounded-xl font-urbanist">
-            <div className="flex justify-between py-6 border-b border-[#ADB1B1] items-center w-[100%] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
-                <h1 className="font-[500] min-lg:text-[22px] xl:text-[24px] 2xl:text-[26px] tracking-wide capitalize">
-                    Order
-                </h1>
+        <section className="flex h-fit w-full flex-col gap-6 overflow-hidden rounded-2xl border border-dukka-line/80 bg-white pb-4 font-urbanist shadow-[0_12px_40px_rgba(3,24,21,0.04)]">
+            <div className="flex w-full items-center justify-between border-b border-dukka-line/80 px-5 py-5 sm:px-7">
+                <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#888B8B]">
+                        Account
+                    </p>
+                    <h1 className="text-[20px] font-semibold tracking-tight text-dukka-forest md:text-[22px]">
+                        Orders
+                    </h1>
+                </div>
                 <div className="flex items-center gap-4">
                     <button className="border border-[#ADB1B1] rounded-md bg-[#F9F9F9] w-14 h-10 flex justify-center items-center">
                         <CiSearch className="w-5 h-5" />

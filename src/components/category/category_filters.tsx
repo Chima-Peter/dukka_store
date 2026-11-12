@@ -41,34 +41,34 @@ const CategoryFilters = ({
     const isAll = activeCategory.toLowerCase() === "all";
 
     return (
-        <aside className="flex h-fit w-full flex-col gap-8 bg-white font-urbanist">
-            <div className="flex items-center justify-between border-b border-[#E8EBEB] pb-3">
-                <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#888B8B]">
+        <aside className="flex h-fit w-full flex-col gap-8 font-urbanist">
+            <div className="flex items-center justify-between border-b border-dukka-line pb-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-dukka-muted">
                     Filter
                 </p>
                 {onClose && (
                     <button
                         type="button"
                         onClick={onClose}
-                        className="text-[13px] font-medium text-[#0D523F] underline-offset-4 hover:underline"
+                        className="text-[13px] font-medium text-dukka-forest underline-offset-4 hover:underline"
                     >
                         Close
                     </button>
                 )}
             </div>
 
-            <div className="flex flex-col gap-3">
-                <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#888B8B]">
+            <div className="flex flex-col gap-2">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-dukka-muted">
                     Category
                 </p>
                 <div className="flex flex-col">
                     <Link
                         href="/category/all"
                         onClick={onClose}
-                        className={`border-l-2 px-3 py-2.5 text-[14px] transition-colors ${
+                        className={`border-l-2 px-3 py-2 text-[14px] transition-colors ${
                             isAll
-                                ? "border-[#FEB100] bg-[#F7F8F7] font-semibold text-[#0D523F]"
-                                : "border-transparent text-[#4B5555] hover:border-[#D5DADA] hover:text-[#0D523F]"
+                                ? "border-dukka-amber font-semibold text-dukka-forest"
+                                : "border-transparent text-dukka-muted hover:border-dukka-line hover:text-dukka-forest"
                         }`}
                     >
                         All products
@@ -82,10 +82,10 @@ const CategoryFilters = ({
                                 key={category.category_id}
                                 href={`/category/${encodeURIComponent(category.name)}`}
                                 onClick={onClose}
-                                className={`border-l-2 px-3 py-2.5 text-[14px] transition-colors ${
+                                className={`border-l-2 px-3 py-2 text-[14px] transition-colors ${
                                     active
-                                        ? "border-[#FEB100] bg-[#F7F8F7] font-semibold text-[#0D523F]"
-                                        : "border-transparent text-[#4B5555] hover:border-[#D5DADA] hover:text-[#0D523F]"
+                                        ? "border-dukka-amber font-semibold text-dukka-forest"
+                                        : "border-transparent text-dukka-muted hover:border-dukka-line hover:text-dukka-forest"
                                 }`}
                             >
                                 {category.name}
@@ -95,20 +95,20 @@ const CategoryFilters = ({
                 </div>
             </div>
 
-            <div className="flex flex-col gap-3">
-                <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#888B8B]">
+            <div className="flex flex-col gap-2">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-dukka-muted">
                     Sort
                 </p>
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-wrap gap-2">
                     {sortLabels.map((option) => (
                         <button
                             key={option.value}
                             type="button"
                             onClick={() => onSortChange(option.value)}
-                            className={`px-3 py-2 text-left text-[14px] transition-colors ${
+                            className={`px-3 py-1.5 text-[13px] transition-colors ${
                                 sortBy === option.value
-                                    ? "bg-[#0D523F] font-medium text-white"
-                                    : "text-[#4B5555] hover:bg-[#F7F8F7] hover:text-[#0D523F]"
+                                    ? "bg-dukka-ink font-medium text-white"
+                                    : "border border-dukka-line text-dukka-muted hover:border-dukka-forest hover:text-dukka-forest"
                             }`}
                         >
                             {option.label}
@@ -117,20 +117,20 @@ const CategoryFilters = ({
                 </div>
             </div>
 
-            <div className="flex flex-col gap-3">
-                <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#888B8B]">
+            <div className="flex flex-col gap-2">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-dukka-muted">
                     Availability
                 </p>
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-wrap gap-2">
                     {stockLabels.map((option) => (
                         <button
                             key={option.value}
                             type="button"
                             onClick={() => onStockChange(option.value)}
-                            className={`px-3 py-2 text-left text-[14px] transition-colors ${
+                            className={`px-3 py-1.5 text-[13px] transition-colors ${
                                 stock === option.value
-                                    ? "bg-[#0D523F] font-medium text-white"
-                                    : "text-[#4B5555] hover:bg-[#F7F8F7] hover:text-[#0D523F]"
+                                    ? "bg-dukka-ink font-medium text-white"
+                                    : "border border-dukka-line text-dukka-muted hover:border-dukka-forest hover:text-dukka-forest"
                             }`}
                         >
                             {option.label}

@@ -94,27 +94,24 @@ const CategoryUI = ({ subCategory }: { subCategory: string }) => {
     };
 
     return (
-        <main className="w-full bg-[#F0F0F0] pb-16 pt-[120px] font-urbanist sm:pt-[130px] lg:pt-[230px] xl:pt-[270px]">
-            <div className="border-b border-[#E4E7E7] bg-white px-4 py-3 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
-                <nav className="flex flex-wrap items-center gap-2 text-[13px] text-[#6B7373]">
-                    <Link href="/" className="hover:text-[#0D523F]">
+        <main className="page-nav-offset w-full bg-dukka-canvas pb-16 font-urbanist">
+            <div className="border-b border-dukka-line bg-white px-4 py-3 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
+                <nav className="flex flex-wrap items-center gap-2 text-[13px] text-dukka-muted">
+                    <Link href="/" className="hover:text-dukka-forest">
                         Home
                     </Link>
                     <span>/</span>
-                    <span className="capitalize text-[#0D523F]">{title}</span>
+                    <span className="capitalize text-dukka-ink">{title}</span>
                 </nav>
             </div>
 
-            <div className="border-b border-[#E4E7E7] bg-white px-4 py-6 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
-                <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#888B8B]">
-                    Catalog
-                </p>
+            <div className="px-4 py-8 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
                 <div className="flex flex-wrap items-end justify-between gap-4">
                     <div>
-                        <h1 className="text-[clamp(1.75rem,3vw,2.75rem)] font-semibold tracking-tight text-[#0D523F]">
+                        <h1 className="text-[clamp(1.75rem,3vw,2.5rem)] font-semibold tracking-tight text-dukka-ink">
                             {title}
                         </h1>
-                        <div className="mt-1 text-[14px] text-[#6B7373]">
+                        <div className="mt-1 text-[14px] text-dukka-muted">
                             {isLoading || isFetching ? (
                                 <DukkaLoader
                                     variant="inline"
@@ -128,7 +125,7 @@ const CategoryUI = ({ subCategory }: { subCategory: string }) => {
                     <button
                         type="button"
                         onClick={() => setMobileFiltersOpen(true)}
-                        className="inline-flex items-center gap-2 border border-[#0D523F] px-4 py-2.5 text-[14px] font-medium text-[#0D523F] lg:hidden"
+                        className="inline-flex items-center gap-2 border border-dukka-ink px-4 py-2.5 text-[14px] font-medium text-dukka-ink lg:hidden"
                     >
                         Filter
                         <IoFilter className="h-4 w-4" />
@@ -136,8 +133,8 @@ const CategoryUI = ({ subCategory }: { subCategory: string }) => {
                 </div>
             </div>
 
-            <div className="mx-auto grid w-full max-w-[1600px] grid-cols-1 gap-6 px-4 py-6 sm:px-6 md:px-8 lg:grid-cols-12 lg:gap-8 lg:px-12 lg:py-8 xl:px-14 2xl:px-16">
-                <div className="hidden h-fit border border-[#E8EBEB] bg-white p-5 lg:col-span-3 lg:sticky lg:top-[250px] lg:block xl:p-6">
+            <div className="mx-auto grid w-full max-w-[1600px] grid-cols-1 gap-8 px-4 pb-6 sm:px-6 md:px-8 lg:grid-cols-12 lg:px-12 xl:px-14 2xl:px-16">
+                <div className="hidden h-fit lg:sticky lg:top-[calc(var(--dukka-nav-height)+16px)] lg:col-span-3 lg:block">
                     <CategoryFilters {...filterProps} />
                 </div>
 
@@ -145,8 +142,8 @@ const CategoryUI = ({ subCategory }: { subCategory: string }) => {
                     {(isLoading || isFetching) && details.length === 0 ? (
                         <DukkaLoader label="Loading products" />
                     ) : details.length === 0 ? (
-                        <div className="border border-[#E8EBEB] bg-white p-8">
-                            <p className="text-[#0D523F]">
+                        <div className="py-12">
+                            <p className="text-dukka-ink">
                                 No products match these filters.
                             </p>
                             <button
@@ -155,14 +152,14 @@ const CategoryUI = ({ subCategory }: { subCategory: string }) => {
                                     setSortBy("featured");
                                     setStock("all");
                                 }}
-                                className="mt-3 text-[14px] font-semibold text-[#0D523F] underline-offset-4 hover:underline"
+                                className="mt-3 text-[14px] font-semibold text-dukka-forest underline-offset-4 hover:underline"
                             >
                                 Reset filters
                             </button>
                         </div>
                     ) : (
                         <motion.div
-                            className="grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 sm:gap-x-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+                            className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4"
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.35 }}
@@ -201,7 +198,7 @@ const CategoryUI = ({ subCategory }: { subCategory: string }) => {
                             onClick={() => setMobileFiltersOpen(false)}
                         />
                         <motion.div
-                            className="absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto border-t border-[#E4E7E7] bg-white p-5"
+                            className="absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto border-t border-dukka-line bg-white p-5"
                             initial={{ y: "100%" }}
                             animate={{ y: 0 }}
                             exit={{ y: "100%" }}

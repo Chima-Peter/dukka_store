@@ -77,10 +77,10 @@ const ProductPage = () => {
     );
 
     return (
-        <main className="w-full bg-[#F0F0F0] pb-16 pt-[120px] font-urbanist sm:pt-[130px] lg:pt-[230px] xl:pt-[270px]">
-            <div className="border-b border-[#E4E7E7] bg-white px-4 py-3 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
-                <nav className="flex flex-wrap items-center gap-2 text-[13px] text-[#6B7373]">
-                    <Link href="/" className="hover:text-[#0D523F]">
+        <main className="w-full page-nav-offset bg-dukka-canvas pb-16 font-urbanist">
+            <div className="border-b border-dukka-line bg-white px-4 py-3 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
+                <nav className="flex flex-wrap items-center gap-2 text-[13px] text-dukka-muted">
+                    <Link href="/" className="hover:text-dukka-forest">
                         Home
                     </Link>
                     <span>/</span>
@@ -88,14 +88,14 @@ const ProductPage = () => {
                         <>
                             <Link
                                 href={`/category/${encodeURIComponent(data.category_name)}`}
-                                className="hover:text-[#0D523F]"
+                                className="hover:text-dukka-forest"
                             >
                                 {data.category_name}
                             </Link>
                             <span>/</span>
                         </>
                     )}
-                    <span className="max-w-[40ch] truncate text-[#0D523F]">
+                    <span className="max-w-[40ch] truncate text-dukka-forest">
                         {data?.name || "Product"}
                     </span>
                 </nav>
@@ -110,20 +110,20 @@ const ProductPage = () => {
 
                 {data && (
                     <motion.section
-                        className="grid grid-cols-1 gap-8 bg-white lg:grid-cols-12 lg:gap-0"
+                        className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12"
                         initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.45, ease: "easeOut" }}
                     >
-                        <div className="flex flex-col gap-4 p-4 sm:p-6 lg:col-span-7 lg:border-r lg:border-[#E8EBEB] lg:p-10">
-                            <div className="flex min-h-[320px] items-center justify-center bg-[#F5F6F5] p-6 md:min-h-[460px]">
+                        <div className="flex flex-col gap-4 p-4 sm:p-6 lg:col-span-7 lg:p-0">
+                            <div className="flex min-h-[360px] items-center justify-center overflow-hidden bg-dukka-soft md:min-h-[520px]">
                                 <ProductImage
                                     src={images[activeImage]?.image_url}
                                     alt={data.name}
                                     seed={data.id}
                                     width={520}
                                     height={520}
-                                    className="max-h-[420px] w-auto object-contain"
+                                    className="h-full max-h-[520px] w-full object-cover"
                                 />
                             </div>
                             {images.length > 1 && (
@@ -135,8 +135,8 @@ const ProductPage = () => {
                                             onClick={() => setActiveImage(index)}
                                             className={`shrink-0 border p-1.5 transition-colors ${
                                                 activeImage === index
-                                                    ? "border-[#0D523F]"
-                                                    : "border-transparent bg-[#F5F6F5]"
+                                                    ? "border-dukka-forest"
+                                                    : "border-transparent bg-dukka-soft"
                                             }`}
                                         >
                                             <ProductImage
@@ -155,23 +155,23 @@ const ProductPage = () => {
 
                         <div className="flex flex-col gap-5 p-4 sm:p-6 lg:col-span-5 lg:p-10">
                             <div>
-                                <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#888B8B]">
+                                <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-dukka-muted">
                                     {data.category_name}
                                 </p>
-                                <h1 className="text-[clamp(1.75rem,3vw,2.5rem)] font-semibold leading-tight tracking-tight text-[#0D523F]">
+                                <h1 className="text-[clamp(1.75rem,3vw,2.5rem)] font-semibold leading-tight tracking-tight text-dukka-forest">
                                     {data.name}
                                 </h1>
                             </div>
 
-                            <div className="border-y border-[#E8EBEB] py-4">
-                                <p className="text-[28px] font-semibold tracking-tight text-[#031815]">
+                            <div className="border-y border-dukka-line py-4">
+                                <p className="text-[28px] font-semibold tracking-tight text-dukka-ink">
                                     {formatMoney(
                                         selectedVariant?.price,
                                         selectedVariant?.currency,
                                     )}
                                 </p>
                                 {selectedVariant?.promotion && (
-                                    <p className="mt-1 text-sm text-[#0D523F]">
+                                    <p className="mt-1 text-sm text-dukka-forest">
                                         Promo saves{" "}
                                         {formatMoney(
                                             selectedVariant.promotion.amount,
@@ -187,14 +187,14 @@ const ProductPage = () => {
                             </div>
 
                             {data.description && (
-                                <p className="text-[16px] leading-relaxed text-[#4B5555]">
+                                <p className="text-[16px] leading-relaxed text-dukka-muted">
                                     {data.description}
                                 </p>
                             )}
 
                             {data.variants.length > 0 && (
                                 <div className="flex flex-col gap-3">
-                                    <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#888B8B]">
+                                    <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-dukka-muted">
                                         Options
                                     </p>
                                     <div className="flex flex-wrap gap-2">
@@ -219,8 +219,8 @@ const ProductPage = () => {
                                                     }
                                                     className={`border px-3.5 py-2 text-[13px] font-medium transition-colors ${
                                                         active
-                                                            ? "border-[#0D523F] bg-[#0D523F] text-white"
-                                                            : "border-[#D5DADA] bg-white text-[#0D523F] hover:border-[#0D523F]"
+                                                            ? "border-dukka-forest bg-dukka-forest text-white"
+                                                            : "border-dukka-line bg-white text-dukka-forest hover:border-dukka-forest"
                                                     } ${variant.sold_out ? "opacity-50" : ""}`}
                                                 >
                                                     {label || "Standard"}
@@ -233,19 +233,19 @@ const ProductPage = () => {
 
                             {specEntries.length > 0 && (
                                 <div className="flex flex-col gap-2">
-                                    <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-[#888B8B]">
+                                    <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-dukka-muted">
                                         Specs
                                     </p>
-                                    <dl className="divide-y divide-[#E8EBEB] border border-[#E8EBEB]">
+                                    <dl className="divide-y divide-[#E8EBEB] border border-dukka-line">
                                         {specEntries.map(([key, value]) => (
                                             <div
                                                 key={key}
                                                 className="grid grid-cols-2 gap-3 px-3 py-2.5 text-[14px]"
                                             >
-                                                <dt className="capitalize text-[#6B7373]">
+                                                <dt className="capitalize text-dukka-muted">
                                                     {key.replaceAll("_", " ")}
                                                 </dt>
-                                                <dd className="text-[#031815]">
+                                                <dd className="text-dukka-ink">
                                                     {typeof value === "string" ||
                                                     typeof value === "number"
                                                         ? value
@@ -260,25 +260,25 @@ const ProductPage = () => {
                             <button
                                 onClick={onAdd}
                                 disabled={!!selectedVariant?.sold_out}
-                                className="mt-2 w-full bg-[#FEB100] px-8 py-3.5 text-[15px] font-semibold text-[#031815] transition-colors hover:bg-[#0D523F] hover:text-white disabled:cursor-not-allowed disabled:opacity-50 sm:w-fit"
+                                className="mt-2 w-full bg-dukka-amber px-8 py-3.5 text-[15px] font-semibold text-dukka-ink transition-colors hover:bg-dukka-forest hover:text-white disabled:cursor-not-allowed disabled:opacity-50 sm:w-fit"
                             >
                                 {selectedVariant?.sold_out
                                     ? "Sold out"
                                     : "Add to cart"}
                             </button>
                             {message && (
-                                <p className="text-sm text-[#0D523F]">{message}</p>
+                                <p className="text-sm text-dukka-forest">{message}</p>
                             )}
                         </div>
                     </motion.section>
                 )}
 
                 {data && (
-                    <section className="mt-6 border border-[#E8EBEB] bg-white p-4 sm:p-6 lg:p-8">
-                        <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#888B8B]">
+                    <section className="mt-10 border-t border-dukka-line bg-dukka-canvas py-8">
+                        <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-dukka-muted">
                             Feedback
                         </p>
-                        <h2 className="mb-4 text-xl font-semibold text-[#0D523F]">
+                        <h2 className="mb-4 text-xl font-semibold text-dukka-forest">
                             Reviews
                         </h2>
                         <div className="relative min-h-[160px]">

@@ -6,6 +6,7 @@ import type {
     CheckoutResult,
     CreateAddressRequest,
     PaymentMethod,
+    PrecheckoutView,
 } from "@/types/api";
 
 export const CheckoutApi = createApi({
@@ -36,10 +37,13 @@ export const CheckoutApi = createApi({
             query: () => "/payments/methods",
             providesTags: ["PaymentMethods"],
         }),
-        getPrecheckout: builder.query<unknown, { cart_id?: string } | void>({
+        getPrecheckout: builder.query<PrecheckoutView, { cart_id?: string } | void>({
             query: (params) => ({
                 url: "/checkout/precheckout",
-                params: params ?? undefined,
+                params:
+                    params && "cart_id" in params && params.cart_id
+                        ? { cart_id: params.cart_id }
+                        : undefined,
             }),
         }),
         checkout: builder.mutation<CheckoutResult, CheckoutRequest>({

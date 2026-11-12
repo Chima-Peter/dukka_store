@@ -5,27 +5,31 @@ import { motion } from "framer-motion";
 
 const HomeHero = () => {
     return (
-        <section className="relative w-full min-h-[72vh] md:min-h-[78vh] overflow-hidden bg-[#0D523F] text-white font-urbanist">
+        <section className="relative w-full min-h-[70vh] md:min-h-[76vh] overflow-hidden bg-dukka-forest text-white font-urbanist">
             <div
                 aria-hidden
-                className="pointer-events-none absolute inset-0 opacity-40"
+                className="pointer-events-none absolute inset-0"
                 style={{
                     backgroundImage:
-                        "radial-gradient(circle at 18% 22%, rgba(254,177,0,0.35), transparent 34%), radial-gradient(circle at 82% 18%, rgba(255,255,255,0.12), transparent 28%), linear-gradient(135deg, transparent 42%, rgba(3,24,21,0.55) 42%, rgba(3,24,21,0.55) 58%, transparent 58%)",
+                        "radial-gradient(ellipse 80% 60% at 70% 40%, rgba(254,177,0,0.28), transparent 55%), linear-gradient(160deg, rgba(3,24,21,0.15) 0%, rgba(3,24,21,0.55) 100%), url('/dukka_logo.png')",
+                    backgroundSize: "cover, cover, min(42vw, 520px)",
+                    backgroundPosition: "center, center, 92% 70%",
+                    backgroundRepeat: "no-repeat, no-repeat, no-repeat",
+                    opacity: 1,
                 }}
             />
             <div
                 aria-hidden
-                className="pointer-events-none absolute inset-0 opacity-[0.07]"
+                className="pointer-events-none absolute inset-0 opacity-[0.06]"
                 style={{
                     backgroundImage:
-                        "repeating-linear-gradient(-12deg, transparent, transparent 18px, #fff 18px, #fff 19px)",
+                        "repeating-linear-gradient(-12deg, transparent, transparent 22px, #fff 22px, #fff 23px)",
                 }}
             />
 
-            <div className="relative z-10 mx-auto flex min-h-[72vh] md:min-h-[78vh] w-full max-w-[1600px] flex-col justify-end px-4 pb-16 pt-10 sm:px-6 sm:pb-20 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
+            <div className="relative z-10 mx-auto flex min-h-[70vh] md:min-h-[76vh] w-full max-w-[1600px] flex-col justify-end px-4 pb-16 pt-10 sm:px-6 sm:pb-20 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
                 <motion.p
-                    className="mb-3 text-[13px] font-medium uppercase tracking-[0.28em] text-[#FEB100] sm:text-sm"
+                    className="mb-3 text-[13px] font-medium uppercase tracking-[0.28em] text-dukka-amber sm:text-sm"
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
@@ -60,7 +64,7 @@ const HomeHero = () => {
                 >
                     <Link
                         href="/category/all"
-                        className="bg-[#FEB100] px-8 py-3.5 text-[15px] font-semibold text-[#031815] transition-colors duration-300 hover:bg-white sm:text-base"
+                        className="bg-dukka-amber px-8 py-3.5 text-[15px] font-semibold text-dukka-ink transition-colors duration-300 hover:bg-white sm:text-base"
                     >
                         Shop catalog
                     </Link>

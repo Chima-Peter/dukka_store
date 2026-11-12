@@ -19,9 +19,15 @@ const ProfilePointsPanel = ({ onBack, backHref }: Props) => {
 
     return (
         <ProfileSectionShell title="Points" onBack={onBack} backHref={backHref}>
-            <div className="mb-6 rounded-lg border border-[#ADB1B1] bg-[#FFF8EB] px-5 py-4">
-                <p className="text-sm text-gray-600">Available balance</p>
-                <p className="mt-1 text-3xl font-semibold text-[#0D523F]">
+            <div className="relative mb-6 overflow-hidden rounded-2xl bg-dukka-forest px-5 py-5 text-white shadow-[0_12px_28px_rgba(13,82,63,0.2)]">
+                <div
+                    aria-hidden
+                    className="absolute -right-6 -top-8 h-24 w-24 rounded-full bg-dukka-amber/25 blur-2xl"
+                />
+                <p className="relative text-[12px] font-semibold uppercase tracking-[0.14em] text-white/70">
+                    Available balance
+                </p>
+                <p className="relative mt-1 text-3xl font-semibold tracking-tight">
                     {Number.isFinite(balance) ? balance.toLocaleString() : "0"}
                 </p>
             </div>

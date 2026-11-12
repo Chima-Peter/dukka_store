@@ -204,6 +204,23 @@ export interface MarketPaymentMethodDetail {
     updated_at?: string;
 }
 
+export interface PrecheckoutPaymentMethod {
+    id: string;
+    market_id?: string;
+    payment_method_id?: string;
+    payment_method_name?: string;
+    name?: string;
+}
+
+export interface PrecheckoutView {
+    shipping_addresses: AddressRecord[];
+    billing_addresses: AddressRecord[];
+    points_balance: number;
+    payment_methods: PrecheckoutPaymentMethod[];
+    cash_limit: number;
+    cart: CartView;
+}
+
 export interface CheckoutRequest {
     cart_id?: string;
     shipping_address_id: string;

@@ -15,7 +15,7 @@ const Footer = () => {
     const year = new Date().getFullYear();
 
     return (
-        <footer className="flex w-[100%] flex-col gap-10 bg-[#031815] px-4 pb-24 pt-14 font-urbanist sm:px-6 md:px-8 min-lg:pb-8 lg:px-12 xl:px-14 2xl:px-16">
+        <footer className="flex w-full flex-col gap-10 bg-dukka-ink px-4 pb-24 pt-14 font-urbanist sm:px-6 md:px-8 min-lg:pb-8 lg:px-12 xl:px-14 2xl:px-16">
             <section className="flex w-[100%] flex-wrap justify-between gap-y-12 min-lg:gap-0">
                 <div className="flex w-[100%] flex-col gap-4 sm:w-[48%] min-lg:w-[28%]">
                     <Image
@@ -86,7 +86,7 @@ const Footer = () => {
                         <li>
                             <Link
                                 href="mailto:hello@dukka.store?subject=Dukka%20inquiry"
-                                className="inline-flex w-fit bg-[#FEB100] px-4 py-2.5 text-[14px] font-semibold text-[#031815] transition-colors hover:bg-white"
+                                className="inline-flex w-fit bg-dukka-amber px-4 py-2.5 text-[14px] font-semibold text-dukka-ink transition-colors hover:bg-white"
                             >
                                 Contact us
                             </Link>

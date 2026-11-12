@@ -32,7 +32,7 @@ const SearchBar = () => {
         <form
             noValidate
             onSubmit={handleSubmit}
-            className="relative flex w-full border border-[#E4E7E7] bg-white font-urbanist transition-colors focus-within:border-[#0D523F] min-[1050px]:w-[360px] xl:w-[440px] 2xl:w-[520px]"
+            className="relative flex w-full border border-dukka-line bg-dukka-canvas font-urbanist transition-colors focus-within:border-dukka-forest min-[1050px]:w-full"
         >
             <input
                 onFocus={turnOnSuggestion}
@@ -44,14 +44,14 @@ const SearchBar = () => {
                 id="search"
                 placeholder="Search products"
                 autoComplete="off"
-                className="h-11 w-full bg-transparent px-4 text-[15px] text-[#031815] outline-none placeholder:text-[#888B8B] xl:h-12 xl:text-[16px]"
+                className="h-10 w-full bg-transparent px-4 text-[14px] text-dukka-ink outline-none placeholder:text-dukka-muted xl:h-11 xl:text-[15px]"
             />
             <button
                 type="submit"
                 aria-label="Search"
-                className="flex shrink-0 items-center justify-center bg-[#FEB100] px-4 text-[#031815] transition-colors hover:bg-[#0D523F] hover:text-white xl:px-5"
+                className="flex shrink-0 items-center justify-center bg-dukka-amber px-3.5 text-dukka-ink transition-colors hover:bg-dukka-forest hover:text-white"
             >
-                <FiSearch className="h-5 w-5" />
+                <FiSearch className="h-4 w-4" />
             </button>
             {showSuggestion && <SearchSuggestion query={search_query} />}
         </form>

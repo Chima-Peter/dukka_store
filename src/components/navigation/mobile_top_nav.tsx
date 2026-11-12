@@ -1,53 +1,91 @@
-"use client"
+"use client";
 
-
-import { MdClose, MdLocationOn } from "react-icons/md"
-import SearchBar from "../search/search_bar"
+import { MdClose, MdLocationOn } from "react-icons/md";
+import SearchBar from "../search/search_bar";
 import MobileMenuCategories from "./mobile_menu_categories";
 import useNavigationContext from "../../hooks/use_category_component";
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect } from "react";
-
-
+import { useEffect, useRef } from "react";
+import { useActiveMarket } from "@/hooks/use_active_market";
 
 const MobileTopNav = ({ userLocation }: { userLocation: string }) => {
-    const { showAllCategories, setShowAllCategories } = useNavigationContext()
+    const { showAllCategories, setShowAllCategories } = useNavigationContext();
+    const { market, currencyName, currencyCode } = useActiveMarket();
+    const navRef = useRef<HTMLElement>(null);
+    const deliverTo = market?.name || userLocation;
+    const currency = currencyName || currencyCode;
 
-    // toggle mobile menu display or hide all categories
     const toggleCategories = () => {
-        setShowAllCategories(!showAllCategories)
-    }
+        setShowAllCategories(!showAllCategories);
+    };
 
-    // block body scrolling when menu is open
     useEffect(() => {
-        document.body.style.overflow = (showAllCategories) ? "hidden" : "auto"
-    }, [showAllCategories])
+        document.body.style.overflow = showAllCategories ? "hidden" : "auto";
+    }, [showAllCategories]);
 
+    useEffect(() => {
+        const el = navRef.current;
+        if (!el) return;
+        const syncHeight = () => {
+            if (window.matchMedia("(max-width: 1049px)").matches) {
+                document.documentElement.style.setProperty(
+                    "--dukka-nav-height",
+                    `${el.getBoundingClientRect().height}px`,
+                );
+            }
+        };
+        syncHeight();
+        const observer = new ResizeObserver(syncHeight);
+        observer.observe(el);
+        window.addEventListener("resize", syncHeight);
+        return () => {
+            observer.disconnect();
+            window.removeEventListener("resize", syncHeight);
+        };
+    }, [showAllCategories]);
 
     return (
-        <nav className={`flex-col z-50 gap-2 w-[100%] bg-white fixed pt-4 pb-2 drop-shadow-md ${showAllCategories ? 'h-[100vh] overflow-y-scroll customScroll' : ''} max-[1050px]:flex hidden`}>
-            <div className="w-[100%] flex items-center justify-between px-4 sm:px-6 md:px-8">
+        <nav
+            ref={navRef}
+            className={`fixed z-50 hidden w-full flex-col gap-2 border-b border-dukka-line bg-white pt-3 pb-2 max-[1050px]:flex ${
+                showAllCategories ? "h-[100vh] overflow-y-scroll customScroll" : ""
+            }`}
+        >
+            <div className="flex w-full items-center justify-between px-4 sm:px-6 md:px-8">
                 <div className="flex items-center gap-3">
-                    {
-                        showAllCategories ? <button onClick={toggleCategories}>
-                            <MdClose className="w-8 h-8 md:w-9 md:h-9" />
-                    </button> : <button onClick={toggleCategories}>
-                        <Image priority width={24} height={24}  src="/images/navigation/mobile/ic_round-menu.svg" alt="Menu" />
-                    </button>
-                    }
+                    {showAllCategories ? (
+                        <button type="button" onClick={toggleCategories} aria-label="Close menu">
+                            <MdClose className="h-7 w-7 text-dukka-ink" />
+                        </button>
+                    ) : (
+                        <button type="button" onClick={toggleCategories} aria-label="Open menu">
+                            <Image
+                                priority
+                                width={24}
+                                height={24}
+                                src="/images/navigation/mobile/ic_round-menu.svg"
+                                alt=""
+                            />
+                        </button>
+                    )}
                     <Link href="/">
-                        <Image width={90} height={24} src="/images/navigation/mobile/logo.svg" alt="Dukka" />
+                        <Image
+                            width={90}
+                            height={24}
+                            src="/images/navigation/mobile/logo.svg"
+                            alt="Dukka"
+                        />
                     </Link>
                 </div>
-                <div className="flex flex-col gap-0 items-start">
-                    <p className="font-urbanist text-[#888B8B] text-[12px] sm:text-[14px] font-[400]">
-                        Current Location
+                <div className="flex flex-col items-start gap-0">
+                    <p className="text-[11px] font-normal text-dukka-muted sm:text-[12px]">
+                        Deliver to{currency ? ` · ${currency}` : ""}
                     </p>
-                    <div className="flex gap-[2px] items-center">
-                        <MdLocationOn className="w-4 h-4" />
-                        <p className="font-urbanist text-[14px] sm:text-[16px] font-[500]">
-                            {userLocation}
+                    <div className="flex items-center gap-0.5">
+                        <MdLocationOn className="h-3.5 w-3.5 text-dukka-forest" />
+                        <p className="text-[13px] font-medium text-dukka-ink sm:text-[14px]">
+                            {deliverTo}
                         </p>
                     </div>
                 </div>
@@ -57,7 +95,7 @@ const MobileTopNav = ({ userLocation }: { userLocation: string }) => {
             </div>
             <MobileMenuCategories />
         </nav>
-    )
-}
+    );
+};
 
-export default MobileTopNav
+export default MobileTopNav;

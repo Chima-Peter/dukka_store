@@ -8,28 +8,38 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        dukka: {
+          forest: "#0D523F",
+          amber: "#FEB100",
+          ink: "#031815",
+          canvas: "#FAFAFA",
+          muted: "#6B7373",
+          line: "#E4E7E7",
+          soft: "#F3F5F4",
+          panel: "#F7F8F7",
+        },
+      },
       fontFamily: {
         urbanist: "var(--font-urbanist)",
-        noto_sans: "var(--font-noto_sans)",
-        poppins: "var(--font-Poppins)",
-        georgian: "var(--font-Georgian)",
-        philisopher: "var(--font-philisopher)",
-        inter: "var(--font-Inter)",
+      },
+      spacing: {
+        "nav-offset": "var(--dukka-nav-height, 120px)",
       },
     },
     screens: {
-      'xs': '361px',
-      'ss': '375px',
-      'sm': '680px',
-      'md': '768px',
-      'min-lg': '1000px',
-      'lg': '1099px',
-      'xl': '1440px',
-      '2xl': '2560px',
-      '4xl': '3840px'
+      xs: "361px",
+      ss: "375px",
+      sm: "680px",
+      md: "768px",
+      "min-lg": "1000px",
+      lg: "1099px",
+      xl: "1440px",
+      "2xl": "2560px",
+      "4xl": "3840px",
     },
     boxShadow: {
-      'nav-top': '0 -2px 6px rgba(0, 0, 0, 0.1)', // Top shadow
+      "nav-top": "0 -2px 6px rgba(0, 0, 0, 0.1)",
     },
   },
   plugins: [],

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const NotFoundPage = () => {
     return (
-        <main className="flex flex-col gap-8 w-[100%] pt-[120px] sm:pt-[130px] lg:pt-[230px] xl:pt-[270px] 2xl:pt-[270px] bg-[#F0F0F0] font-urbanist">
+        <main className="flex flex-col gap-8 w-[100%] page-nav-offset bg-dukka-canvas font-urbanist">
             <section className="w-[100%] min-lg:w-[93%] self-center flex justify-center items-center bg-white h-[600px] xl:h-[700px] 2xl:h-[800px]">
                 <div className="flex flex-col gap-4 py-10 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16 border border-gray-100 items-center w-[90%] sm:w-[400px] min-lg:w-[500px] drop-shadow-md xl:w-[600px]">
                     <h1 className="text-2xl sm:text-3xl min-lg:text-4xl xl:text-5xl 2xl:text-6xl text-[#FEB100] tracking-wide font-semibold">

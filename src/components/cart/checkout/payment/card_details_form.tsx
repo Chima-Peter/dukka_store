@@ -1,14 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { CiCircleChevRight } from "react-icons/ci";
-import { IoIosCheckmarkCircle } from "react-icons/io";
 import {
     useCheckoutMutation,
     useGetPaymentMethodsQuery,
+    useGetPrecheckoutQuery,
 } from "@/redux/services/checkout_api";
 import { loadCheckoutDraft, clearCheckoutDraft } from "@/lib/checkout_session";
-import { getGuestCartId } from "@/lib/cookies";
+import { getAccessToken, getGuestCartId } from "@/lib/cookies";
 import { useAppSelector } from "@/redux/store";
 import { normalizeList } from "@/utils/map_product";
 import { clearCart } from "@/redux/features/cart_slice";
@@ -18,9 +17,34 @@ import DukkaLoader from "@/components/ui/dukka_loader";
 const CardDetailsForm = () => {
     const dispatch = useAppDispatch();
     const serverCartId = useAppSelector((s) => s.cart.server_cart_id);
+    const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
+    const authed = isAuthenticated || !!getAccessToken();
+    const guestCartId = getGuestCartId();
+    const cartId = serverCartId || guestCartId;
+
+    const { data: precheckout } = useGetPrecheckoutQuery(
+        authed ? undefined : { cart_id: cartId },
+        { skip: !authed && !cartId },
+    );
+
     const { data: methodsData, isLoading: loadingMethods } =
-        useGetPaymentMethodsQuery();
-    const methods = useMemo(() => normalizeList(methodsData), [methodsData]);
+        useGetPaymentMethodsQuery(undefined, {
+            skip: (precheckout?.payment_methods?.length ?? 0) > 0,
+        });
+
+    const methods = useMemo(() => {
+        if (precheckout?.payment_methods?.length) {
+            return precheckout.payment_methods.map((method) => ({
+                id: method.payment_method_id || method.id,
+                name: method.payment_method_name || method.name || "Payment",
+            }));
+        }
+        return normalizeList(methodsData).map((method) => ({
+            id: method.id,
+            name: method.name,
+        }));
+    }, [precheckout, methodsData]);
+
     const [paymentMethodId, setPaymentMethodId] = useState("");
     const [checkout, { isLoading }] = useCheckoutMutation();
     const [error, setError] = useState("");
@@ -65,26 +89,22 @@ const CardDetailsForm = () => {
     };
 
     return (
-        <section className="w-[100%] flex flex-col border border-gray-400 rounded-lg">
-            <div className="flex w-[100%] justify-between p-6 border-b border-gray-400">
-                <div className="flex gap-4 items-center">
-                    <IoIosCheckmarkCircle className="w-6 h-6 xl:w-8 xl:h-8 2xl:w-10 2xl:h-10 text-gray-500" />
-                    <h1 className="text-lg min-lg:text-xl xl:text-2xl 2xl:text-3xl tracking-wide font-medium">
-                        Payment
-                    </h1>
-                </div>
-                <CiCircleChevRight className="w-6 h-6 xl:w-8 xl:h-8 2xl:w-10 2xl:h-10 text-gray-500" />
+        <section className="flex w-full flex-col border border-dukka-line">
+            <div className="flex w-full items-center justify-between border-b border-dukka-line px-6 py-5">
+                <h1 className="text-lg font-semibold tracking-wide text-dukka-ink min-lg:text-xl">
+                    Payment
+                </h1>
             </div>
-            <div className="flex flex-col gap-4 w-[100%] p-6">
-                <p className="text-[15px] text-gray-700">
-                    You will be redirected to Paystack to complete payment securely. We never
-                    collect card numbers on Dukka.
+            <div className="flex w-full flex-col gap-4 p-6">
+                <p className="text-[15px] text-dukka-muted">
+                    You will be redirected to Paystack to complete payment securely. We
+                    never collect card numbers on Dukka.
                 </p>
-                {loadingMethods ? (
+                {loadingMethods && methods.length === 0 ? (
                     <DukkaLoader variant="inline" label="Loading payment methods" />
                 ) : (
                     <select
-                        className="w-full rounded-md border border-gray-400 px-4 py-3 text-[16px] bg-white"
+                        className="w-full border border-dukka-line bg-white px-4 py-3 text-[16px] outline-none focus:border-dukka-forest"
                         value={selectedMethod}
                         onChange={(event) => setPaymentMethodId(event.target.value)}
                     >
@@ -100,7 +120,7 @@ const CardDetailsForm = () => {
                     type="button"
                     onClick={payWithPaystack}
                     disabled={isLoading || !selectedMethod}
-                    className="items-center w-[100%] mt-2 hover:bg-white border-[1.4px] border-[#FEB100] flex gap-2 rounded-lg bg-[#FEB100] py-3 justify-center text-[16px] xl:text-[18px] font-medium tracking-wide disabled:opacity-60"
+                    className="mt-2 flex w-full items-center justify-center bg-dukka-amber py-3.5 text-[16px] font-semibold text-dukka-ink transition-colors hover:bg-dukka-forest hover:text-white disabled:opacity-60"
                 >
                     {isLoading ? "Redirecting..." : "Pay with Paystack"}
                 </button>

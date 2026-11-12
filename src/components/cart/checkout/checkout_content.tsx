@@ -1,26 +1,53 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
-import { BsChevronDoubleRight } from "react-icons/bs";
-import { FaChevronRight } from "react-icons/fa6";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import addCommasToInt from "@/utils/add_commas_to_int";
-import { useAppSelector } from "@/redux/store";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { useGetServiceStatesQuery } from "@/redux/services/catalog_api";
-import { useCreateShippingAddressMutation } from "@/redux/services/checkout_api";
-import { getGuestCartId } from "@/lib/cookies";
+import {
+    useCreateShippingAddressMutation,
+    useGetPrecheckoutQuery,
+} from "@/redux/services/checkout_api";
+import { getAccessToken, getGuestCartId } from "@/lib/cookies";
 import { normalizeList } from "@/utils/map_product";
 import { saveCheckoutDraft } from "@/lib/checkout_session";
 import { useActiveMarketId } from "@/hooks/use_active_market_id";
+import { useAppSelector } from "@/redux/store";
+import { formatMoney } from "@/utils/format_money";
+import DukkaLoader from "@/components/ui/dukka_loader";
+import type { AddressRecord } from "@/types/api";
+
+const emptyForm = {
+    first_name: "",
+    last_name: "",
+    phone_number: "",
+    whatsapp_number: "",
+    email: "",
+    street_address: "",
+    state: "",
+    country: "Nigeria",
+};
 
 const CheckoutContent = () => {
     const router = useRouter();
     const carts = useAppSelector((store) => store.cart);
-    const totalAmount = carts.total || 0;
+    const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
     const marketId = useActiveMarketId();
+    const authed = isAuthenticated || !!getAccessToken();
+    const guestCartId = getGuestCartId();
+    const cartId = carts.server_cart_id || guestCartId;
+
+    const {
+        data: precheckout,
+        isLoading: loadingPrecheckout,
+        isError: precheckoutError,
+        error: precheckoutErr,
+    } = useGetPrecheckoutQuery(authed ? undefined : { cart_id: cartId }, {
+        skip: !authed && !cartId,
+    });
+
     const { data: statesData } = useGetServiceStatesQuery(
         { market_id: marketId! },
         { skip: !marketId },
@@ -29,19 +56,39 @@ const CheckoutContent = () => {
     const [createShippingAddress, { isLoading }] =
         useCreateShippingAddressMutation();
     const [error, setError] = useState("");
-    const [form, setForm] = useState({
-        first_name: "",
-        last_name: "",
-        phone_number: "",
-        whatsapp_number: "",
-        email: "",
-        street_address: "",
-        state: "",
-        country: "Nigeria",
-    });
+    const [form, setForm] = useState(emptyForm);
+    const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
+        null,
+    );
 
-    const onChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const shippingAddresses = precheckout?.shipping_addresses ?? [];
+    const serverTotal = Number(precheckout?.cart?.total ?? carts.total ?? 0);
+
+    useEffect(() => {
+        if (!selectedAddressId) return;
+        const address = shippingAddresses.find((a) => a.id === selectedAddressId);
+        if (!address) return;
+        setForm({
+            first_name: address.first_name || "",
+            last_name: address.last_name || "",
+            phone_number: address.phone_number || "",
+            whatsapp_number: address.whatsapp_number || "",
+            email: address.email || "",
+            street_address: address.street_address || "",
+            state: address.state || "",
+            country: address.country || "Nigeria",
+        });
+    }, [selectedAddressId, shippingAddresses]);
+
+    const onChange = (
+        event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    ) => {
+        setSelectedAddressId(null);
         setForm((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+    };
+
+    const applyAddress = (address: AddressRecord) => {
+        setSelectedAddressId(address.id);
     };
 
     const onSubmit = async (event: FormEvent) => {
@@ -52,13 +99,17 @@ const CheckoutContent = () => {
             return;
         }
         try {
-            const address = await createShippingAddress({
-                ...form,
-                market_id: marketId,
-            }).unwrap();
+            let shippingAddressId = selectedAddressId ?? undefined;
+            if (!shippingAddressId) {
+                const address = await createShippingAddress({
+                    ...form,
+                    market_id: marketId,
+                }).unwrap();
+                shippingAddressId = address.id;
+            }
             saveCheckoutDraft({
                 ...form,
-                shipping_address_id: address.id,
+                shipping_address_id: shippingAddressId,
             });
             router.push("/cart/checkout/payment");
         } catch (err) {
@@ -69,161 +120,224 @@ const CheckoutContent = () => {
         }
     };
 
-    return (
-        <main className="flex flex-col gap-8 w-[100%] pt-[120px] sm:pt-[130px] lg:pt-[230px] xl:pt-[270px] 2xl:pt-[270px] bg-[#F0F0F0] font-urbanist mb-10">
-            <section className="bg-white px-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16 py-4">
-                <p className="flex items-center gap-1 pb-2 border-b-[1.4px] border-b-gray-300">
-                    <Link className="text-[13px] opacity-75 font-normal" href="/">
-                        Home
-                    </Link>{" "}
-                    <strong className="opacity-65">
-                        <BsChevronDoubleRight className="w-3 h-3" />
-                    </strong>{" "}
-                    <Link href={`/cart`} className="text-[13px] opacity-75 font-normal">
-                        Cart
-                    </Link>{" "}
-                    <strong className="opacity-65">
-                        <BsChevronDoubleRight className="w-3 h-3" />
-                    </strong>{" "}
-                    <Link href={`/cart/checkout`} className="text-[15px] font-semibold">
-                        Checkout
-                    </Link>
-                </p>
-            </section>
-            <section className="flex min-lg:justify-between flex-col min-lg:flex-row gap-8 min-lg:gap-0 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16 py-10 bg-white w-[100%]">
-                <form
-                    onSubmit={onSubmit}
-                    className="w-[100%] min-lg:w-[68%] flex flex-col gap-6 border border-gray-400 rounded-lg p-6"
-                >
-                    <h1 className="text-xl font-medium">Customer & delivery details</h1>
-                    <div className="w-[100%] flex justify-between gap-4 flex-wrap">
-                        <input
-                            type="text"
-                            name="first_name"
-                            value={form.first_name}
-                            onChange={onChange}
-                            required
-                            className="w-[100%] sm:w-[48%] text-[16px] py-3 px-4 rounded-md border border-gray-400"
-                            placeholder="First name"
-                        />
-                        <input
-                            type="text"
-                            name="last_name"
-                            value={form.last_name}
-                            onChange={onChange}
-                            required
-                            className="w-[100%] sm:w-[48%] text-[16px] py-3 px-4 rounded-md border border-gray-400"
-                            placeholder="Last name"
-                        />
-                    </div>
-                    <input
-                        type="email"
-                        name="email"
-                        value={form.email}
-                        onChange={onChange}
-                        required
-                        className="w-full text-[16px] py-3 px-4 rounded-md border border-gray-400"
-                        placeholder="Email"
-                    />
-                    <div className="w-full flex gap-4 flex-wrap">
-                        <div className="w-full sm:w-[48%]">
-                            <PhoneInput
-                                country={"ng"}
-                                value={form.phone_number}
-                                onChange={(value) =>
-                                    setForm((prev) => ({ ...prev, phone_number: value }))
-                                }
-                                inputStyle={{ width: "100%", height: "48px" }}
-                            />
-                        </div>
-                        <div className="w-full sm:w-[48%]">
-                            <PhoneInput
-                                country={"ng"}
-                                value={form.whatsapp_number}
-                                onChange={(value) =>
-                                    setForm((prev) => ({
-                                        ...prev,
-                                        whatsapp_number: value,
-                                    }))
-                                }
-                                inputStyle={{ width: "100%", height: "48px" }}
-                            />
-                        </div>
-                    </div>
-                    <input
-                        type="text"
-                        name="street_address"
-                        value={form.street_address}
-                        onChange={onChange}
-                        required
-                        className="w-full text-[16px] py-3 px-4 rounded-md border border-gray-400"
-                        placeholder="Street address"
-                    />
-                    <div className="w-full flex gap-4 flex-wrap">
-                        <input
-                            type="text"
-                            name="country"
-                            value={form.country}
-                            onChange={onChange}
-                            required
-                            className="w-full sm:w-[48%] text-[16px] py-3 px-4 rounded-md border border-gray-400"
-                            placeholder="Country"
-                        />
-                        <select
-                            name="state"
-                            value={form.state}
-                            onChange={onChange}
-                            required
-                            className="w-full sm:w-[48%] text-[16px] py-3 px-4 rounded-md border border-gray-400 bg-white"
-                        >
-                            <option value="">Select state</option>
-                            {states.map((state) => (
-                                <option key={state.id} value={state.id}>
-                                    {state.state_name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    {error && <p className="text-sm text-red-600">{error}</p>}
-                    <button
-                        type="submit"
-                        disabled={isLoading || carts.cart.length === 0}
-                        className="items-center w-full mt-2 hover:bg-white border-[1.4px] border-[#FEB100] flex gap-2 rounded-lg bg-[#FEB100] py-3 justify-center text-[16px] font-medium tracking-wide disabled:opacity-60"
-                    >
-                        {isLoading ? "Saving..." : "Continue to payment"}
-                    </button>
-                    {!getGuestCartId() && carts.cart.length === 0 && (
-                        <p className="text-sm text-gray-600">Your cart is empty.</p>
-                    )}
-                </form>
+    const precheckoutMessage =
+        (precheckoutErr as { data?: { message?: string } })?.data?.message ||
+        "Unable to load checkout. Return to cart and try again.";
 
-                <section className="flex flex-col gap-4 w-[100%] min-lg:w-[30%] p-6 rounded-lg border border-gray-400 h-fit">
-                    <ul className="flex flex-col gap-2">
-                        <li className="flex justify-between">
-                            <p className="text-[14px] min-lg:text-[16px] text-black font-[400]">
-                                Subtotal:
-                            </p>
-                            <h3 className="text-[16px] min-lg:text-[18px] font-semibold">
-                                &#8358;{addCommasToInt(totalAmount)}
-                            </h3>
-                        </li>
-                        <li className="flex justify-between mt-6 py-1 border-b border-b-gray-300">
-                            <p className="text-[14px] min-lg:text-[16px] text-black font-[400]">
-                                Grand Total:
-                            </p>
-                            <h3 className="text-[17px] min-lg:text-[20px] font-bold">
-                                &#8358;{addCommasToInt(totalAmount)}
-                            </h3>
-                        </li>
-                    </ul>
-                    <button className="flex justify-between py-1 border-b border-b-gray-300 mt-4 ">
-                        <p className="text-[14px] min-lg:text-[16px] text-black font-[400]">
-                            Order instruction
-                        </p>
-                        <FaChevronRight className="w-4 h-4 text-gray-400" />
-                    </button>
-                </section>
+    return (
+        <main className="page-nav-offset mb-10 flex w-full flex-col gap-8 bg-dukka-canvas font-urbanist">
+            <section className="border-b border-dukka-line bg-white px-4 py-3 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
+                <nav className="flex flex-wrap items-center gap-2 text-[13px] text-dukka-muted">
+                    <Link href="/" className="hover:text-dukka-forest">
+                        Home
+                    </Link>
+                    <span>/</span>
+                    <Link href="/cart" className="hover:text-dukka-forest">
+                        Cart
+                    </Link>
+                    <span>/</span>
+                    <span className="text-dukka-ink">Checkout</span>
+                </nav>
             </section>
+
+            {loadingPrecheckout && (
+                <DukkaLoader label="Loading checkout" />
+            )}
+
+            {(precheckoutError || (!authed && !cartId)) && !loadingPrecheckout && (
+                <section className="px-4 sm:px-6 md:px-8 lg:px-12">
+                    <p className="text-sm text-red-600">{precheckoutMessage}</p>
+                    <Link
+                        href="/cart"
+                        className="mt-4 inline-flex bg-dukka-amber px-5 py-3 text-[14px] font-semibold text-dukka-ink"
+                    >
+                        Back to cart
+                    </Link>
+                </section>
+            )}
+
+            {precheckout && (
+                <section className="flex w-full flex-col gap-8 bg-white px-4 py-10 min-lg:flex-row min-lg:justify-between min-lg:gap-10 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
+                    <form
+                        onSubmit={onSubmit}
+                        className="flex w-full flex-col gap-6 min-lg:w-[65%]"
+                    >
+                        <h1 className="text-xl font-semibold text-dukka-ink">
+                            Customer & delivery details
+                        </h1>
+
+                        {shippingAddresses.length > 0 && (
+                            <div className="flex flex-col gap-2">
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-dukka-muted">
+                                    Saved addresses
+                                </p>
+                                <div className="flex flex-col gap-2">
+                                    {shippingAddresses.map((address) => (
+                                        <button
+                                            key={address.id}
+                                            type="button"
+                                            onClick={() => applyAddress(address)}
+                                            className={`border px-4 py-3 text-left text-[14px] transition-colors ${
+                                                selectedAddressId === address.id
+                                                    ? "border-dukka-forest bg-dukka-panel text-dukka-ink"
+                                                    : "border-dukka-line text-dukka-muted hover:border-dukka-forest"
+                                            }`}
+                                        >
+                                            <span className="font-medium text-dukka-ink">
+                                                {address.first_name} {address.last_name}
+                                            </span>
+                                            <span className="mt-1 block text-[13px]">
+                                                {address.street_address}, {address.country}
+                                            </span>
+                                        </button>
+                                    ))}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setSelectedAddressId(null);
+                                            setForm(emptyForm);
+                                        }}
+                                        className="text-left text-[13px] font-semibold text-dukka-forest underline-offset-4 hover:underline"
+                                    >
+                                        Use a new address
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="flex w-full flex-wrap justify-between gap-4">
+                            <input
+                                type="text"
+                                name="first_name"
+                                value={form.first_name}
+                                onChange={onChange}
+                                required
+                                className="w-full border border-dukka-line bg-dukka-canvas px-4 py-3 text-[16px] outline-none focus:border-dukka-forest sm:w-[48%]"
+                                placeholder="First name"
+                            />
+                            <input
+                                type="text"
+                                name="last_name"
+                                value={form.last_name}
+                                onChange={onChange}
+                                required
+                                className="w-full border border-dukka-line bg-dukka-canvas px-4 py-3 text-[16px] outline-none focus:border-dukka-forest sm:w-[48%]"
+                                placeholder="Last name"
+                            />
+                        </div>
+                        <input
+                            type="email"
+                            name="email"
+                            value={form.email}
+                            onChange={onChange}
+                            required
+                            className="w-full border border-dukka-line bg-dukka-canvas px-4 py-3 text-[16px] outline-none focus:border-dukka-forest"
+                            placeholder="Email"
+                        />
+                        <div className="flex w-full flex-wrap gap-4">
+                            <div className="w-full sm:w-[48%]">
+                                <PhoneInput
+                                    country={"ng"}
+                                    value={form.phone_number}
+                                    onChange={(value) => {
+                                        setSelectedAddressId(null);
+                                        setForm((prev) => ({
+                                            ...prev,
+                                            phone_number: value,
+                                        }));
+                                    }}
+                                    inputStyle={{ width: "100%", height: "48px" }}
+                                />
+                            </div>
+                            <div className="w-full sm:w-[48%]">
+                                <PhoneInput
+                                    country={"ng"}
+                                    value={form.whatsapp_number}
+                                    onChange={(value) => {
+                                        setSelectedAddressId(null);
+                                        setForm((prev) => ({
+                                            ...prev,
+                                            whatsapp_number: value,
+                                        }));
+                                    }}
+                                    inputStyle={{ width: "100%", height: "48px" }}
+                                />
+                            </div>
+                        </div>
+                        <input
+                            type="text"
+                            name="street_address"
+                            value={form.street_address}
+                            onChange={onChange}
+                            required
+                            className="w-full border border-dukka-line bg-dukka-canvas px-4 py-3 text-[16px] outline-none focus:border-dukka-forest"
+                            placeholder="Street address"
+                        />
+                        <div className="flex w-full flex-wrap gap-4">
+                            <input
+                                type="text"
+                                name="country"
+                                value={form.country}
+                                onChange={onChange}
+                                required
+                                className="w-full border border-dukka-line bg-dukka-canvas px-4 py-3 text-[16px] outline-none focus:border-dukka-forest sm:w-[48%]"
+                                placeholder="Country"
+                            />
+                            <select
+                                name="state"
+                                value={form.state}
+                                onChange={onChange}
+                                required
+                                className="w-full border border-dukka-line bg-white px-4 py-3 text-[16px] outline-none focus:border-dukka-forest sm:w-[48%]"
+                            >
+                                <option value="">Select state</option>
+                                {states.map((state) => (
+                                    <option key={state.id} value={state.id}>
+                                        {state.state_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        {error && <p className="text-sm text-red-600">{error}</p>}
+                        <button
+                            type="submit"
+                            disabled={isLoading || !precheckout.cart?.items?.length}
+                            className="mt-2 flex w-full items-center justify-center bg-dukka-amber py-3.5 text-[16px] font-semibold text-dukka-ink transition-colors hover:bg-dukka-forest hover:text-white disabled:opacity-60"
+                        >
+                            {isLoading ? "Saving..." : "Continue to payment"}
+                        </button>
+                    </form>
+
+                    <aside className="h-fit w-full bg-dukka-ink p-6 text-white min-lg:w-[32%]">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-dukka-amber">
+                            Order summary
+                        </p>
+                        <dl className="mt-6 space-y-4 border-y border-white/15 py-6">
+                            <div className="flex justify-between text-[14px]">
+                                <dt className="text-white/70">Items</dt>
+                                <dd>{precheckout.cart?.items?.length ?? 0}</dd>
+                            </div>
+                            <div className="flex justify-between text-[14px]">
+                                <dt className="text-white/70">Subtotal</dt>
+                                <dd className="tabular-nums">
+                                    {formatMoney(serverTotal)}
+                                </dd>
+                            </div>
+                            <div className="flex justify-between pt-2">
+                                <dt className="text-[15px] font-medium">Total</dt>
+                                <dd className="text-[22px] font-semibold tabular-nums text-dukka-amber">
+                                    {formatMoney(serverTotal)}
+                                </dd>
+                            </div>
+                        </dl>
+                        {authed && (
+                            <p className="mt-4 text-[13px] text-white/60">
+                                Points balance: {precheckout.points_balance ?? 0}
+                            </p>
+                        )}
+                    </aside>
+                </section>
+            )}
         </main>
     );
 };

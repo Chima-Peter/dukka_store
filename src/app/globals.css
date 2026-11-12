@@ -2,51 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --dukka-forest: #0d523f;
+  --dukka-amber: #feb100;
+  --dukka-ink: #031815;
+  --dukka-canvas: #fafafa;
+  --dukka-muted: #6b7373;
+  --dukka-line: #e4e7e7;
+  --dukka-soft: #f3f5f4;
+  --dukka-panel: #f7f8f7;
+  --dukka-nav-height: 120px;
+}
 
 @layer utilities {
-    .customScroll::-webkit-scrollbar {
-        width: 5px;
-        height: 0px;
-        background-color: inherit;
-     }
-     .customScroll::-webkit-scrollbar-thumb {
-        background-color: lightgray;
-     }
+  .customScroll::-webkit-scrollbar {
+    width: 5px;
+    height: 0px;
+    background-color: inherit;
+  }
+  .customScroll::-webkit-scrollbar-thumb {
+    background-color: lightgray;
+  }
 
-     .scrollbar-hide::-webkit-scrollbar {
-        width: 8px; /* Width of the scrollbar */
-      }
+  .scrollbar-hide::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .page-nav-offset {
+    padding-top: var(--dukka-nav-height, 120px);
+  }
 }
 
 @keyframes dukka-spin {
-    to {
-        transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .dukka-loader-spinner {
-    display: block;
-    width: 36px;
-    height: 36px;
-    border-radius: 9999px;
-    border: 2.5px solid rgba(13, 82, 63, 0.15);
-    border-top-color: #0d523f;
-    border-right-color: #feb100;
-    animation: dukka-spin 0.75s linear infinite;
+  display: block;
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  border: 2.5px solid rgba(13, 82, 63, 0.15);
+  border-top-color: var(--dukka-forest);
+  border-right-color: var(--dukka-amber);
+  animation: dukka-spin 0.75s linear infinite;
 }
 
 .dukka-loader-inline {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border-radius: 9999px;
-    border: 2px solid rgba(13, 82, 63, 0.18);
-    border-top-color: #0d523f;
-    border-right-color: #feb100;
-    animation: dukka-spin 0.7s linear infinite;
-    flex-shrink: 0;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  border: 2px solid rgba(13, 82, 63, 0.18);
+  border-top-color: var(--dukka-forest);
+  border-right-color: var(--dukka-amber);
+  animation: dukka-spin 0.7s linear infinite;
+  flex-shrink: 0;
 }
-
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
@@ -55,13 +69,14 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 input[type="number"] {
-  -moz-appearance: textfield; /* For Firefox */
-  appearance: textfield; /* For newer browsers */
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 /* Urbanist (and many display fonts) render password mask glyphs tiny */
 input[type="password"] {
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+    Arial, sans-serif;
   letter-spacing: 0.12em;
   font-size: 16px;
   line-height: 1.5;
