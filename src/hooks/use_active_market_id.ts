@@ -13,16 +13,12 @@ export function notifyActiveMarketChanged(marketId: string) {
 }
 
 export function useActiveMarketId() {
-    const [marketId, setMarketId] = useState<string | undefined>(() => {
-        if (typeof window === "undefined") return undefined;
-        return getActiveMarketId();
-    });
+    // Always start undefined so SSR and the client's first paint match.
+    // Reading localStorage in useState causes a hydration mismatch.
+    const [marketId, setMarketId] = useState<string | undefined>(undefined);
 
     useEffect(() => {
-        const current = getActiveMarketId();
-        if (current !== marketId) {
-            setMarketId(current);
-        }
+        setMarketId(getActiveMarketId());
 
         const onMarket = (event: Event) => {
             const detail = (event as CustomEvent<{ marketId?: string }>).detail;
@@ -40,7 +36,6 @@ export function useActiveMarketId() {
             window.removeEventListener(MARKET_EVENT, onMarket);
             window.removeEventListener("storage", onStorage);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps -- hydrate once, then listen
     }, []);
 
     return marketId;

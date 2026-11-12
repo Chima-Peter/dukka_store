@@ -7,6 +7,7 @@ import { useGetProductSuggestionsQuery } from "@/redux/services/catalog_api";
 import { useActiveMarketId } from "@/hooks/use_active_market_id";
 import { formatMoney } from "@/utils/format_money";
 import ProductImage from "@/components/ui/product_image";
+import DukkaLoader from "@/components/ui/dukka_loader";
 
 const SearchSuggestion = ({ query }: { query: string }) => {
     const router = useRouter();
@@ -58,8 +59,8 @@ const SearchSuggestion = ({ query }: { query: string }) => {
                     </li>
                 )}
                 {debounced.length >= 2 && isFetching && products.length === 0 && (
-                    <li className="px-4 py-3 text-[14px] text-[#6B7373]">
-                        Searching...
+                    <li className="px-4 py-3">
+                        <DukkaLoader variant="inline" label="Searching..." />
                     </li>
                 )}
                 {debounced.length >= 2 &&

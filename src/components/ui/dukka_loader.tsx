@@ -31,30 +31,17 @@ const DukkaLoader = ({
 
     return (
         <div className={shell} role="status" aria-live="polite">
-            <div className="flex w-full max-w-[220px] flex-col items-center gap-6 font-urbanist">
+            <div className="flex w-full max-w-[220px] flex-col items-center gap-5 font-urbanist">
                 <motion.div
-                    className="flex flex-col items-center gap-3"
+                    className="flex flex-col items-center gap-4"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.45, ease: "easeOut" }}
                 >
+                    <span className="dukka-loader-spinner" aria-hidden />
                     <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-[#888B8B]">
                         Dukka
                     </p>
-                    <div className="relative">
-                        <motion.p
-                            className="text-[42px] font-semibold leading-none tracking-tight text-[#0D523F]"
-                            animate={{ opacity: [0.55, 1, 0.55] }}
-                            transition={{
-                                duration: 1.8,
-                                ease: "easeInOut",
-                                repeat: Infinity,
-                            }}
-                        >
-                            Store
-                        </motion.p>
-                        <span className="dukka-loader-line" aria-hidden />
-                    </div>
                 </motion.div>
 
                 <p className="text-center text-[13px] font-medium tracking-wide text-[#5B6363]">
