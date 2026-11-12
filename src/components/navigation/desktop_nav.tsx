@@ -123,8 +123,8 @@ const DesktopNav = ({ userLocation, flag, currency, language }: PropTypes) => {
                 <div className="flex w-[100%] items-center justify-between px-4 py-4 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
                     <Link href="/">
                         <Image
-                            width={205}
-                            height={47}
+                            width={140}
+                            height={36}
                             src="/logo.svg"
                             alt="Dukka"
                             priority

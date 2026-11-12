@@ -1,0 +1,13 @@
+<svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Dukka</title>
+  <text
+    x="0"
+    y="29"
+    fill="#FFFFFF"
+    font-family="Urbanist, 'Segoe UI', Helvetica, Arial, sans-serif"
+    font-size="28"
+    font-weight="700"
+    letter-spacing="-0.04em"
+  >Dukka</text>
+  <circle cx="102" cy="11" r="4.5" fill="#FEB100"/>
+</svg>

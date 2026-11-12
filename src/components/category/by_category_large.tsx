@@ -157,10 +157,10 @@ const ByCategoryLarge = ({header, details, caller, link}: ByCategoryTypes) => {
                         </button>
                     </div>
                     <section
-                        className={`grid w-full gap-3 px-2 pb-8 sm:gap-4 ${
+                        className={`grid w-full gap-x-3 gap-y-5 px-2 pb-8 sm:gap-x-4 ${
                             grid === "1x3"
                                 ? "grid-cols-1 md:grid-cols-2"
-                                : "grid-cols-2 md:grid-cols-3"
+                                : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
                         }`}
                     >
                         {detailsList.map((field: DetailsType, index: number) => (

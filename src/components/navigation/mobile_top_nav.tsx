@@ -37,7 +37,7 @@ const MobileTopNav = ({ userLocation }: { userLocation: string }) => {
                     </button>
                     }
                     <Link href="/">
-                        <Image width={103} height={24} src="/images/navigation/mobile/logo.svg" alt="Dukka" />
+                        <Image width={90} height={24} src="/images/navigation/mobile/logo.svg" alt="Dukka" />
                     </Link>
                 </div>
                 <div className="flex flex-col gap-0 items-start">

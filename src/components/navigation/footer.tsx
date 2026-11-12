@@ -19,9 +19,9 @@ const Footer = () => {
             <section className="flex w-[100%] flex-wrap justify-between gap-y-12 min-lg:gap-0">
                 <div className="flex w-[100%] flex-col gap-4 sm:w-[48%] min-lg:w-[28%]">
                     <Image
-                        width={200}
-                        height={44}
-                        src="/logo.svg"
+                        width={140}
+                        height={36}
+                        src="/logo-light.svg"
                         alt="Dukka"
                     />
                     <p className="text-[14px] font-normal leading-relaxed tracking-wide text-[#888B8B] md:text-[16px]">

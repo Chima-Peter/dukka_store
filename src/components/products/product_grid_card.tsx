@@ -56,49 +56,52 @@ const ProductGridCard = ({ detail }: { detail: DetailsType }) => {
 
     return (
         <motion.article
-            className="group flex h-full flex-col border border-[#E4E7E7] bg-white"
-            whileHover={{ y: -3 }}
+            className="group flex h-full flex-col bg-white"
+            whileHover={{ y: -2 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
         >
             <Link
                 href={productHref}
-                className="relative block aspect-[4/5] w-full overflow-hidden bg-[#F3F5F4]"
+                className="relative block aspect-square w-full overflow-hidden rounded-md bg-[#F3F5F4]"
             >
                 <ProductImage
                     src={detail.image}
                     alt={detail.title}
                     seed={detail.id || detail.title}
-                    width={480}
-                    height={600}
+                    width={280}
+                    height={280}
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                 />
                 {detail.sold_out && (
-                    <span className="absolute left-3 top-3 bg-[#031815] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">
+                    <span className="absolute left-2 top-2 bg-[#031815] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-white">
                         Sold out
                     </span>
                 )}
             </Link>
 
-            <div className="flex flex-1 flex-col gap-2 p-3.5 sm:p-4">
-                <Link href={productHref} className="line-clamp-2 min-h-[2.6em] text-[15px] font-medium leading-snug text-[#0D523F] sm:text-[16px]">
+            <div className="flex flex-1 flex-col gap-1 pt-2.5">
+                <Link
+                    href={productHref}
+                    className="line-clamp-2 min-h-[2.4em] text-[13px] font-medium leading-snug text-[#0D523F] sm:text-[14px]"
+                >
                     {detail.title}
                 </Link>
-                <p className="text-[17px] font-semibold tracking-tight text-[#031815] sm:text-[18px]">
+                <p className="text-[14px] font-semibold tracking-tight text-[#031815] sm:text-[15px]">
                     {formatMoney(
                         Number(detail.price.replace(/,/g, "")),
                         detail.currency,
                     )}
                 </p>
 
-                <div className="mt-auto pt-2">
+                <div className="mt-auto pt-1.5">
                     <AnimatePresence mode="popLayout">
                         {!detail.market_variant_id ? (
                             <motion.div key="view" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                                 <Link
                                     href={productHref}
-                                    className="flex w-full items-center justify-center gap-2 border border-[#FEB100] bg-[#FEB100] py-2.5 text-[14px] font-semibold text-[#031815] transition-colors hover:bg-[#0D523F] hover:border-[#0D523F] hover:text-white"
+                                    className="flex w-full items-center justify-center gap-1.5 rounded-md border border-[#FEB100] bg-[#FEB100] py-1.5 text-[12px] font-semibold text-[#031815] transition-colors hover:border-[#0D523F] hover:bg-[#0D523F] hover:text-white"
                                 >
-                                    {detail.sold_out ? "View product" : "Select options"}
+                                    {detail.sold_out ? "View" : "Options"}
                                 </Link>
                             </motion.div>
                         ) : quantity < 1 ? (
@@ -107,44 +110,44 @@ const ProductGridCard = ({ detail }: { detail: DetailsType }) => {
                                 type="button"
                                 onClick={addProductToCart}
                                 disabled={detail.sold_out}
-                                className="flex w-full items-center justify-center gap-2 border border-[#FEB100] bg-[#FEB100] py-2.5 text-[14px] font-semibold text-[#031815] transition-colors hover:bg-[#0D523F] hover:border-[#0D523F] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                                className="flex w-full items-center justify-center gap-1.5 rounded-md border border-[#FEB100] bg-[#FEB100] py-1.5 text-[12px] font-semibold text-[#031815] transition-colors hover:border-[#0D523F] hover:bg-[#0D523F] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                             >
-                                <BsCart2 className="h-4 w-4" />
-                                {detail.sold_out ? "Sold out" : "Add to cart"}
+                                <BsCart2 className="h-3.5 w-3.5" />
+                                {detail.sold_out ? "Sold out" : "Add"}
                             </motion.button>
                         ) : (
                             <motion.div
                                 key="qty"
-                                className="flex w-full items-center justify-between border border-[#FEB100]"
+                                className="flex w-full items-center justify-between rounded-md border border-[#FEB100]"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                             >
                                 <button
                                     type="button"
-                                    className="bg-[#FEB100] px-3 py-2 text-[18px] font-medium"
+                                    className="rounded-l-md bg-[#FEB100] px-2.5 py-1.5 text-[15px] font-medium"
                                     onClick={removeQuantity}
                                 >
                                     -
                                 </button>
-                                <div className="relative flex h-7 w-8 items-center justify-center overflow-hidden">
+                                <div className="relative flex h-6 w-7 items-center justify-center overflow-hidden">
                                     <AnimatePresence mode="popLayout">
                                         <motion.span
                                             key={quantity}
                                             initial={{
-                                                y: method === "add" ? 10 : -10,
+                                                y: method === "add" ? 8 : -8,
                                                 opacity: 0,
                                             }}
                                             animate={{ y: 0, opacity: 1 }}
                                             exit={{
-                                                y: method === "add" ? 10 : -10,
+                                                y: method === "add" ? 8 : -8,
                                                 opacity: 0,
                                             }}
                                             transition={{ duration: 0.15 }}
-                                            className="absolute text-[15px] font-semibold"
+                                            className="absolute text-[13px] font-semibold"
                                         >
                                             {quantity}
                                         </motion.span>
@@ -152,7 +155,7 @@ const ProductGridCard = ({ detail }: { detail: DetailsType }) => {
                                 </div>
                                 <button
                                     type="button"
-                                    className="bg-[#FEB100] px-3 py-2 text-[18px] font-medium"
+                                    className="rounded-r-md bg-[#FEB100] px-2.5 py-1.5 text-[15px] font-medium"
                                     onClick={addQuantity}
                                 >
                                     +
