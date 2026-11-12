@@ -22,9 +22,7 @@ const ReviewDropdown = ({
     const latest = reviews[0];
 
     return (
-        <div
-            className={`w-[100%] bg-white flex flex-col gap-4 py-5 px-4 justify-between rounded-md drop-shadow-md top-[50px] z-20 left-0 font-NotoSans ${writeReview || viewReview ? "static" : "absolute"}`}
-        >
+        <div className="absolute left-0 top-[50px] z-20 flex w-full flex-col justify-between gap-4 rounded-md bg-white px-4 py-5 drop-shadow-md font-NotoSans">
             <button
                 className="w-fit h-hit px-5 py-2 text-white rounded-md bg-[#FEB100] font-[400] text-[16px] xl:text-[18px] disabled:opacity-50"
                 onClick={() => setWriteReview(true)}

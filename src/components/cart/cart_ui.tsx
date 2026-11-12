@@ -86,7 +86,13 @@ const CartUI = () => {
     };
 
     return (
-        <main className="page-nav-offset w-full bg-dukka-canvas pb-28 font-urbanist lg:pb-16">
+        <main
+            className={`page-nav-offset w-full bg-dukka-canvas font-urbanist lg:pb-16 ${
+                isEmpty
+                    ? "pb-28"
+                    : "pb-28 max-[1050px]:pb-[calc(var(--dukka-bottom-nav-height)+11rem)]"
+            }`}
+        >
             <div className="border-b border-dukka-line bg-white px-4 py-3 sm:px-6 md:px-8 lg:px-12 xl:px-14 2xl:px-16">
                 <nav className="flex flex-wrap items-center gap-2 text-[13px] text-dukka-muted">
                     <Link href="/" className="hover:text-dukka-forest">
@@ -234,7 +240,7 @@ const CartUI = () => {
             )}
 
             {!isEmpty && (
-                <div className="fixed inset-x-0 bottom-0 z-40 border-t border-dukka-line bg-white px-4 py-4 shadow-[0_-8px_24px_rgba(3,24,21,0.08)] lg:hidden">
+                <div className="fixed inset-x-0 bottom-[var(--dukka-bottom-nav-height,0px)] z-40 border-t border-dukka-line bg-white px-4 py-4 shadow-[0_-8px_24px_rgba(3,24,21,0.08)] lg:hidden">
                     <div className="mb-3 flex items-end justify-between gap-4">
                         <div>
                             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-dukka-muted">

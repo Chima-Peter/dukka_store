@@ -181,9 +181,6 @@ const DesktopProfilePage = ({ initialStep = 0 }: { initialStep?: number }) => {
                                 Sign out
                             </span>
                         </button>
-                        {logoutModal && (
-                            <LogoutModal setLogoutModal={setLogoutModal} />
-                        )}
                     </ul>
                 </motion.aside>
 
@@ -196,6 +193,8 @@ const DesktopProfilePage = ({ initialStep = 0 }: { initialStep?: number }) => {
                     {profilePages[step] ?? profilePages[0]}
                 </motion.div>
             </section>
+
+            {logoutModal && <LogoutModal setLogoutModal={setLogoutModal} />}
         </main>
     );
 };

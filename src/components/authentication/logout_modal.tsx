@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { CiSaveUp1 } from "react-icons/ci";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -18,6 +20,14 @@ const LogoutModal = ({
     const router = useRouter();
     const [logoutRequest, { isLoading }] = useLogoutMutation();
 
+    useEffect(() => {
+        const previous = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = previous;
+        };
+    }, []);
+
     const confirmLogout = async () => {
         try {
             await logoutRequest().unwrap();
@@ -31,51 +41,63 @@ const LogoutModal = ({
         router.push("/");
     };
 
-    return (
-        <div className="w-[100vw] top-0 left-0 fixed backdrop-brightness-50 backdrop-blur-sm flex items-center justify-center min-h-[100vh] z-50">
+    const close = () => setLogoutModal(false);
+
+    if (typeof document === "undefined") return null;
+
+    return createPortal(
+        <div
+            className="fixed inset-0 z-[100] flex min-h-[100vh] w-screen items-center justify-center bg-dukka-ink/45 px-4 backdrop-blur-sm"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="logout-modal-title"
+        >
+            <button
+                type="button"
+                aria-label="Close sign out dialog"
+                className="absolute inset-0 cursor-default"
+                onClick={close}
+            />
             <motion.div
-                className="flex w-[90%] sm:w-[400px] flex-col rounded-lg shadow-xl bg-[#FFF9F3] h-[230px] z-30"
-                initial={{ scale: 0.5, opacity: 0.5 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{
-                    duration: 0.8,
-                    ease: "easeInOut",
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 10,
-                    mass: 0.5,
-                }}
+                className="relative z-10 flex w-full max-w-[400px] flex-col overflow-hidden rounded-2xl bg-white shadow-[0_24px_60px_rgba(3,24,21,0.2)]"
+                initial={{ scale: 0.94, opacity: 0, y: 10 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                transition={{ duration: 0.28, ease: "easeOut" }}
             >
-                <div className="flex flex-col h-[180px] w-[100%] items-center justify-center rounded-t-lg">
-                    <CiSaveUp1 className="w-[60px] h-[60px] text-[#D70404]" />
-                    <h2 className="mt-2 font-[600] text-[20px] md:text-[24px] lg:text-[26px]">
-                        Log Out
+                <div className="flex flex-col items-center px-6 py-8 text-center">
+                    <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[#FFF0F0]">
+                        <CiSaveUp1 className="h-8 w-8 text-[#C62828]" />
+                    </div>
+                    <h2
+                        id="logout-modal-title"
+                        className="font-urbanist text-[22px] font-semibold tracking-tight text-dukka-ink"
+                    >
+                        Sign out
                     </h2>
-                    <p className="text-[16px] md:text-[18px] text-[#646767] font-[400]">
-                        You&lsquo;re about to log out
+                    <p className="mt-1 text-[14px] text-dukka-muted">
+                        You’re about to leave your Dukka account.
                     </p>
                 </div>
-                <div className="w-[100%] flex bg-white rounded-b-lg">
+                <div className="grid grid-cols-2 border-t border-dukka-line">
                     <button
-                        className="w-[50%] py-3 hover:bg-[#D3D9D9] rounded-t-none text-[16px] md:text-[18px] rounded-l-lg font-[400] font-urbanist border-r border-r-[#ADB1B1]"
-                        onClick={() => setLogoutModal(false)}
+                        type="button"
+                        className="border-r border-dukka-line py-3.5 text-[14px] font-semibold text-dukka-forest transition-colors hover:bg-dukka-soft"
+                        onClick={close}
                     >
-                        Keep me logged in
+                        Stay signed in
                     </button>
                     <button
-                        className="w-[50%] py-3 hover:bg-[#D3D9D9] rounded-t-none text-[16px] md:text-[18px] font-[400] rounded-r-lg font-urbanist"
+                        type="button"
+                        className="py-3.5 text-[14px] font-semibold text-[#C62828] transition-colors hover:bg-[#FFF5F5] disabled:opacity-60"
                         onClick={confirmLogout}
                         disabled={isLoading}
                     >
-                        {isLoading ? "Logging out..." : "Yes, log me out"}
+                        {isLoading ? "Signing out..." : "Yes, sign out"}
                     </button>
                 </div>
             </motion.div>
-            <div
-                className="w-[100vw] h-[100%] z-[-20] fixed top-0 left-0"
-                onClick={() => setLogoutModal(false)}
-            />
-        </div>
+        </div>,
+        document.body,
     );
 };
 

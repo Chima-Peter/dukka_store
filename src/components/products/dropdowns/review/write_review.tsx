@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { GoPerson } from "react-icons/go";
 import { IoIosStar } from "react-icons/io";
 import { MdOutlineCancel } from "react-icons/md";
@@ -27,6 +28,16 @@ const WriteReview = ({
     });
     const [error, setError] = useState("");
     const [disableSubmit, setDisableSubmit] = useState(true);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        const previous = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = previous;
+        };
+    }, []);
 
     useEffect(() => {
         setDisableSubmit(
@@ -59,27 +70,45 @@ const WriteReview = ({
         }
     };
 
-    return (
-        <section className="min-h-[100vh] backdrop-brightness-50 w-[100%] z-40 fixed backdrop-blur-sm left-0 top-0 flex items-center justify-center">
-            <div className="w-[90%] sm:w-[500px] md:w-[600px] min-lg:w-[700px] text-black z-50 flex flex-col gap-8 h-fit rounded-md drop-shadow-md p-6 bg-white">
-                <div className="w-[100%] flex justify-between">
-                    <h4 className="font-[500] text-[20px] xl:text-[22px]">
+    const close = () => setWriteReview(false);
+
+    if (!mounted) return null;
+
+    return createPortal(
+        <section
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-dukka-ink/45 px-4 backdrop-blur-sm"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="write-review-title"
+        >
+            <button
+                type="button"
+                aria-label="Close write review"
+                className="absolute inset-0 cursor-default"
+                onClick={close}
+            />
+            <div className="relative z-10 flex max-h-[90vh] w-full max-w-[640px] flex-col gap-6 overflow-y-auto rounded-2xl bg-white p-6 shadow-[0_24px_60px_rgba(3,24,21,0.2)] font-urbanist">
+                <div className="flex w-full items-center justify-between">
+                    <h4
+                        id="write-review-title"
+                        className="text-[20px] font-semibold tracking-tight text-dukka-ink xl:text-[22px]"
+                    >
                         Write a review
                     </h4>
-                    <button onClick={() => setWriteReview(false)}>
-                        <MdOutlineCancel className="w-[30px] h-[30px] text-[#75716F]" />
+                    <button type="button" onClick={close} aria-label="Close">
+                        <MdOutlineCancel className="h-[30px] w-[30px] text-[#75716F]" />
                     </button>
                 </div>
 
-                <div className="flex gap-5 items-start">
-                    <div className="w-16 h-16 flex items-center justify-center border rounded-full border-[#888B8B]">
-                        <GoPerson className="w-7 h-7" />
+                <div className="flex items-start gap-5">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full border border-dukka-line bg-dukka-soft">
+                        <GoPerson className="h-7 w-7 text-dukka-forest" />
                     </div>
                     <div className="flex flex-col gap-0">
-                        <h4 className="font-[500] text-[20px] xl:text-[22px]">
+                        <h4 className="text-[18px] font-semibold text-dukka-ink xl:text-[20px]">
                             {me?.name || "Customer"}
                         </h4>
-                        <div className="flex gap-2 mt-5">
+                        <div className="mt-4 flex gap-2">
                             {Array.from({ length: 5 }, (_, index: number) => (
                                 <button
                                     key={index}
@@ -90,9 +119,14 @@ const WriteReview = ({
                                             star: index + 1,
                                         })
                                     }
+                                    aria-label={`Rate ${index + 1} stars`}
                                 >
                                     <IoIosStar
-                                        className={`w-[26px] h-[26px] ${index + 1 <= reviewFormData.star ? "text-[#FEB100]" : "text-[#888B8B]"}`}
+                                        className={`h-[26px] w-[26px] ${
+                                            index + 1 <= reviewFormData.star
+                                                ? "text-dukka-amber"
+                                                : "text-[#888B8B]"
+                                        }`}
                                     />
                                 </button>
                             ))}
@@ -100,7 +134,7 @@ const WriteReview = ({
                     </div>
                 </div>
 
-                <form className="w-[100%] flex flex-col gap-4" onSubmit={handleSubmit}>
+                <form className="flex w-full flex-col gap-4" onSubmit={handleSubmit}>
                     <input
                         type="text"
                         value={reviewFormData.title}
@@ -111,12 +145,12 @@ const WriteReview = ({
                             })
                         }
                         placeholder="Review title"
-                        className="w-[100%] border-[1.5px] border-[#888B8B] p-4 rounded-lg"
+                        className="w-full rounded-xl border border-dukka-line p-4 outline-none transition-colors focus:border-dukka-forest"
                     />
                     <textarea
                         name="review"
                         id="review"
-                        className="w-[100%] border-[1.5px] border-[#888B8B] placeholder:text-[#888B8B] p-4 rounded-lg text-[16px] xl:text-[18px]"
+                        className="w-full rounded-xl border border-dukka-line p-4 text-[16px] outline-none transition-colors placeholder:text-[#888B8B] focus:border-dukka-forest xl:text-[18px]"
                         placeholder="Your feedback helps others decide to buy or not"
                         cols={10}
                         rows={5}
@@ -132,13 +166,18 @@ const WriteReview = ({
                     <button
                         type="submit"
                         disabled={disableSubmit || isLoading}
-                        className={`text-black px-10 py-2 rounded-md text-[18px] xl:text-[20px] font-[400] ${disableSubmit || isLoading ? "bg-[#888B8B]" : "bg-[#FEB100]"} self-end`}
+                        className={`self-end rounded-full px-8 py-2.5 text-[16px] font-semibold xl:text-[18px] ${
+                            disableSubmit || isLoading
+                                ? "bg-[#888B8B] text-white"
+                                : "bg-dukka-amber text-dukka-ink hover:bg-dukka-forest hover:text-white"
+                        }`}
                     >
                         {isLoading ? "Posting..." : "Post"}
                     </button>
                 </form>
             </div>
-        </section>
+        </section>,
+        document.body,
     );
 };
 

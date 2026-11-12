@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { IoIosStar } from "react-icons/io";
 import { MdOutlineCancel } from "react-icons/md";
 import { useGetReviewsQuery } from "@/redux/services/reviews_api";
@@ -22,18 +24,49 @@ const ViewReviews = ({
         { skip: !marketVariantId },
     );
     const reviewList = data?.items ?? [];
+    const [mounted, setMounted] = useState(false);
 
-    return (
-        <section className="fixed inset-0 z-50 flex items-center justify-center backdrop-brightness-50">
-            <div className="bg-white w-[90%] max-w-[640px] max-h-[80vh] overflow-y-auto rounded-xl p-6 flex flex-col gap-4">
-                <div className="flex justify-between items-center">
-                    <h2 className="text-xl font-semibold">Reviews</h2>
-                    <button onClick={() => setViewReview(false)}>
-                        <MdOutlineCancel className="w-7 h-7" />
+    useEffect(() => {
+        setMounted(true);
+        const previous = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = previous;
+        };
+    }, []);
+
+    const close = () => setViewReview(false);
+
+    if (!mounted) return null;
+
+    return createPortal(
+        <section
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-dukka-ink/45 px-4 backdrop-blur-sm"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="view-reviews-title"
+        >
+            <button
+                type="button"
+                aria-label="Close reviews"
+                className="absolute inset-0 cursor-default"
+                onClick={close}
+            />
+            <div className="relative z-10 flex max-h-[80vh] w-full max-w-[640px] flex-col gap-4 overflow-y-auto rounded-2xl bg-white p-6 shadow-[0_24px_60px_rgba(3,24,21,0.2)] font-urbanist">
+                <div className="flex items-center justify-between">
+                    <h2
+                        id="view-reviews-title"
+                        className="text-xl font-semibold tracking-tight text-dukka-ink"
+                    >
+                        Reviews
+                    </h2>
+                    <button type="button" onClick={close} aria-label="Close">
+                        <MdOutlineCancel className="h-7 w-7 text-[#75716F]" />
                     </button>
                 </div>
                 <button
-                    className="w-fit px-5 py-2 text-white rounded-md bg-[#FEB100]"
+                    type="button"
+                    className="w-fit rounded-full bg-dukka-amber px-5 py-2 text-[14px] font-semibold text-dukka-ink transition-colors hover:bg-dukka-forest hover:text-white disabled:opacity-50"
                     onClick={() => {
                         setViewReview(false);
                         setWriteReview(true);
@@ -42,21 +75,27 @@ const ViewReviews = ({
                 >
                     Write a review
                 </button>
-                {isLoading && <DukkaLoader variant="inline" label="Loading reviews" />}
+                {isLoading && (
+                    <DukkaLoader variant="inline" label="Loading reviews" />
+                )}
                 {!isLoading && reviewList.length === 0 && (
-                    <p className="text-sm text-gray-600">No reviews yet.</p>
+                    <p className="text-sm text-dukka-muted">No reviews yet.</p>
                 )}
                 {reviewList.map((review) => (
                     <div
                         key={review.id}
-                        className="border border-[#ADB1B1] rounded-lg p-4 flex flex-col gap-2"
+                        className="flex flex-col gap-2 rounded-xl border border-dukka-line p-4"
                     >
-                        <div className="flex justify-between items-center">
+                        <div className="flex items-center justify-between">
                             <div className="flex">
                                 {Array.from({ length: 5 }, (_, index) => (
                                     <IoIosStar
                                         key={index}
-                                        className={`w-5 h-5 ${index < review.rating ? "text-[#FFA500]" : "text-[#888B8B]"}`}
+                                        className={`h-5 w-5 ${
+                                            index < review.rating
+                                                ? "text-[#FFA500]"
+                                                : "text-[#888B8B]"
+                                        }`}
                                     />
                                 ))}
                             </div>
@@ -68,24 +107,27 @@ const ViewReviews = ({
                             </p>
                         </div>
                         {review.title && (
-                            <h3 className="font-semibold">{review.title}</h3>
+                            <h3 className="font-semibold text-dukka-ink">
+                                {review.title}
+                            </h3>
                         )}
-                        <p>{review.review}</p>
+                        <p className="text-dukka-muted">{review.review}</p>
                         {review.image_url && (
-                            <div className="flex gap-2 flex-wrap">
+                            <div className="flex flex-wrap gap-2">
                                 <ProductImage
                                     src={review.image_url}
                                     alt={review.title}
                                     width={64}
                                     height={64}
-                                    className="w-16 h-16 object-cover rounded-md"
+                                    className="h-16 w-16 rounded-md object-cover"
                                 />
                             </div>
                         )}
                     </div>
                 ))}
             </div>
-        </section>
+        </section>,
+        document.body,
     );
 };
 

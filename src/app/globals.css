@@ -12,6 +12,7 @@
   --dukka-soft: #f3f5f4;
   --dukka-panel: #f7f8f7;
   --dukka-nav-height: 120px;
+  --dukka-bottom-nav-height: 0px;
 }
 
 @layer utilities {
